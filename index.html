@@ -11,383 +11,380 @@
   --calipso:#369C9B;--calipso-dark:#2a7978;--calipso-light:#e8f5f5;--calipso-mid:#c2e4e4;
   --marengo:#2D3748;--marengo-light:#3d4f66;--fondo:#F2F7F7;--blanco:#ffffff;
   --texto:#2D3748;--texto2:#6b7a90;--borde:rgba(45,55,72,0.12);--borde2:rgba(45,55,72,0.22);
-  --rojo:#c0392b;--rojo-bg:#fdf0ef;--rojo-mid:rgba(192,57,43,0.2);
-  --verde:#1e7e4a;--verde-bg:#eaf7f0;--verde-mid:rgba(30,126,74,0.2);
-  --amber:#8a5c00;--amber-bg:#fff8e6;
+  --rojo:#c0392b;--rojo-bg:#fdf0ef;--rojo-mid:rgba(192,57,43,0.18);
+  --verde:#1e7e4a;--verde-bg:#eaf7f0;--verde-mid:rgba(30,126,74,0.18);
+  --amber:#7a5200;--amber-bg:#fff8e6;--amber-mid:rgba(122,82,0,0.15);
   --r:8px;--r-lg:14px;
 }
 *{box-sizing:border-box;margin:0;padding:0;}
 body{background:var(--fondo);color:var(--texto);min-height:100vh;font-family:'Poppins',sans-serif;}
 .page{display:none;}.page.active{display:block;}
 
-header{background:var(--marengo);padding:0 32px;height:60px;display:flex;align-items:center;justify-content:space-between;}
-.header-brand{display:flex;align-items:center;gap:12px;}
-.header-logo{font-size:20px;font-weight:800;color:var(--calipso);}
-.header-divider{width:1px;height:20px;background:rgba(255,255,255,0.15);}
-.header-sub{font-size:12px;color:rgba(255,255,255,0.4);font-weight:500;letter-spacing:0.06em;text-transform:uppercase;}
-.header-right{display:flex;align-items:center;gap:8px;font-size:12px;color:rgba(255,255,255,0.45);font-weight:500;}
-.dot{width:7px;height:7px;border-radius:50%;background:rgba(255,255,255,0.2);flex-shrink:0;}
+/* HEADER */
+header{background:var(--marengo);padding:0 28px;height:58px;display:flex;align-items:center;justify-content:space-between;}
+.logo{font-size:19px;font-weight:800;color:var(--calipso);}
+.hd{width:1px;height:18px;background:rgba(255,255,255,0.15);margin:0 10px;}
+.h-sub{font-size:11px;color:rgba(255,255,255,0.4);font-weight:600;letter-spacing:.07em;text-transform:uppercase;}
+.h-right{display:flex;align-items:center;gap:7px;font-size:12px;color:rgba(255,255,255,0.4);font-weight:500;}
+.dot{width:7px;height:7px;border-radius:50%;background:rgba(255,255,255,0.18);flex-shrink:0;transition:background .3s;}
 .dot.on{background:var(--calipso);animation:pulse 2s infinite;}
 @keyframes pulse{0%,100%{opacity:1}50%{opacity:.3}}
 
-.tabs{background:var(--blanco);border-bottom:1.5px solid var(--calipso);display:flex;padding:0 32px;gap:4px;}
-.tab{padding:0 20px;height:46px;font-size:13px;font-weight:600;font-family:'Poppins',sans-serif;cursor:pointer;border:none;background:transparent;color:var(--texto2);border-bottom:3px solid transparent;margin-bottom:-1.5px;transition:all .15s;}
+/* TABS */
+.tabs{background:var(--blanco);border-bottom:2px solid var(--calipso);display:flex;padding:0 28px;gap:2px;}
+.tab{padding:0 18px;height:44px;font-size:13px;font-weight:600;font-family:'Poppins',sans-serif;cursor:pointer;border:none;background:transparent;color:var(--texto2);border-bottom:3px solid transparent;margin-bottom:-2px;transition:all .15s;}
 .tab:hover{color:var(--marengo);}
 .tab.active{color:var(--calipso);border-bottom-color:var(--calipso);}
 
-.content{padding:28px 32px;max-width:960px;margin:0 auto;}
-.card{background:var(--blanco);border:1px solid var(--borde);border-radius:var(--r-lg);padding:24px 28px;margin-bottom:18px;}
-.card-header{display:flex;align-items:center;justify-content:space-between;margin-bottom:18px;padding-bottom:14px;border-bottom:1px solid var(--borde);}
-.card-title{font-size:13px;font-weight:700;color:var(--marengo);letter-spacing:0.04em;text-transform:uppercase;}
-
-input,select,textarea{width:100%;padding:10px 14px;border:1px solid var(--borde2);border-radius:var(--r);background:var(--fondo);color:var(--texto);font-size:14px;font-weight:500;font-family:'Poppins',sans-serif;outline:none;transition:all .15s;}
-input:focus,select:focus,textarea:focus{border-color:var(--calipso);background:var(--blanco);box-shadow:0 0 0 3px rgba(54,156,155,0.12);}
-label{font-size:12px;font-weight:600;color:var(--texto2);display:block;margin-bottom:6px;letter-spacing:0.02em;}
-.field{margin-bottom:16px;}
-
-.btn{display:inline-flex;align-items:center;gap:6px;padding:9px 18px;border-radius:var(--r);border:1.5px solid var(--borde2);cursor:pointer;font-size:13px;font-weight:600;font-family:'Poppins',sans-serif;transition:all .15s;background:var(--blanco);color:var(--texto);}
-.btn:hover{border-color:var(--calipso);color:var(--calipso);}
-.btn:disabled{opacity:.45;cursor:not-allowed;}
-.btn-primary{background:var(--calipso);color:#fff;border-color:var(--calipso);}
-.btn-primary:hover{background:var(--calipso-dark);border-color:var(--calipso-dark);color:#fff;}
-.btn-dark{background:var(--marengo);color:#fff;border-color:var(--marengo);}
-.btn-dark:hover{background:var(--marengo-light);color:#fff;border-color:var(--marengo-light);}
-.btn-sm{padding:5px 12px;font-size:11px;}
-.btn-danger{color:var(--rojo);border-color:var(--rojo-mid);}
-.btn-danger:hover{background:var(--rojo-bg);border-color:var(--rojo);}
-.btn-success{color:var(--verde);border-color:var(--verde-mid);}
-.btn-success:hover{background:var(--verde-bg);border-color:var(--verde);}
-
-.grid2{display:grid;grid-template-columns:1fr 1fr;gap:18px;}
+/* LAYOUT */
+.content{padding:24px 28px;max-width:980px;margin:0 auto;}
+.card{background:var(--blanco);border:1px solid var(--borde);border-radius:var(--r-lg);padding:20px 24px;margin-bottom:16px;}
+.ch{display:flex;align-items:center;justify-content:space-between;margin-bottom:16px;padding-bottom:12px;border-bottom:1px solid var(--borde);}
+.ct{font-size:12px;font-weight:700;color:var(--marengo);letter-spacing:.05em;text-transform:uppercase;}
+.grid2{display:grid;grid-template-columns:1fr 1fr;gap:16px;}
 @media(max-width:640px){.grid2{grid-template-columns:1fr;}}
-.grid3{display:grid;grid-template-columns:repeat(3,1fr);gap:14px;margin-bottom:18px;}
+.grid3{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin-bottom:16px;}
 @media(max-width:500px){.grid3{grid-template-columns:1fr 1fr;}}
 
-.metric{background:var(--blanco);border:1px solid var(--borde);border-radius:var(--r-lg);padding:16px 20px;border-left:3px solid var(--calipso);}
-.metric-val{font-size:28px;font-weight:800;color:var(--marengo);line-height:1;margin-bottom:2px;}
-.metric-label{font-size:11px;font-weight:600;color:var(--texto2);letter-spacing:0.06em;text-transform:uppercase;}
+/* FORM */
+input,select,textarea{width:100%;padding:9px 13px;border:1px solid var(--borde2);border-radius:var(--r);background:var(--fondo);color:var(--texto);font-size:14px;font-weight:500;font-family:'Poppins',sans-serif;outline:none;transition:all .15s;}
+input:focus,select:focus,textarea:focus{border-color:var(--calipso);background:var(--blanco);box-shadow:0 0 0 3px rgba(54,156,155,0.1);}
+label{font-size:11px;font-weight:700;color:var(--texto2);display:block;margin-bottom:5px;letter-spacing:.03em;text-transform:uppercase;}
+.field{margin-bottom:14px;}
 
-.table-wrap{overflow-x:auto;}
+/* BUTTONS */
+.btn{display:inline-flex;align-items:center;gap:5px;padding:8px 16px;border-radius:var(--r);border:1.5px solid var(--borde2);cursor:pointer;font-size:13px;font-weight:600;font-family:'Poppins',sans-serif;transition:all .15s;background:var(--blanco);color:var(--texto);}
+.btn:hover{border-color:var(--calipso);color:var(--calipso);}
+.btn:disabled{opacity:.4;cursor:not-allowed;pointer-events:none;}
+.btn-p{background:var(--calipso);color:#fff;border-color:var(--calipso);}
+.btn-p:hover{background:var(--calipso-dark);border-color:var(--calipso-dark);color:#fff;}
+.btn-d{background:var(--marengo);color:#fff;border-color:var(--marengo);}
+.btn-d:hover{background:var(--marengo-light);color:#fff;border-color:var(--marengo-light);}
+.btn-r{color:var(--rojo);border-color:var(--rojo-mid);}
+.btn-r:hover{background:var(--rojo-bg);border-color:var(--rojo);color:var(--rojo);}
+.btn-g{color:var(--verde);border-color:var(--verde-mid);}
+.btn-g:hover{background:var(--verde-bg);border-color:var(--verde);color:var(--verde);}
+.btn-sm{padding:4px 11px;font-size:11px;}
+.btn-xs{padding:3px 8px;font-size:10px;}
+
+/* MATERIA CHIPS */
+.mat-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:8px;}
+@media(max-width:580px){.mat-grid{grid-template-columns:repeat(2,1fr);}}
+.mat-btn{padding:10px 8px;border-radius:var(--r);border:1.5px solid var(--borde);cursor:pointer;background:var(--fondo);font-family:'Poppins',sans-serif;font-size:11px;font-weight:700;color:var(--texto2);text-align:center;transition:all .15s;line-height:1.3;}
+.mat-btn:hover{border-color:var(--calipso);color:var(--calipso);background:var(--calipso-light);}
+.mat-btn.sel{border-color:var(--calipso);background:var(--calipso);color:#fff;border-width:2px;}
+
+/* METRICS */
+.metric{background:var(--blanco);border:1px solid var(--borde);border-radius:var(--r-lg);padding:14px 18px;border-left:3px solid var(--calipso);}
+.mv{font-size:26px;font-weight:800;color:var(--marengo);line-height:1;margin-bottom:2px;}
+.ml{font-size:10px;font-weight:700;color:var(--texto2);letter-spacing:.07em;text-transform:uppercase;}
+
+/* TABLE */
+.tw{overflow-x:auto;}
 table{width:100%;border-collapse:collapse;font-size:13px;}
 thead tr{border-bottom:2px solid var(--calipso-mid);}
-th{padding:9px 14px;text-align:left;font-size:10px;font-weight:700;color:var(--calipso-dark);text-transform:uppercase;letter-spacing:0.08em;}
-td{padding:10px 14px;border-bottom:1px solid var(--borde);color:var(--texto);font-weight:500;}
+th{padding:8px 12px;text-align:left;font-size:10px;font-weight:700;color:var(--calipso-dark);text-transform:uppercase;letter-spacing:.08em;}
+td{padding:9px 12px;border-bottom:1px solid var(--borde);color:var(--texto);font-weight:500;}
 tr:last-child td{border-bottom:none;}
 tbody tr:hover td{background:var(--calipso-light);}
 
-.badge{display:inline-flex;align-items:center;gap:4px;padding:3px 10px;border-radius:999px;font-size:11px;font-weight:700;}
-.badge-green{background:var(--verde-bg);color:var(--verde);border:1px solid var(--verde-mid);}
-.badge-red{background:var(--rojo-bg);color:var(--rojo);border:1px solid var(--rojo-mid);}
-.badge-amber{background:var(--amber-bg);color:var(--amber);}
-.badge-cal{background:var(--calipso-light);color:var(--calipso-dark);border:1px solid var(--calipso-mid);}
-.tag{display:inline-flex;align-items:center;gap:5px;background:var(--calipso-light);color:var(--calipso-dark);font-size:12px;font-weight:700;padding:4px 12px;border-radius:999px;border:1px solid var(--calipso-mid);}
-
-/* MATERIA SELECTOR */
-.materias-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:10px;margin-bottom:6px;}
-@media(max-width:640px){.materias-grid{grid-template-columns:repeat(2,1fr);}}
-.materia-btn{
-  padding:12px 10px;border-radius:var(--r);border:1.5px solid var(--borde);
-  cursor:pointer;background:var(--fondo);font-family:'Poppins',sans-serif;
-  font-size:12px;font-weight:700;color:var(--texto2);text-align:center;
-  transition:all .15s;line-height:1.3;
-}
-.materia-btn:hover{border-color:var(--calipso);color:var(--calipso);background:var(--calipso-light);}
-.materia-btn.selected{border-color:var(--calipso);background:var(--calipso);color:#fff;border-width:2px;}
+/* BADGES */
+.badge{display:inline-flex;align-items:center;gap:3px;padding:2px 9px;border-radius:999px;font-size:11px;font-weight:700;}
+.bg{background:var(--verde-bg);color:var(--verde);border:1px solid var(--verde-mid);}
+.br{background:var(--rojo-bg);color:var(--rojo);border:1px solid var(--rojo-mid);}
+.ba{background:var(--amber-bg);color:var(--amber);border:1px solid var(--amber-mid);}
+.bc{background:var(--calipso-light);color:var(--calipso-dark);border:1px solid var(--calipso-mid);}
+.tag{display:inline-flex;align-items:center;gap:4px;background:var(--calipso-light);color:var(--calipso-dark);font-size:11px;font-weight:700;padding:3px 10px;border-radius:999px;border:1px solid var(--calipso-mid);}
 
 /* QR */
-.qr-wrapper{display:flex;flex-direction:column;align-items:center;gap:16px;padding:16px 0 8px;}
-.qr-box{background:var(--blanco);border:2px solid var(--calipso-mid);border-radius:14px;padding:14px;}
-#qrcode canvas,#qrcode img{border-radius:6px;display:block;}
+.qr-w{display:flex;flex-direction:column;align-items:center;gap:14px;padding:12px 0 6px;}
+.qr-box{background:var(--blanco);border:2px solid var(--calipso-mid);border-radius:12px;padding:12px;}
+#qrcode canvas,#qrcode img{border-radius:5px;display:block;}
 .qr-info{text-align:center;}
-.qr-info strong{display:block;font-size:15px;font-weight:800;color:var(--marengo);margin-bottom:2px;}
+.qr-info strong{display:block;font-size:14px;font-weight:800;color:var(--marengo);margin-bottom:2px;}
 .qr-info span{font-size:12px;color:var(--texto2);font-weight:500;}
-.timer-wrap{display:flex;flex-direction:column;align-items:center;gap:7px;width:100%;}
-.timer-track{width:200px;height:5px;background:var(--calipso-mid);border-radius:3px;overflow:hidden;}
-.timer-fill{height:100%;background:var(--calipso);transition:width 1s linear;border-radius:3px;}
-.timer-label{font-size:12px;font-weight:600;color:var(--texto2);}
-.pulse-row{display:flex;align-items:center;gap:6px;}
+.timer-w{display:flex;flex-direction:column;align-items:center;gap:6px;width:100%;}
+.timer-t{width:190px;height:4px;background:var(--calipso-mid);border-radius:2px;overflow:hidden;}
+.timer-f{height:100%;background:var(--calipso);transition:width 1s linear;border-radius:2px;}
+.timer-l{font-size:11px;font-weight:600;color:var(--texto2);}
+.pr{display:flex;align-items:center;gap:5px;}
 
 /* LIVE BANNER */
-.live-banner{
-  background:var(--marengo);border-radius:var(--r-lg);
-  padding:14px 24px;margin-bottom:18px;
-  display:none;align-items:center;justify-content:space-between;gap:16px;
-}
-.live-banner.on{display:flex;}
-.live-num{font-size:32px;font-weight:800;color:#fff;line-height:1;}
-.live-sep{width:1px;height:36px;background:rgba(255,255,255,0.1);}
-.live-meta{display:flex;flex-direction:column;gap:2px;}
-.live-materia{font-size:14px;font-weight:700;color:var(--calipso);}
-.live-fecha{font-size:12px;font-weight:500;color:rgba(255,255,255,0.45);}
-.live-right{display:flex;align-items:center;gap:6px;font-size:11px;font-weight:600;color:rgba(255,255,255,0.35);letter-spacing:.06em;text-transform:uppercase;}
+.live-bar{background:var(--marengo);border-radius:var(--r-lg);padding:12px 20px;margin-bottom:16px;display:none;align-items:center;justify-content:space-between;gap:14px;}
+.live-bar.on{display:flex;}
+.live-n{font-size:30px;font-weight:800;color:#fff;line-height:1;}
+.live-sep{width:1px;height:32px;background:rgba(255,255,255,0.1);}
+.live-mat{font-size:13px;font-weight:700;color:var(--calipso);}
+.live-fec{font-size:11px;font-weight:500;color:rgba(255,255,255,0.4);}
 
-/* AUSENTES PANEL */
-.ausentes-panel{display:none;}
-.ausentes-panel.show{display:block;}
+/* ── PANEL VERIFICACIÓN ── */
+.verif-overlay{display:none;position:fixed;inset:0;background:rgba(45,55,72,0.6);z-index:100;align-items:center;justify-content:center;padding:16px;}
+.verif-overlay.show{display:flex;}
+.verif-modal{background:var(--blanco);border-radius:var(--r-lg);width:100%;max-width:700px;max-height:90vh;display:flex;flex-direction:column;overflow:hidden;}
+.verif-header{padding:18px 22px 14px;border-bottom:1px solid var(--borde);flex-shrink:0;}
+.verif-title{font-size:16px;font-weight:800;color:var(--marengo);margin-bottom:2px;}
+.verif-sub{font-size:12px;font-weight:500;color:var(--texto2);}
+.verif-search{padding:12px 22px;border-bottom:1px solid var(--borde);flex-shrink:0;}
+.verif-search input{margin:0;}
+.verif-body{overflow-y:auto;flex:1;}
+.verif-footer{padding:14px 22px;border-top:1px solid var(--borde);flex-shrink:0;display:flex;align-items:center;justify-content:space-between;gap:10px;flex-wrap:wrap;}
+.verif-stats{display:flex;gap:12px;}
+.vs{font-size:12px;font-weight:600;}
+.vs-p{color:var(--verde);}
+.vs-a{color:var(--rojo);}
+
+/* Filas del listado */
+.alu-row{display:flex;align-items:center;padding:10px 22px;border-bottom:1px solid var(--borde);gap:12px;transition:background .1s;}
+.alu-row:hover{background:var(--fondo);}
+.alu-row:last-child{border-bottom:none;}
+.alu-check{width:20px;height:20px;border-radius:5px;border:2px solid var(--borde2);cursor:pointer;appearance:none;flex-shrink:0;transition:all .15s;background:var(--fondo);}
+.alu-check:checked{background:var(--calipso);border-color:var(--calipso);}
+.alu-check:checked::after{content:'✓';color:#fff;font-size:12px;display:flex;align-items:center;justify-content:center;font-weight:700;line-height:20px;}
+.alu-info{flex:1;}
+.alu-name{font-size:13px;font-weight:700;color:var(--marengo);}
+.alu-rut{font-size:11px;font-weight:500;color:var(--texto2);}
+.alu-estado{flex-shrink:0;}
+
+/* MISC */
+.msg{border-radius:var(--r);padding:9px 13px;font-size:12px;font-weight:600;margin-top:10px;display:none;}
+.ms{background:var(--verde-bg);color:var(--verde);border:1px solid var(--verde-mid);}
+.me{background:var(--rojo-bg);color:var(--rojo);border:1px solid var(--rojo-mid);}
+.empty{text-align:center;padding:36px 20px;color:var(--texto2);font-size:13px;font-weight:500;}
+.loading{text-align:center;padding:22px;color:var(--texto2);font-size:13px;font-weight:500;}
+.sp{display:inline-block;width:13px;height:13px;border:2px solid var(--calipso-mid);border-top-color:var(--calipso);border-radius:50%;animation:spin .7s linear infinite;margin-right:5px;vertical-align:middle;}
+@keyframes spin{to{transform:rotate(360deg)}}
+.flex{display:flex;gap:8px;align-items:center;flex-wrap:wrap;}
+.mt{margin-top:14px;}
+.chip{display:inline-block;background:var(--marengo);color:#fff;font-size:10px;font-weight:700;padding:2px 7px;border-radius:4px;letter-spacing:.05em;text-transform:uppercase;}
+.chip-v{display:inline-block;background:var(--verde);color:#fff;font-size:10px;font-weight:700;padding:2px 7px;border-radius:4px;}
 
 /* ALUMNO PAGE */
-.alumno-bg{min-height:100vh;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:24px;background:var(--marengo);}
-.alumno-card{background:var(--blanco);border-radius:20px;padding:36px 32px;width:100%;max-width:420px;}
-.alumno-logo{font-size:22px;font-weight:800;color:var(--calipso);margin-bottom:6px;}
-.alumno-divider{height:2px;background:var(--calipso);width:40px;margin:12px 0 18px;}
-.alumno-title{font-size:20px;font-weight:800;color:var(--marengo);margin-bottom:4px;line-height:1.2;}
-.alumno-sub{font-size:13px;font-weight:500;color:var(--texto2);}
-.btn-submit{width:100%;padding:14px;background:var(--calipso);color:#fff;border:none;border-radius:var(--r);font-size:15px;font-weight:700;font-family:'Poppins',sans-serif;cursor:pointer;transition:background .15s;margin-top:4px;}
-.btn-submit:hover{background:var(--calipso-dark);}
-.btn-submit:disabled{background:var(--calipso-mid);cursor:not-allowed;color:var(--calipso-dark);}
-.success-wrap{text-align:center;padding:16px 0;}
-.success-circle{width:72px;height:72px;border-radius:50%;background:var(--calipso);display:flex;align-items:center;justify-content:center;margin:0 auto 18px;}
-.success-check{width:32px;height:32px;stroke:#fff;stroke-width:3;fill:none;}
-.success-title{font-size:20px;font-weight:800;color:var(--marengo);margin-bottom:6px;}
-.success-sub{font-size:13px;font-weight:500;color:var(--texto2);line-height:1.6;}
-.alumno-footer{margin-top:20px;text-align:center;font-size:11px;font-weight:600;color:rgba(255,255,255,0.25);letter-spacing:.08em;text-transform:uppercase;}
-
-.msg{border-radius:var(--r);padding:10px 14px;font-size:13px;font-weight:500;margin-top:12px;display:none;}
-.msg-success{background:var(--verde-bg);color:var(--verde);border:1px solid var(--verde-mid);}
-.msg-error{background:var(--rojo-bg);color:var(--rojo);border:1px solid var(--rojo-mid);}
-.empty-state{text-align:center;padding:40px 24px;color:var(--texto2);font-size:13px;font-weight:500;}
-.loading{text-align:center;padding:24px;color:var(--texto2);font-size:13px;font-weight:500;}
-.spinner{display:inline-block;width:14px;height:14px;border:2px solid var(--calipso-mid);border-top-color:var(--calipso);border-radius:50%;animation:spin .7s linear infinite;margin-right:6px;vertical-align:middle;}
-@keyframes spin{to{transform:rotate(360deg)}}
-.flex{display:flex;gap:10px;align-items:center;flex-wrap:wrap;}
-.mt{margin-top:16px;}
-.chip{display:inline-block;background:var(--marengo);color:#fff;font-size:10px;font-weight:700;padding:2px 8px;border-radius:4px;letter-spacing:.06em;text-transform:uppercase;}
-
-/* CIERRE SESIÓN PANEL */
-.cierre-panel{background:var(--amber-bg);border:1px solid rgba(138,92,0,0.2);border-radius:var(--r-lg);padding:18px 22px;margin-bottom:18px;display:none;}
-.cierre-panel.show{display:block;}
-.cierre-title{font-size:13px;font-weight:700;color:var(--amber);margin-bottom:6px;text-transform:uppercase;letter-spacing:.04em;}
-.cierre-desc{font-size:13px;font-weight:500;color:var(--texto2);margin-bottom:14px;line-height:1.5;}
+.alu-bg{min-height:100vh;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:20px;background:var(--marengo);}
+.alu-card{background:var(--blanco);border-radius:18px;padding:32px 28px;width:100%;max-width:400px;}
+.alu-logo{font-size:20px;font-weight:800;color:var(--calipso);margin-bottom:5px;}
+.alu-div{height:2px;background:var(--calipso);width:36px;margin:10px 0 16px;}
+.alu-title{font-size:19px;font-weight:800;color:var(--marengo);margin-bottom:3px;line-height:1.2;}
+.alu-sub{font-size:12px;font-weight:500;color:var(--texto2);margin-bottom:22px;}
+.btn-sub{width:100%;padding:13px;background:var(--calipso);color:#fff;border:none;border-radius:var(--r);font-size:14px;font-weight:700;font-family:'Poppins',sans-serif;cursor:pointer;transition:background .15s;}
+.btn-sub:hover{background:var(--calipso-dark);}
+.btn-sub:disabled{background:var(--calipso-mid);cursor:not-allowed;color:var(--calipso-dark);}
+.ok-w{text-align:center;padding:12px 0;}
+.ok-c{width:68px;height:68px;border-radius:50%;background:var(--calipso);display:flex;align-items:center;justify-content:center;margin:0 auto 16px;}
+.ok-sv{width:30px;height:30px;stroke:#fff;stroke-width:3;fill:none;}
+.ok-t{font-size:19px;font-weight:800;color:var(--marengo);margin-bottom:5px;}
+.ok-s{font-size:12px;font-weight:500;color:var(--texto2);line-height:1.6;}
+.alu-ft{margin-top:18px;text-align:center;font-size:10px;font-weight:600;color:rgba(255,255,255,0.22);letter-spacing:.08em;text-transform:uppercase;}
 </style>
 </head>
 <body>
 
-<!-- PROFESOR -->
+<!-- ══ PROFESOR ══════════════════════════════════════════ -->
 <div id="profe-page" class="page active">
-  <header>
-    <div class="header-brand">
-      <div class="header-logo">PREUDD</div>
-      <div class="header-divider"></div>
-      <div class="header-sub">Asistencia 2026</div>
+<header>
+  <div class="flex" style="gap:0">
+    <div class="logo">PREUDD</div>
+    <div class="hd"></div>
+    <div class="h-sub">Asistencia 2026</div>
+  </div>
+  <div class="h-right">
+    <span class="dot" id="h-dot"></span>
+    <span id="h-sesion">Sin sesión activa</span>
+  </div>
+</header>
+<div class="tabs">
+  <button class="tab active" onclick="showTab('ts')">Sesión</button>
+  <button class="tab" onclick="showTab('tr')">Registros</button>
+  <button class="tab" onclick="showTab('ta')">Alumnos</button>
+</div>
+
+<!-- TAB SESIÓN -->
+<div id="ts" class="content">
+
+  <!-- Live banner -->
+  <div class="live-bar" id="live-bar">
+    <div class="flex" style="gap:14px">
+      <div>
+        <div style="font-size:10px;font-weight:700;color:rgba(255,255,255,0.35);letter-spacing:.07em;text-transform:uppercase;margin-bottom:1px;">Presentes</div>
+        <div class="live-n" id="live-n">0</div>
+      </div>
+      <div class="live-sep"></div>
+      <div>
+        <div class="live-mat" id="live-mat">—</div>
+        <div class="live-fec" id="live-fec">—</div>
+      </div>
     </div>
-    <div class="header-right">
-      <span class="dot" id="header-dot"></span>
-      <span id="header-sesion">Sin sesión activa</span>
+    <div class="flex">
+      <button class="btn btn-sm" style="color:var(--calipso-mid);border-color:rgba(194,228,228,0.3);background:rgba(54,156,155,0.12);" onclick="abrirVerificacion()">Ver lista completa</button>
+      <div class="pr"><span class="dot on"></span><span style="font-size:10px;font-weight:600;color:rgba(255,255,255,0.3);letter-spacing:.06em;text-transform:uppercase;">En vivo</span></div>
     </div>
-  </header>
-  <div class="tabs">
-    <button class="tab active" onclick="showTab('tab-sesion')">Sesión</button>
-    <button class="tab" onclick="showTab('tab-registros')">Registros</button>
-    <button class="tab" onclick="showTab('tab-alumnos')">Alumnos</button>
   </div>
 
-  <!-- TAB SESIÓN -->
-  <div id="tab-sesion" class="content">
-
-    <!-- Live banner -->
-    <div class="live-banner" id="live-banner">
-      <div class="flex" style="gap:16px;align-items:center;">
-        <div>
-          <div style="font-size:11px;font-weight:600;color:rgba(255,255,255,0.4);letter-spacing:.06em;text-transform:uppercase;margin-bottom:2px;">Presentes</div>
-          <div class="live-num" id="live-num">0</div>
-        </div>
-        <div class="live-sep"></div>
-        <div class="live-meta">
-          <div class="live-materia" id="live-materia">—</div>
-          <div class="live-fecha" id="live-fecha">—</div>
-        </div>
+  <div class="grid2">
+    <!-- Config -->
+    <div class="card">
+      <div class="ch"><div class="ct">Configurar sesión</div></div>
+      <div class="field">
+        <label>Materia</label>
+        <div class="mat-grid" id="mat-grid"></div>
       </div>
-      <div class="live-right">
-        <span class="dot on"></span> En vivo
+      <div class="field">
+        <label>Fecha de clase</label>
+        <select id="sel-fecha" disabled>
+          <option value="">— elige una materia primero —</option>
+        </select>
+      </div>
+      <div class="field">
+        <label>Validez QR (minutos)</label>
+        <input id="ses-min" type="number" value="15" min="1" max="120"/>
+      </div>
+      <div class="flex mt">
+        <button class="btn btn-p" id="btn-act" onclick="iniciarSesion()" disabled>Activar sesión</button>
+        <button class="btn btn-r btn-sm" onclick="pedirCierre()">Finalizar sesión</button>
       </div>
     </div>
 
-    <div class="grid2">
-      <!-- Configurar sesión -->
-      <div class="card">
-        <div class="card-header">
-          <div class="card-title">Configurar sesión</div>
-        </div>
-
-        <div class="field">
-          <label>Materia</label>
-          <div class="materias-grid" id="materias-grid"></div>
-        </div>
-
-        <div class="field">
-          <label>Fecha de clase</label>
-          <select id="sel-fecha" disabled>
-            <option value="">— elige una materia primero —</option>
-          </select>
-        </div>
-
-        <div class="field">
-          <label>Validez del QR (minutos)</label>
-          <input id="sesion-minutos" type="number" value="15" min="1" max="120"/>
-        </div>
-
-        <div class="flex mt">
-          <button class="btn btn-primary" id="btn-activar" onclick="iniciarSesion()" disabled>Activar sesión</button>
-          <button class="btn btn-danger btn-sm" onclick="cerrarSesion()">Cerrar sesión</button>
-        </div>
+    <!-- QR -->
+    <div class="card">
+      <div class="ch">
+        <div class="ct">Código QR</div>
+        <button class="btn btn-sm" id="btn-regen" style="display:none" onclick="regenerarQR()">Regenerar</button>
       </div>
-
-      <!-- QR -->
-      <div class="card">
-        <div class="card-header">
-          <div class="card-title">Código QR</div>
-          <button class="btn btn-sm" id="btn-regenerar" style="display:none" onclick="regenerarQR()">Regenerar</button>
-        </div>
-        <div id="qr-placeholder" class="empty-state" style="padding:32px 0">
-          <div style="font-size:32px;margin-bottom:8px;">⬜</div>
-          Activa una sesión para generar el QR
-        </div>
-        <div id="qr-panel" style="display:none">
-          <div class="qr-wrapper">
-            <div class="qr-box"><div id="qrcode"></div></div>
-            <div class="qr-info">
-              <strong id="qr-nombre-display">—</strong>
-              <span id="qr-fecha-display">—</span>
-            </div>
-            <div class="timer-wrap">
-              <div class="pulse-row">
-                <span class="dot on"></span>
-                <span class="timer-label" id="timer-text">—</span>
-              </div>
-              <div class="timer-track"><div class="timer-fill" id="timer-bar" style="width:100%"></div></div>
-            </div>
+      <div id="qr-ph" class="empty" style="padding:28px 0">
+        <div style="font-size:28px;margin-bottom:8px">⬜</div>
+        Activa una sesión para generar el QR
+      </div>
+      <div id="qr-panel" style="display:none">
+        <div class="qr-w">
+          <div class="qr-box"><div id="qrcode"></div></div>
+          <div class="qr-info">
+            <strong id="qr-mat">—</strong>
+            <span id="qr-fec">—</span>
+          </div>
+          <div class="timer-w">
+            <div class="pr"><span class="dot on"></span><span class="timer-l" id="timer-txt">—</span></div>
+            <div class="timer-t"><div class="timer-f" id="timer-bar" style="width:100%"></div></div>
           </div>
         </div>
       </div>
     </div>
-
-    <!-- Panel cierre -->
-    <div class="cierre-panel" id="cierre-panel">
-      <div class="cierre-title">⚠ Al cerrar la sesión</div>
-      <div class="cierre-desc">
-        Los alumnos que <strong>no escanearon el QR</strong> quedarán marcados como <strong>falta (0)</strong> en el registro.
-        Los alumnos presentes quedarán como <strong>asistencia (1)</strong>.
-        Esto permite exportar el Excel con el registro completo.
-      </div>
-      <div class="flex">
-        <button class="btn btn-danger" onclick="cerrarSesionFinal()">Confirmar cierre y marcar ausentes</button>
-        <button class="btn btn-sm" onclick="document.getElementById('cierre-panel').classList.remove('show')">Cancelar</button>
-      </div>
-    </div>
-
-    <!-- Tabla live -->
-    <div class="card">
-      <div class="card-header">
-        <div class="card-title">Registro en tiempo real</div>
-        <span class="tag" id="conteo-tag">0 presentes</span>
-      </div>
-      <div id="sesion-live-table"><div class="empty-state">Sin sesión activa</div></div>
-    </div>
   </div>
 
-  <!-- TAB REGISTROS -->
-  <div id="tab-registros" class="content" style="display:none">
-    <div class="card">
-      <div class="card-header">
-        <div class="card-title">Filtros</div>
-        <button class="btn btn-success btn-sm" onclick="exportarCSV()">Exportar CSV</button>
+  <!-- Tabla live -->
+  <div class="card">
+    <div class="ch">
+      <div class="ct">Presentes en tiempo real</div>
+      <span class="tag" id="conteo-tag">0 presentes</span>
+    </div>
+    <div id="live-table"><div class="empty">Sin sesión activa</div></div>
+  </div>
+</div>
+
+<!-- TAB REGISTROS -->
+<div id="tr" class="content" style="display:none">
+  <div class="card">
+    <div class="ch">
+      <div class="ct">Filtros</div>
+      <button class="btn btn-g btn-sm" onclick="exportarCSV()">Exportar CSV</button>
+    </div>
+    <div class="grid2">
+      <div class="field"><label>Materia</label>
+        <select id="f-mat" onchange="filtrarReg()"><option value="">Todas</option></select>
       </div>
-      <div class="grid2">
-        <div class="field">
-          <label>Materia</label>
-          <select id="filtro-materia" onchange="filtrarRegistros()">
-            <option value="">Todas</option>
-          </select>
-        </div>
-        <div class="field">
-          <label>Estado</label>
-          <select id="filtro-estado" onchange="filtrarRegistros()">
-            <option value="">Todos</option>
-            <option value="1">Presentes</option>
-            <option value="0">Ausentes</option>
-            <option value="J">Justificados</option>
-          </select>
-        </div>
-      </div>
-      <div class="field">
-        <label>Buscar alumno</label>
-        <input id="filtro-alumno" placeholder="Nombre o RUT..." oninput="filtrarRegistros()"/>
+      <div class="field"><label>Estado</label>
+        <select id="f-est" onchange="filtrarReg()">
+          <option value="">Todos</option>
+          <option value="1">Presentes</option>
+          <option value="0">Ausentes</option>
+          <option value="J">Justificados</option>
+        </select>
       </div>
     </div>
-
-    <div class="grid3" id="metrics-wrap"></div>
-
-    <div class="card">
-      <div class="table-wrap">
-        <div id="tabla-registros"><div class="loading"><span class="spinner"></span>Cargando...</div></div>
-      </div>
+    <div class="field"><label>Buscar</label>
+      <input id="f-alu" placeholder="Nombre o RUT..." oninput="filtrarReg()"/>
     </div>
   </div>
+  <div class="grid3" id="metrics"></div>
+  <div class="card"><div class="tw"><div id="t-reg"><div class="loading"><span class="sp"></span>Cargando...</div></div></div></div>
+</div>
 
-  <!-- TAB ALUMNOS -->
-  <div id="tab-alumnos" class="content" style="display:none">
-    <div class="card">
-      <div class="card-header">
-        <div class="card-title">Importar alumnos</div>
-        <button class="btn btn-sm" onclick="agregarManual()">+ Manual</button>
-      </div>
-      <p style="font-size:13px;font-weight:500;color:var(--texto2);margin-bottom:14px;line-height:1.6;">Pega desde Excel (Tab) o sube CSV. Columnas: <strong style="color:var(--marengo)">nombre · rut · correo</strong></p>
-      <div class="field">
-        <label>Pegar datos</label>
-        <textarea id="import-text" rows="4" placeholder="nombre	rut	correo"></textarea>
+<!-- TAB ALUMNOS -->
+<div id="ta" class="content" style="display:none">
+  <div class="card">
+    <div class="ch">
+      <div class="ct">Importar alumnos</div>
+      <button class="btn btn-sm" onclick="document.getElementById('mod-manual').style.display='block'">+ Manual</button>
+    </div>
+    <p style="font-size:12px;font-weight:500;color:var(--texto2);margin-bottom:12px;line-height:1.6;">Pega desde Excel (Tab) o sube CSV. Columnas: <strong style="color:var(--marengo)">nombre · rut · correo</strong></p>
+    <div class="field"><label>Pegar datos</label><textarea id="imp-txt" rows="4" placeholder="nombre	rut	correo"></textarea></div>
+    <div class="flex">
+      <button class="btn btn-p" onclick="importarAlumnos()">Importar</button>
+      <label class="btn btn-d" style="cursor:pointer">Subir CSV<input type="file" accept=".csv" onchange="leerCSV(this)" style="display:none"/></label>
+    </div>
+    <div id="imp-st" class="msg"></div>
+  </div>
+  <div id="mod-manual" style="display:none" class="card">
+    <div class="ch"><div class="ct">Agregar alumno</div><button class="btn btn-sm" onclick="document.getElementById('mod-manual').style.display='none'">✕</button></div>
+    <div class="grid2" style="gap:12px">
+      <div class="field"><label>Nombre</label><input id="m-n" placeholder="Juan Pérez"/></div>
+      <div class="field"><label>RUT</label><input id="m-r" placeholder="12345678-9"/></div>
+    </div>
+    <div class="field"><label>Correo</label><input id="m-c" type="email" placeholder="juan@mail.com"/></div>
+    <button class="btn btn-p mt" onclick="guardarManual()">Guardar</button>
+  </div>
+  <div class="card">
+    <div class="ch"><div class="ct">Nómina</div><button class="btn btn-r btn-sm" onclick="limpiarAlumnos()">Limpiar todo</button></div>
+    <div id="t-alu"><div class="loading"><span class="sp"></span>Cargando...</div></div>
+  </div>
+</div>
+</div>
+
+<!-- ══ PANEL VERIFICACIÓN ════════════════════════════════ -->
+<div class="verif-overlay" id="verif-overlay">
+  <div class="verif-modal">
+    <div class="verif-header">
+      <div class="verif-title" id="verif-title">Verificar asistencia</div>
+      <div class="verif-sub" id="verif-sub">Revisa y ajusta antes de finalizar</div>
+    </div>
+    <div class="verif-search">
+      <input id="verif-buscar" placeholder="Buscar alumno..." oninput="filtrarVerif()"/>
+    </div>
+    <div class="verif-body" id="verif-body"></div>
+    <div class="verif-footer">
+      <div class="verif-stats">
+        <span class="vs vs-p" id="vs-p">0 presentes</span>
+        <span class="vs" style="color:var(--borde2)">·</span>
+        <span class="vs vs-a" id="vs-a">0 ausentes</span>
       </div>
       <div class="flex">
-        <button class="btn btn-primary" onclick="importarAlumnos()">Importar</button>
-        <label class="btn btn-dark" style="cursor:pointer">Subir CSV<input type="file" accept=".csv" onchange="leerCSV(this)" style="display:none"/></label>
+        <button class="btn btn-sm" onclick="cerrarVerifSinFinalizar()">Volver</button>
+        <button class="btn btn-r" onclick="confirmarCierre()">Finalizar y registrar asistencia</button>
       </div>
-      <div id="import-status" class="msg"></div>
-    </div>
-    <div id="modal-manual" style="display:none" class="card">
-      <div class="card-header">
-        <div class="card-title">Agregar alumno</div>
-        <button class="btn btn-sm" onclick="document.getElementById('modal-manual').style.display='none'">✕</button>
-      </div>
-      <div class="grid2" style="gap:12px">
-        <div class="field"><label>Nombre completo</label><input id="m-nombre" placeholder="Juan Pérez"/></div>
-        <div class="field"><label>RUT</label><input id="m-rut" placeholder="12345678-9"/></div>
-      </div>
-      <div class="field"><label>Correo</label><input id="m-correo" type="email" placeholder="juan@mail.com"/></div>
-      <button class="btn btn-primary mt" onclick="guardarManual()">Guardar</button>
-    </div>
-    <div class="card">
-      <div class="card-header">
-        <div class="card-title">Nómina</div>
-        <button class="btn btn-danger btn-sm" onclick="limpiarAlumnos()">Limpiar todo</button>
-      </div>
-      <div id="tabla-alumnos"><div class="loading"><span class="spinner"></span>Cargando...</div></div>
     </div>
   </div>
 </div>
 
-<!-- ALUMNO -->
+<!-- ══ ALUMNO ════════════════════════════════════════════ -->
 <div id="alumno-page" class="page">
-  <div class="alumno-bg">
-    <div class="alumno-card">
-      <div id="alumno-form-wrap">
-        <div class="alumno-logo">PREUDD</div>
-        <div class="alumno-divider"></div>
-        <div class="alumno-title">Marcar asistencia</div>
-        <div class="alumno-sub" id="alumno-sesion-info" style="margin-bottom:24px;">Verificando sesión...</div>
-        <div class="field"><label>Nombre completo</label><input id="al-nombre" placeholder="Tu nombre"/></div>
-        <div class="field"><label>RUT</label><input id="al-rut" placeholder="12345678-9"/></div>
-        <div class="field"><label>Correo</label><input id="al-correo" type="email" placeholder="tu@correo.com"/></div>
-        <button class="btn-submit" id="al-submit-btn" onclick="marcarAsistencia()">Marcar mi asistencia</button>
-        <div class="msg msg-error" id="al-error"></div>
+  <div class="alu-bg">
+    <div class="alu-card">
+      <div id="alu-form">
+        <div class="alu-logo">PREUDD</div>
+        <div class="alu-div"></div>
+        <div class="alu-title">Marcar asistencia</div>
+        <div class="alu-sub" id="alu-info">Verificando sesión...</div>
+        <div class="field"><label>Nombre completo</label><input id="al-n" placeholder="Tu nombre"/></div>
+        <div class="field"><label>RUT</label><input id="al-r" placeholder="12345678-9"/></div>
+        <div class="field"><label>Correo</label><input id="al-c" type="email" placeholder="tu@correo.com"/></div>
+        <button class="btn-sub" id="al-btn" onclick="marcarAsistencia()">Marcar mi asistencia</button>
+        <div class="msg me" id="al-err"></div>
       </div>
-      <div class="success-wrap" id="alumno-success" style="display:none">
-        <div class="success-circle">
-          <svg class="success-check" viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg>
-        </div>
-        <div class="success-title">¡Asistencia registrada!</div>
-        <p class="success-sub" id="success-detail"></p>
+      <div class="ok-w" id="alu-ok" style="display:none">
+        <div class="ok-c"><svg class="ok-sv" viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg></div>
+        <div class="ok-t">¡Asistencia registrada!</div>
+        <p class="ok-s" id="ok-det"></p>
       </div>
     </div>
-    <div class="alumno-footer">Preuniversitario UDD · Concepción 2026</div>
+    <div class="alu-ft">Preuniversitario UDD · Concepción 2026</div>
   </div>
 </div>
 
@@ -408,407 +405,455 @@ const app = initializeApp({
 });
 const db = getFirestore(app);
 
-// ─── DATOS MATERIAS (fechas programadas) ───
 const MATERIAS = {"M1": {"nombre": "Matemática — Bloque 1", "area": "Matemáticas", "fechas": [{"col": 3, "fecha": "2026-04-06", "label": "6 Abr (L)"}, {"col": 4, "fecha": "2026-04-07", "label": "7 Abr (M)"}, {"col": 5, "fecha": "2026-04-13", "label": "13 Abr (L)"}, {"col": 6, "fecha": "2026-04-14", "label": "14 Abr (M)"}, {"col": 7, "fecha": "2026-04-20", "label": "20 Abr (L)"}, {"col": 8, "fecha": "2026-04-21", "label": "21 Abr (M)"}, {"col": 9, "fecha": "2026-04-27", "label": "27 Abr (L)"}, {"col": 10, "fecha": "2026-04-28", "label": "28 Abr (M)"}, {"col": 11, "fecha": "2026-05-04", "label": "4 May (L)"}, {"col": 12, "fecha": "2026-05-05", "label": "5 May (M)"}, {"col": 13, "fecha": "2026-05-11", "label": "11 May (L)"}, {"col": 14, "fecha": "2026-05-12", "label": "12 May (M)"}, {"col": 15, "fecha": "2026-05-18", "label": "18 May (L)"}, {"col": 16, "fecha": "2026-05-19", "label": "19 May (M)"}, {"col": 17, "fecha": "2026-05-25", "label": "25 May (L)"}, {"col": 18, "fecha": "2026-05-26", "label": "26 May (M)"}, {"col": 19, "fecha": "2026-06-01", "label": "1 Jun (L)"}, {"col": 20, "fecha": "2026-06-02", "label": "2 Jun (M)"}, {"col": 21, "fecha": "2026-06-08", "label": "8 Jun (L)"}, {"col": 22, "fecha": "2026-06-09", "label": "9 Jun (M)"}, {"col": 23, "fecha": "2026-06-15", "label": "15 Jun (L)"}, {"col": 24, "fecha": "2026-06-16", "label": "16 Jun (M)"}, {"col": 25, "fecha": "2026-06-22", "label": "22 Jun (L)"}, {"col": 26, "fecha": "2026-06-23", "label": "23 Jun (M)"}, {"col": 27, "fecha": "2026-06-30", "label": "30 Jun (M)"}, {"col": 28, "fecha": "2026-08-03", "label": "3 Ago (L)"}, {"col": 29, "fecha": "2026-08-04", "label": "4 Ago (M)"}, {"col": 30, "fecha": "2026-08-10", "label": "10 Ago (L)"}, {"col": 31, "fecha": "2026-08-11", "label": "11 Ago (M)"}, {"col": 32, "fecha": "2026-08-17", "label": "17 Ago (L)"}, {"col": 33, "fecha": "2026-08-18", "label": "18 Ago (M)"}, {"col": 34, "fecha": "2026-08-24", "label": "24 Ago (L)"}, {"col": 35, "fecha": "2026-08-25", "label": "25 Ago (M)"}, {"col": 36, "fecha": "2026-08-31", "label": "31 Ago (L)"}, {"col": 37, "fecha": "2026-09-01", "label": "1 Sep (M)"}, {"col": 38, "fecha": "2026-09-07", "label": "7 Sep (L)"}, {"col": 39, "fecha": "2026-09-08", "label": "8 Sep (M)"}, {"col": 40, "fecha": "2026-09-14", "label": "14 Sep (L)"}, {"col": 41, "fecha": "2026-09-15", "label": "15 Sep (M)"}, {"col": 42, "fecha": "2026-09-21", "label": "21 Sep (L)"}, {"col": 43, "fecha": "2026-09-22", "label": "22 Sep (M)"}, {"col": 44, "fecha": "2026-09-28", "label": "28 Sep (L)"}, {"col": 45, "fecha": "2026-09-29", "label": "29 Sep (M)"}, {"col": 46, "fecha": "2026-10-05", "label": "5 Oct (L)"}, {"col": 47, "fecha": "2026-10-06", "label": "6 Oct (M)"}, {"col": 48, "fecha": "2026-10-13", "label": "13 Oct (M)"}, {"col": 49, "fecha": "2026-10-19", "label": "19 Oct (L)"}, {"col": 50, "fecha": "2026-10-20", "label": "20 Oct (M)"}, {"col": 51, "fecha": "2026-10-26", "label": "26 Oct (L)"}, {"col": 52, "fecha": "2026-10-27", "label": "27 Oct (M)"}, {"col": 53, "fecha": "2026-11-02", "label": "2 Nov (L)"}, {"col": 54, "fecha": "2026-11-03", "label": "3 Nov (M)"}, {"col": 55, "fecha": "2026-11-09", "label": "9 Nov (L)"}, {"col": 56, "fecha": "2026-11-10", "label": "10 Nov (M)"}, {"col": 57, "fecha": "2026-11-16", "label": "16 Nov (L)"}, {"col": 58, "fecha": "2026-11-17", "label": "17 Nov (M)"}, {"col": 59, "fecha": "2026-11-23", "label": "23 Nov (L)"}, {"col": 60, "fecha": "2026-11-24", "label": "24 Nov (M)"}, {"col": 61, "fecha": "2026-11-30", "label": "30 Nov (L)"}]}, "M2": {"nombre": "Matemática — Bloque 2", "area": "Matemáticas", "fechas": [{"col": 3, "fecha": "2026-08-05", "label": "5 Ago (X)"}, {"col": 4, "fecha": "2026-08-12", "label": "12 Ago (X)"}, {"col": 5, "fecha": "2026-08-19", "label": "19 Ago (X)"}, {"col": 6, "fecha": "2026-08-26", "label": "26 Ago (X)"}, {"col": 7, "fecha": "2026-09-02", "label": "2 Sep (X)"}, {"col": 8, "fecha": "2026-09-09", "label": "9 Sep (X)"}, {"col": 9, "fecha": "2026-09-16", "label": "16 Sep (X)"}, {"col": 10, "fecha": "2026-09-23", "label": "23 Sep (X)"}, {"col": 11, "fecha": "2026-09-30", "label": "30 Sep (X)"}, {"col": 12, "fecha": "2026-10-07", "label": "7 Oct (X)"}, {"col": 13, "fecha": "2026-10-14", "label": "14 Oct (X)"}, {"col": 14, "fecha": "2026-10-21", "label": "21 Oct (X)"}, {"col": 15, "fecha": "2026-10-28", "label": "28 Oct (X)"}, {"col": 16, "fecha": "2026-11-04", "label": "4 Nov (X)"}, {"col": 17, "fecha": "2026-11-11", "label": "11 Nov (X)"}, {"col": 18, "fecha": "2026-11-18", "label": "18 Nov (X)"}, {"col": 19, "fecha": "2026-11-25", "label": "25 Nov (X)"}]}, "Lenguaje": {"nombre": "Comprensión Lectora", "area": "Comprensión Lectora", "fechas": [{"col": 3, "fecha": "2026-04-09", "label": "9 Abr (J)"}, {"col": 4, "fecha": "2026-04-16", "label": "16 Abr (J)"}, {"col": 5, "fecha": "2026-04-23", "label": "23 Abr (J)"}, {"col": 6, "fecha": "2026-04-30", "label": "30 Abr (J)"}, {"col": 7, "fecha": "2026-05-07", "label": "7 May (J)"}, {"col": 8, "fecha": "2026-05-14", "label": "14 May (J)"}, {"col": 9, "fecha": "2026-05-28", "label": "28 May (J)"}, {"col": 10, "fecha": "2026-06-04", "label": "4 Jun (J)"}, {"col": 11, "fecha": "2026-06-11", "label": "11 Jun (J)"}, {"col": 12, "fecha": "2026-06-18", "label": "18 Jun (J)"}, {"col": 13, "fecha": "2026-06-25", "label": "25 Jun (J)"}, {"col": 14, "fecha": "2026-08-06", "label": "6 Ago (J)"}, {"col": 15, "fecha": "2026-08-13", "label": "13 Ago (J)"}, {"col": 16, "fecha": "2026-08-20", "label": "20 Ago (J)"}, {"col": 17, "fecha": "2026-08-27", "label": "27 Ago (J)"}, {"col": 18, "fecha": "2026-09-03", "label": "3 Sep (J)"}, {"col": 19, "fecha": "2026-09-10", "label": "10 Sep (J)"}, {"col": 20, "fecha": "2026-09-17", "label": "17 Sep (J)"}, {"col": 21, "fecha": "2026-09-24", "label": "24 Sep (J)"}, {"col": 22, "fecha": "2026-10-01", "label": "1 Oct (J)"}, {"col": 23, "fecha": "2026-10-08", "label": "8 Oct (J)"}, {"col": 24, "fecha": "2026-10-15", "label": "15 Oct (J)"}, {"col": 25, "fecha": "2026-10-22", "label": "22 Oct (J)"}, {"col": 26, "fecha": "2026-10-29", "label": "29 Oct (J)"}, {"col": 27, "fecha": "2026-11-05", "label": "5 Nov (J)"}, {"col": 28, "fecha": "2026-11-12", "label": "12 Nov (J)"}, {"col": 29, "fecha": "2026-11-19", "label": "19 Nov (J)"}, {"col": 30, "fecha": "2026-11-26", "label": "26 Nov (J)"}]}, "Ciencias": {"nombre": "Ciencias", "area": "Ciencias", "fechas": [{"col": 3, "fecha": "2026-04-08", "label": "8 Abr (X)"}, {"col": 4, "fecha": "2026-04-15", "label": "15 Abr (X)"}, {"col": 5, "fecha": "2026-04-22", "label": "22 Abr (X)"}, {"col": 6, "fecha": "2026-04-29", "label": "29 Abr (X)"}, {"col": 7, "fecha": "2026-05-06", "label": "6 May (X)"}, {"col": 8, "fecha": "2026-05-13", "label": "13 May (X)"}, {"col": 9, "fecha": "2026-05-20", "label": "20 May (X)"}, {"col": 10, "fecha": "2026-05-27", "label": "27 May (X)"}, {"col": 11, "fecha": "2026-06-03", "label": "3 Jun (X)"}, {"col": 12, "fecha": "2026-06-10", "label": "10 Jun (X)"}, {"col": 13, "fecha": "2026-06-17", "label": "17 Jun (X)"}, {"col": 14, "fecha": "2026-06-24", "label": "24 Jun (X)"}, {"col": 15, "fecha": "2026-08-05", "label": "5 Ago (X)"}, {"col": 16, "fecha": "2026-08-12", "label": "12 Ago (X)"}, {"col": 17, "fecha": "2026-08-19", "label": "19 Ago (X)"}, {"col": 18, "fecha": "2026-08-26", "label": "26 Ago (X)"}, {"col": 19, "fecha": "2026-09-02", "label": "2 Sep (X)"}, {"col": 20, "fecha": "2026-09-09", "label": "9 Sep (X)"}, {"col": 21, "fecha": "2026-09-16", "label": "16 Sep (X)"}, {"col": 22, "fecha": "2026-09-23", "label": "23 Sep (X)"}, {"col": 23, "fecha": "2026-09-30", "label": "30 Sep (X)"}, {"col": 24, "fecha": "2026-10-07", "label": "7 Oct (X)"}, {"col": 25, "fecha": "2026-10-14", "label": "14 Oct (X)"}, {"col": 26, "fecha": "2026-10-21", "label": "21 Oct (X)"}, {"col": 27, "fecha": "2026-10-28", "label": "28 Oct (X)"}, {"col": 28, "fecha": "2026-11-04", "label": "4 Nov (X)"}, {"col": 29, "fecha": "2026-11-11", "label": "11 Nov (X)"}, {"col": 30, "fecha": "2026-11-18", "label": "18 Nov (X)"}, {"col": 31, "fecha": "2026-11-25", "label": "25 Nov (X)"}]}, "Historia": {"nombre": "Historia", "area": "Historia", "fechas": [{"col": 3, "fecha": "2026-04-06", "label": "6 Abr (L)"}, {"col": 4, "fecha": "2026-04-13", "label": "13 Abr (L)"}, {"col": 5, "fecha": "2026-04-20", "label": "20 Abr (L)"}, {"col": 6, "fecha": "2026-04-27", "label": "27 Abr (L)"}, {"col": 7, "fecha": "2026-05-04", "label": "4 May (L)"}, {"col": 8, "fecha": "2026-05-11", "label": "11 May (L)"}, {"col": 9, "fecha": "2026-05-18", "label": "18 May (L)"}, {"col": 10, "fecha": "2026-05-25", "label": "25 May (L)"}, {"col": 11, "fecha": "2026-06-01", "label": "1 Jun (L)"}, {"col": 12, "fecha": "2026-06-08", "label": "8 Jun (L)"}, {"col": 13, "fecha": "2026-06-15", "label": "15 Jun (L)"}, {"col": 14, "fecha": "2026-06-22", "label": "22 Jun (L)"}, {"col": 15, "fecha": "2026-08-03", "label": "3 Ago (L)"}, {"col": 16, "fecha": "2026-08-10", "label": "10 Ago (L)"}, {"col": 17, "fecha": "2026-08-17", "label": "17 Ago (L)"}, {"col": 18, "fecha": "2026-08-24", "label": "24 Ago (L)"}, {"col": 19, "fecha": "2026-08-31", "label": "31 Ago (L)"}, {"col": 20, "fecha": "2026-09-07", "label": "7 Sep (L)"}, {"col": 21, "fecha": "2026-09-14", "label": "14 Sep (L)"}, {"col": 22, "fecha": "2026-09-21", "label": "21 Sep (L)"}, {"col": 23, "fecha": "2026-09-28", "label": "28 Sep (L)"}, {"col": 24, "fecha": "2026-10-05", "label": "5 Oct (L)"}, {"col": 25, "fecha": "2026-10-19", "label": "19 Oct (L)"}, {"col": 26, "fecha": "2026-10-26", "label": "26 Oct (L)"}, {"col": 27, "fecha": "2026-11-02", "label": "2 Nov (L)"}, {"col": 28, "fecha": "2026-11-09", "label": "9 Nov (L)"}, {"col": 29, "fecha": "2026-11-16", "label": "16 Nov (L)"}, {"col": 30, "fecha": "2026-11-23", "label": "23 Nov (L)"}, {"col": 31, "fecha": "2026-11-30", "label": "30 Nov (L)"}]}, "Física": {"nombre": "Física", "area": "Física", "fechas": [{"col": 3, "fecha": "2026-04-07", "label": "7 Abr (M)"}, {"col": 4, "fecha": "2026-04-14", "label": "14 Abr (M)"}, {"col": 5, "fecha": "2026-04-21", "label": "21 Abr (M)"}, {"col": 6, "fecha": "2026-04-28", "label": "28 Abr (M)"}, {"col": 7, "fecha": "2026-05-05", "label": "5 May (M)"}, {"col": 8, "fecha": "2026-05-12", "label": "12 May (M)"}, {"col": 9, "fecha": "2026-05-19", "label": "19 May (M)"}, {"col": 10, "fecha": "2026-05-26", "label": "26 May (M)"}, {"col": 11, "fecha": "2026-06-02", "label": "2 Jun (M)"}, {"col": 12, "fecha": "2026-06-09", "label": "9 Jun (M)"}, {"col": 13, "fecha": "2026-06-16", "label": "16 Jun (M)"}, {"col": 14, "fecha": "2026-06-23", "label": "23 Jun (M)"}, {"col": 15, "fecha": "2026-06-30", "label": "30 Jun (M)"}, {"col": 16, "fecha": "2026-08-04", "label": "4 Ago (M)"}, {"col": 17, "fecha": "2026-08-11", "label": "11 Ago (M)"}, {"col": 18, "fecha": "2026-08-18", "label": "18 Ago (M)"}, {"col": 19, "fecha": "2026-08-25", "label": "25 Ago (M)"}, {"col": 20, "fecha": "2026-09-01", "label": "1 Sep (M)"}, {"col": 21, "fecha": "2026-09-08", "label": "8 Sep (M)"}, {"col": 22, "fecha": "2026-09-15", "label": "15 Sep (M)"}, {"col": 23, "fecha": "2026-09-22", "label": "22 Sep (M)"}, {"col": 24, "fecha": "2026-09-29", "label": "29 Sep (M)"}, {"col": 25, "fecha": "2026-10-06", "label": "6 Oct (M)"}, {"col": 26, "fecha": "2026-10-13", "label": "13 Oct (M)"}, {"col": 27, "fecha": "2026-10-20", "label": "20 Oct (M)"}, {"col": 28, "fecha": "2026-10-27", "label": "27 Oct (M)"}, {"col": 29, "fecha": "2026-11-03", "label": "3 Nov (M)"}, {"col": 30, "fecha": "2026-11-10", "label": "10 Nov (M)"}, {"col": 31, "fecha": "2026-11-17", "label": "17 Nov (M)"}, {"col": 32, "fecha": "2026-11-24", "label": "24 Nov (M)"}]}, "Orientación": {"nombre": "Orientación", "area": null, "fechas": [{"col": 3, "fecha": "2026-04-10", "label": "10 Abr (V)"}, {"col": 4, "fecha": "2026-04-17", "label": "17 Abr (V)"}, {"col": 5, "fecha": "2026-04-24", "label": "24 Abr (V)"}, {"col": 6, "fecha": "2026-05-08", "label": "8 May (V)"}, {"col": 7, "fecha": "2026-05-15", "label": "15 May (V)"}, {"col": 8, "fecha": "2026-05-22", "label": "22 May (V)"}, {"col": 9, "fecha": "2026-05-29", "label": "29 May (V)"}, {"col": 10, "fecha": "2026-06-05", "label": "5 Jun (V)"}, {"col": 11, "fecha": "2026-06-12", "label": "12 Jun (V)"}, {"col": 12, "fecha": "2026-06-19", "label": "19 Jun (V)"}, {"col": 13, "fecha": "2026-06-26", "label": "26 Jun (V)"}, {"col": 14, "fecha": "2026-08-07", "label": "7 Ago (V)"}, {"col": 15, "fecha": "2026-08-14", "label": "14 Ago (V)"}, {"col": 16, "fecha": "2026-08-21", "label": "21 Ago (V)"}, {"col": 17, "fecha": "2026-08-28", "label": "28 Ago (V)"}, {"col": 18, "fecha": "2026-09-04", "label": "4 Sep (V)"}, {"col": 19, "fecha": "2026-09-11", "label": "11 Sep (V)"}, {"col": 20, "fecha": "2026-09-25", "label": "25 Sep (V)"}, {"col": 21, "fecha": "2026-10-02", "label": "2 Oct (V)"}, {"col": 22, "fecha": "2026-10-09", "label": "9 Oct (V)"}, {"col": 23, "fecha": "2026-10-16", "label": "16 Oct (V)"}, {"col": 24, "fecha": "2026-10-23", "label": "23 Oct (V)"}, {"col": 25, "fecha": "2026-10-30", "label": "30 Oct (V)"}, {"col": 26, "fecha": "2026-11-06", "label": "6 Nov (V)"}, {"col": 27, "fecha": "2026-11-13", "label": "13 Nov (V)"}, {"col": 28, "fecha": "2026-11-20", "label": "20 Nov (V)"}, {"col": 29, "fecha": "2026-11-27", "label": "27 Nov (V)"}]}};
+const ALUMNOS  = {"M1": [{"correo": "malarconveloso@gmail.com", "nombre": "Matilda Antonia Alarcon Veloso", "rut": "22849985-4"}, {"correo": "valeriapaolaalvarezfernandez@gmail.com", "nombre": "Valeria Paola Alvarez Fernández", "rut": "27358799-3"}, {"correo": "astualonso123@gmail.com", "nombre": "Alonso Agustin Astudillo Fernandez", "rut": "23002266-6"}, {"correo": "gacituamimi99@gmail.com", "nombre": "Evolet Naybth Isidora Benitez Gacitua", "rut": "23239474-9"}, {"correo": "florencia.caceres.donoso24@gmail.com", "nombre": "Florencia Paloma Cáceres Donoso", "rut": "23006455-5"}, {"correo": "mcaceresv2020@ihcass.cl", "nombre": "Martina Caceres Vergara", "rut": "23241569-k"}, {"correo": "javieracatalan2022@gmail.com", "nombre": "Javiera Yubitza Catalan Mendoza", "rut": "22887105-2"}, {"correo": "aconstanzochamorro@gmail.com", "nombre": "Amanda Alejandra Chamorro Constanzo", "rut": "23205129-9"}, {"correo": "valesca.anahis28@gmail.com", "nombre": "Valesca Anahis Cid Muñoz", "rut": "23038236-0"}, {"correo": "elvzabetthsalamanca@gmail.com", "nombre": "Elizabeth Dayana Cuevas Salamanca", "rut": "23239814-0"}, {"correo": "pipedlc18@gmail.com", "nombre": "Felipe Alonso Diaz Torres", "rut": "22975434-3"}, {"correo": "sara_fuentes_82@yahoo.cl", "nombre": "Alonso Durán Fuentes", "rut": "23337342-7"}, {"correo": "sescalonasaavedra@gmail.com", "nombre": "Stephanie Andrea Escalona Saavedra", "rut": "23345673-k"}, {"correo": "polethferrari@gmail.com", "nombre": "Poleth Mikaela Ferrari Fuetes", "rut": "22.693.316-6"}, {"correo": "figueroamartinezchelsea@gmail.com", "nombre": "Chelsea Mabel Figueroa Martínez", "rut": "22271501-6"}, {"correo": "angelineb.colegioedwardccp@gmail.com", "nombre": "Javier Alonso Gajardo Basualto", "rut": "22974574-3"}, {"correo": "pamerodriguezf@gmail.com", "nombre": "Carol Esperanza García Rodríguez", "rut": "23004821-5"}, {"correo": "benjamingonzalezchamorro2006@gmail.com", "nombre": "Benjamin Gonzalez Chamorro", "rut": "22265232-4"}, {"correo": "fernandagonzalez020908@gmail.com", "nombre": "Fernanda Ignacia González Flores", "rut": "22809749-7"}, {"correo": "benjaguerrero581@gmail.com", "nombre": "Benjamín Ignacio Guerrero Quiroga", "rut": "22696731-1"}, {"correo": "francisca.igd.12@gmail.com", "nombre": "Francisca Guzmán Díaz", "rut": "23351472-1"}, {"correo": "chormaz.dickinson@gmail.com", "nombre": "Christian Hormazabal Dickinson", "rut": "22423736-7"}, {"correo": "angelinneinzunzap09@gmail.com", "nombre": "Angelinne Millaray Inzunza Peña", "rut": "22764459-1"}, {"correo": "bbarbarajerez.tapia@gmail.com", "nombre": "Barbara Jerez", "rut": "22765962-8"}, {"correo": "samartinh@almondale.cl", "nombre": "Sofía Antonia Martin Hurst", "rut": "22971901-7"}, {"correo": "camilabelen2277@gmail.com", "nombre": "Camila Belén Matus Creixell", "rut": "22425298-6"}, {"correo": "mellab.valentina@gmail.com", "nombre": "Valentina Paz Mella Bobadilla", "rut": "22535139-2"}, {"correo": "elisamillar7@gmail.com", "nombre": "Elisa Millar Faúndez", "rut": "22856241-6"}, {"correo": "fernamorag22@gmail.com", "nombre": "Fernanda Alejandra Mora González", "rut": "23011609-1"}, {"correo": "maurolavet@gmail.com", "nombre": "Mauro Nicolás Olave Torres", "rut": "23276213-6"}, {"correo": "antonella25.olivares.02@gmail.com", "nombre": "Antonella Paz Olivares Vera", "rut": "22652824-5"}, {"correo": "parrasofia1148@gmail.com", "nombre": "Sofía Antonia Parra Barrientos", "rut": "22877452-9"}, {"correo": "penadiannelys01@gmail.com", "nombre": "Diannelys Sofía Peña Rossodivita", "rut": "26287360-9"}, {"correo": "cota.ramirez.coddou@gmail.com", "nombre": "Constanza Beatriz Ramírez Coddou", "rut": "23112415-2"}, {"correo": "agu.escobar1908@gmail.com", "nombre": "Agustina Del Pilar Riquelme Escobar", "rut": "22777429-0"}, {"correo": "seba26andres@gmail.com", "nombre": "Sebastián Andrés Riquelme Oñate", "rut": "22730058-2"}, {"correo": "keilayazminrobles@gmail.com", "nombre": "Keila Yazmin Robles Espinoza", "rut": "22608509-2"}, {"correo": "luciorodriguez10000@gmail.com", "nombre": "Lucio Alejandro Rodriguez Aguilera", "rut": "22782577-4"}, {"correo": "fersaez1002@gmail.com", "nombre": "Fernanda Dannae Sáez Rodriguez", "rut": "23247015-1"}, {"correo": "elena.san1608@gmail.com", "nombre": "Elena Victoria San Martín Olate", "rut": "22795719-0"}, {"correo": "cristobal.silva.medina.30@gmail.com", "nombre": "Cristóbal Ignacio Silva Medina", "rut": "22967956-2"}, {"correo": "amandat.onate@gmail.com", "nombre": "Amanda Isabel Tapia Oñate", "rut": "22819295-3"}, {"correo": "ampyvallejosv@gmail.com", "nombre": "Amparo Isabella Vallejos Valenzuela", "rut": "22784926-6"}, {"correo": "victoriawega17@gmail.com", "nombre": "Victoria Monserrat Vega Lucero", "rut": "22617442-7"}, {"correo": "lvega@santasabina.cl", "nombre": "Luis Felipe Vega Salazar", "rut": "22916054-0"}, {"correo": "valppetitbrenilh@gmail.com", "nombre": "Mateo Alonso Sebastián Zúñiga Petit-Brenilh", "rut": "22741483-9"}, {"correo": "alexlabra66@gmail.com", "nombre": "Alex Antonio Labra Villegas", "rut": "22377947-6"}, {"correo": "patriciiovasros@gmail.com", "nombre": "Patricio Vásquez Rosales", "rut": "22863079-9"}, {"correo": "valentinaabelenp@gmail.com", "nombre": "Valentina Portiño Cabezas", "rut": "22820638-5"}, {"correo": "sofiaparis0808@gmail.com", "nombre": "Sofia Catalina Paris Lazcano", "rut": "22790587-5"}, {"correo": "anais2009.av@gmail.com", "nombre": "Anais Patricia Villegas Aarcón", "rut": "23011347-5"}, {"correo": "fernandabelensalgadoflores758@gmail.com", "nombre": "Fernanda Salgado Flores", "rut": "22732244-6"}, {"correo": "stefania.zorritolover@gmail.com", "nombre": "Estefania Muñoz Villanueva", "rut": "22763181-3"}, {"correo": "carmengloria3105@gmail.com", "nombre": "Carmen Gloria Silva Bravo", "rut": "23034663-1"}, {"correo": "catalinapedrero73@gmail.com", "nombre": "Catalina Pedreros Aguayo", "rut": "22495082-9"}, {"correo": "mm4293676@gmail.com", "nombre": "Matías Alonso Muñoz Soto", "rut": "22489792-8"}], "M2": [{"correo": "malarconveloso@gmail.com", "nombre": "Matilda Antonia Alarcon Veloso", "rut": "22849985-4"}, {"correo": "valeriapaolaalvarezfernandez@gmail.com", "nombre": "Valeria Paola Alvarez Fernández", "rut": "27358799-3"}, {"correo": "astualonso123@gmail.com", "nombre": "Alonso Agustin Astudillo Fernandez", "rut": "23002266-6"}, {"correo": "gacituamimi99@gmail.com", "nombre": "Evolet Naybth Isidora Benitez Gacitua", "rut": "23239474-9"}, {"correo": "florencia.caceres.donoso24@gmail.com", "nombre": "Florencia Paloma Cáceres Donoso", "rut": "23006455-5"}, {"correo": "mcaceresv2020@ihcass.cl", "nombre": "Martina Caceres Vergara", "rut": "23241569-k"}, {"correo": "javieracatalan2022@gmail.com", "nombre": "Javiera Yubitza Catalan Mendoza", "rut": "22887105-2"}, {"correo": "aconstanzochamorro@gmail.com", "nombre": "Amanda Alejandra Chamorro Constanzo", "rut": "23205129-9"}, {"correo": "valesca.anahis28@gmail.com", "nombre": "Valesca Anahis Cid Muñoz", "rut": "23038236-0"}, {"correo": "elvzabetthsalamanca@gmail.com", "nombre": "Elizabeth Dayana Cuevas Salamanca", "rut": "23239814-0"}, {"correo": "pipedlc18@gmail.com", "nombre": "Felipe Alonso Diaz Torres", "rut": "22975434-3"}, {"correo": "sara_fuentes_82@yahoo.cl", "nombre": "Alonso Durán Fuentes", "rut": "23337342-7"}, {"correo": "sescalonasaavedra@gmail.com", "nombre": "Stephanie Andrea Escalona Saavedra", "rut": "23345673-k"}, {"correo": "polethferrari@gmail.com", "nombre": "Poleth Mikaela Ferrari Fuetes", "rut": "22.693.316-6"}, {"correo": "figueroamartinezchelsea@gmail.com", "nombre": "Chelsea Mabel Figueroa Martínez", "rut": "22271501-6"}, {"correo": "angelineb.colegioedwardccp@gmail.com", "nombre": "Javier Alonso Gajardo Basualto", "rut": "22974574-3"}, {"correo": "pamerodriguezf@gmail.com", "nombre": "Carol Esperanza García Rodríguez", "rut": "23004821-5"}, {"correo": "benjamingonzalezchamorro2006@gmail.com", "nombre": "Benjamin Gonzalez Chamorro", "rut": "22265232-4"}, {"correo": "fernandagonzalez020908@gmail.com", "nombre": "Fernanda Ignacia González Flores", "rut": "22809749-7"}, {"correo": "benjaguerrero581@gmail.com", "nombre": "Benjamín Ignacio Guerrero Quiroga", "rut": "22696731-1"}, {"correo": "francisca.igd.12@gmail.com", "nombre": "Francisca Guzmán Díaz", "rut": "23351472-1"}, {"correo": "chormaz.dickinson@gmail.com", "nombre": "Christian Hormazabal Dickinson", "rut": "22423736-7"}, {"correo": "angelinneinzunzap09@gmail.com", "nombre": "Angelinne Millaray Inzunza Peña", "rut": "22764459-1"}, {"correo": "bbarbarajerez.tapia@gmail.com", "nombre": "Barbara Jerez", "rut": "22765962-8"}, {"correo": "samartinh@almondale.cl", "nombre": "Sofía Antonia Martin Hurst", "rut": "22971901-7"}, {"correo": "camilabelen2277@gmail.com", "nombre": "Camila Belén Matus Creixell", "rut": "22425298-6"}, {"correo": "mellab.valentina@gmail.com", "nombre": "Valentina Paz Mella Bobadilla", "rut": "22535139-2"}, {"correo": "elisamillar7@gmail.com", "nombre": "Elisa Millar Faúndez", "rut": "22856241-6"}, {"correo": "fernamorag22@gmail.com", "nombre": "Fernanda Alejandra Mora González", "rut": "23011609-1"}, {"correo": "maurolavet@gmail.com", "nombre": "Mauro Nicolás Olave Torres", "rut": "23276213-6"}, {"correo": "antonella25.olivares.02@gmail.com", "nombre": "Antonella Paz Olivares Vera", "rut": "22652824-5"}, {"correo": "parrasofia1148@gmail.com", "nombre": "Sofía Antonia Parra Barrientos", "rut": "22877452-9"}, {"correo": "penadiannelys01@gmail.com", "nombre": "Diannelys Sofía Peña Rossodivita", "rut": "26287360-9"}, {"correo": "cota.ramirez.coddou@gmail.com", "nombre": "Constanza Beatriz Ramírez Coddou", "rut": "23112415-2"}, {"correo": "agu.escobar1908@gmail.com", "nombre": "Agustina Del Pilar Riquelme Escobar", "rut": "22777429-0"}, {"correo": "seba26andres@gmail.com", "nombre": "Sebastián Andrés Riquelme Oñate", "rut": "22730058-2"}, {"correo": "keilayazminrobles@gmail.com", "nombre": "Keila Yazmin Robles Espinoza", "rut": "22608509-2"}, {"correo": "luciorodriguez10000@gmail.com", "nombre": "Lucio Alejandro Rodriguez Aguilera", "rut": "22782577-4"}, {"correo": "fersaez1002@gmail.com", "nombre": "Fernanda Dannae Sáez Rodriguez", "rut": "23247015-1"}, {"correo": "elena.san1608@gmail.com", "nombre": "Elena Victoria San Martín Olate", "rut": "22795719-0"}, {"correo": "cristobal.silva.medina.30@gmail.com", "nombre": "Cristóbal Ignacio Silva Medina", "rut": "22967956-2"}, {"correo": "amandat.onate@gmail.com", "nombre": "Amanda Isabel Tapia Oñate", "rut": "22819295-3"}, {"correo": "ampyvallejosv@gmail.com", "nombre": "Amparo Isabella Vallejos Valenzuela", "rut": "22784926-6"}, {"correo": "victoriawega17@gmail.com", "nombre": "Victoria Monserrat Vega Lucero", "rut": "22617442-7"}, {"correo": "lvega@santasabina.cl", "nombre": "Luis Felipe Vega Salazar", "rut": "22916054-0"}, {"correo": "valppetitbrenilh@gmail.com", "nombre": "Mateo Alonso Sebastián Zúñiga Petit-Brenilh", "rut": "22741483-9"}, {"correo": "alexlabra66@gmail.com", "nombre": "Alex Antonio Labra Villegas", "rut": "22377947-6"}, {"correo": "patriciiovasros@gmail.com", "nombre": "Patricio Vásquez Rosales", "rut": "22863079-9"}, {"correo": "valentinaabelenp@gmail.com", "nombre": "Valentina Portiño Cabezas", "rut": "22820638-5"}, {"correo": "sofiaparis0808@gmail.com", "nombre": "Sofia Catalina Paris Lazcano", "rut": "22790587-5"}, {"correo": "anais2009.av@gmail.com", "nombre": "Anais Patricia Villegas Aarcón", "rut": "23011347-5"}, {"correo": "fernandabelensalgadoflores758@gmail.com", "nombre": "Fernanda Salgado Flores", "rut": "22732244-6"}, {"correo": "stefania.zorritolover@gmail.com", "nombre": "Estefania Muñoz Villanueva", "rut": "22763181-3"}, {"correo": "carmengloria3105@gmail.com", "nombre": "Carmen Gloria Silva Bravo", "rut": "23034663-1"}, {"correo": "catalinapedrero73@gmail.com", "nombre": "Catalina Pedreros Aguayo", "rut": "22495082-9"}, {"correo": "mm4293676@gmail.com", "nombre": "Matías Alonso Muñoz Soto", "rut": "22489792-8"}], "Lenguaje": [{"correo": "malarconveloso@gmail.com", "nombre": "Matilda Antonia Alarcon Veloso", "rut": "22849985-4"}, {"correo": "valeriapaolaalvarezfernandez@gmail.com", "nombre": "Valeria Paola Alvarez Fernández", "rut": "27358799-3"}, {"correo": "florencia.caceres.donoso24@gmail.com", "nombre": "Florencia Paloma Cáceres Donoso", "rut": "23006455-5"}, {"correo": "mcaceresv2020@ihcass.cl", "nombre": "Martina Caceres Vergara", "rut": "23241569-k"}, {"correo": "javieracatalan2022@gmail.com", "nombre": "Javiera Yubitza Catalan Mendoza", "rut": "22887105-2"}, {"correo": "aconstanzochamorro@gmail.com", "nombre": "Amanda Alejandra Chamorro Constanzo", "rut": "23205129-9"}, {"correo": "valesca.anahis28@gmail.com", "nombre": "Valesca Anahis Cid Muñoz", "rut": "23038236-0"}, {"correo": "elvzabetthsalamanca@gmail.com", "nombre": "Elizabeth Dayana Cuevas Salamanca", "rut": "23239814-0"}, {"correo": "pipedlc18@gmail.com", "nombre": "Felipe Alonso Diaz Torres", "rut": "22975434-3"}, {"correo": "sara_fuentes_82@yahoo.cl", "nombre": "Alonso Durán Fuentes", "rut": "23337342-7"}, {"correo": "sescalonasaavedra@gmail.com", "nombre": "Stephanie Andrea Escalona Saavedra", "rut": "23345673-k"}, {"correo": "angelineb.colegioedwardccp@gmail.com", "nombre": "Javier Alonso Gajardo Basualto", "rut": "22974574-3"}, {"correo": "pamerodriguezf@gmail.com", "nombre": "Carol Esperanza García Rodríguez", "rut": "23004821-5"}, {"correo": "benjamingatica.bgz@gmail.com", "nombre": "Benjamin Vicente Gatica Zapata", "rut": "22788738-9"}, {"correo": "benjamingonzalezchamorro2006@gmail.com", "nombre": "Benjamin Gonzalez Chamorro", "rut": "22265232-4"}, {"correo": "fernandagonzalez020908@gmail.com", "nombre": "Fernanda Ignacia González Flores", "rut": "22809749-7"}, {"correo": "benjaguerrero581@gmail.com", "nombre": "Benjamín Ignacio Guerrero Quiroga", "rut": "22696731-1"}, {"correo": "francisca.igd.12@gmail.com", "nombre": "Francisca Guzmán Díaz", "rut": "23351472-1"}, {"correo": "chormaz.dickinson@gmail.com", "nombre": "Christian Hormazabal Dickinson", "rut": "22423736-7"}, {"correo": "bbarbarajerez.tapia@gmail.com", "nombre": "Barbara Jerez", "rut": "22765962-8"}, {"correo": "samartinh@almondale.cl", "nombre": "Sofía Antonia Martin Hurst", "rut": "22971901-7"}, {"correo": "camilabelen2277@gmail.com", "nombre": "Camila Belén Matus Creixell", "rut": "22425298-6"}, {"correo": "mellab.valentina@gmail.com", "nombre": "Valentina Paz Mella Bobadilla", "rut": "22535139-2"}, {"correo": "elisamillar7@gmail.com", "nombre": "Elisa Millar Faúndez", "rut": "22856241-6"}, {"correo": "maurolavet@gmail.com", "nombre": "Mauro Nicolás Olave Torres", "rut": "23276213-6"}, {"correo": "antonella25.olivares.02@gmail.com", "nombre": "Antonella Paz Olivares Vera", "rut": "22652824-5"}, {"correo": "penadiannelys01@gmail.com", "nombre": "Diannelys Sofía Peña Rossodivita", "rut": "26287360-9"}, {"correo": "trinidadreyesrecabal@icloud.com", "nombre": "Florencia Reyes", "rut": "23057548-7"}, {"correo": "agu.escobar1908@gmail.com", "nombre": "Agustina Del Pilar Riquelme Escobar", "rut": "22777429-0"}, {"correo": "seba26andres@gmail.com", "nombre": "Sebastián Andrés Riquelme Oñate", "rut": "22730058-2"}, {"correo": "keilayazminrobles@gmail.com", "nombre": "Keila Yazmin Robles Espinoza", "rut": "22608509-2"}, {"correo": "luciorodriguez10000@gmail.com", "nombre": "Lucio Alejandro Rodriguez Aguilera", "rut": "22782577-4"}, {"correo": "fersaez1002@gmail.com", "nombre": "Fernanda Dannae Sáez Rodriguez", "rut": "23247015-1"}, {"correo": "elena.san1608@gmail.com", "nombre": "Elena Victoria San Martín Olate", "rut": "22795719-0"}, {"correo": "cristobal.silva.medina.30@gmail.com", "nombre": "Cristóbal Ignacio Silva Medina", "rut": "22967956-2"}, {"correo": "amandat.onate@gmail.com", "nombre": "Amanda Isabel Tapia Oñate", "rut": "22819295-3"}, {"correo": "ampyvallejosv@gmail.com", "nombre": "Amparo Isabella Vallejos Valenzuela", "rut": "22784926-6"}, {"correo": "victoriawega17@gmail.com", "nombre": "Victoria Monserrat Vega Lucero", "rut": "22617442-7"}, {"correo": "lvega@santasabina.cl", "nombre": "Luis Felipe Vega Salazar", "rut": "22916054-0"}, {"correo": "valppetitbrenilh@gmail.com", "nombre": "Mateo Alonso Sebastián Zúñiga Petit-Brenilh", "rut": "22741483-9"}, {"correo": "alexlabra66@gmail.com", "nombre": "Alex Antonio Labra Villegas", "rut": "22377947-6"}, {"correo": "patriciiovasros@gmail.com", "nombre": "Patricio Vásquez Rosales", "rut": "22863079-9"}, {"correo": "valentinaabelenp@gmail.com", "nombre": "Valentina Portiño Cabezas", "rut": "22820638-5"}, {"correo": "sofiaparis0808@gmail.com", "nombre": "Sofia Catalina Paris Lazcano", "rut": "22790587-5"}, {"correo": "anais2009.av@gmail.com", "nombre": "Anais Patricia Villegas Aarcón", "rut": "23011347-5"}, {"correo": "fernandabelensalgadoflores758@gmail.com", "nombre": "Fernanda Salgado Flores", "rut": "22732244-6"}, {"correo": "stefania.zorritolover@gmail.com", "nombre": "Estefania Muñoz Villanueva", "rut": "22763181-3"}, {"correo": "carmengloria3105@gmail.com", "nombre": "Carmen Gloria Silva Bravo", "rut": "23034663-1"}, {"correo": "catalinapedrero73@gmail.com", "nombre": "Catalina Pedreros Aguayo", "rut": "22495082-9"}, {"correo": "mm4293676@gmail.com", "nombre": "Matías Alonso Muñoz Soto", "rut": "22489792-8"}], "Ciencias": [{"correo": "malarconveloso@gmail.com", "nombre": "Matilda Antonia Alarcon Veloso", "rut": "22849985-4"}, {"correo": "gacituamimi99@gmail.com", "nombre": "Evolet Naybth Isidora Benitez Gacitua", "rut": "23239474-9"}, {"correo": "reyescanoagustin@gmail.com", "nombre": "Jorge Agustin Cano Reyes", "rut": "22452097-2"}, {"correo": "echeverriacris2009@gmail.com", "nombre": "Cristóbal Vicente Echeverría Oliva", "rut": "23159815-4"}, {"correo": "polethferrari@gmail.com", "nombre": "Poleth Mikaela Ferrari Fuetes", "rut": "22.693.316-6"}, {"correo": "benjaguerrero581@gmail.com", "nombre": "Benjamín Ignacio Guerrero Quiroga", "rut": "22696731-1"}, {"correo": "francisca.igd.12@gmail.com", "nombre": "Francisca Guzmán Díaz", "rut": "23351472-1"}, {"correo": "angelinneinzunzap09@gmail.com", "nombre": "Angelinne Millaray Inzunza Peña", "rut": "22764459-1"}, {"correo": "bbarbarajerez.tapia@gmail.com", "nombre": "Barbara Jerez", "rut": "22765962-8"}, {"correo": "elisamillar7@gmail.com", "nombre": "Elisa Millar Faúndez", "rut": "22856241-6"}, {"correo": "antonella25.olivares.02@gmail.com", "nombre": "Antonella Paz Olivares Vera", "rut": "22652824-5"}, {"correo": "trinidadreyesrecabal@icloud.com", "nombre": "Florencia Reyes", "rut": "23057548-7"}, {"correo": "agu.escobar1908@gmail.com", "nombre": "Agustina Del Pilar Riquelme Escobar", "rut": "22777429-0"}, {"correo": "seba26andres@gmail.com", "nombre": "Sebastián Andrés Riquelme Oñate", "rut": "22730058-2"}, {"correo": "keilayazminrobles@gmail.com", "nombre": "Keila Yazmin Robles Espinoza", "rut": "22608509-2"}, {"correo": "fersaez1002@gmail.com", "nombre": "Fernanda Dannae Sáez Rodriguez", "rut": "23247015-1"}, {"correo": "cristobal.silva.medina.30@gmail.com", "nombre": "Cristóbal Ignacio Silva Medina", "rut": "22967956-2"}, {"correo": "victoriawega17@gmail.com", "nombre": "Victoria Monserrat Vega Lucero", "rut": "22617442-7"}, {"correo": "valppetitbrenilh@gmail.com", "nombre": "Mateo Alonso Sebastián Zúñiga Petit-Brenilh", "rut": "22741483-9"}, {"correo": "elvzabetthsalamanca@gmail.com", "nombre": "Elizabeth Dayana Cuevas Salamanca", "rut": "23239814-0"}, {"correo": "sescalonasaavedra@gmail.com", "nombre": "Stephanie Andrea Escalona Saavedra", "rut": "23345673-k"}, {"correo": "fernandagonzalez020908@gmail.com", "nombre": "Fernanda Ignacia González Flores", "rut": "22809749-7"}, {"correo": "chormaz.dickinson@gmail.com", "nombre": "Christian Hormazabal Dickinson", "rut": "22423736-7"}, {"correo": "parrasofia1148@gmail.com", "nombre": "Sofía Antonia Parra Barrientos", "rut": "22877452-9"}, {"correo": "penadiannelys01@gmail.com", "nombre": "Diannelys Sofía Peña Rossodivita", "rut": "26287360-9"}, {"correo": "luciorodriguez10000@gmail.com", "nombre": "Lucio Alejandro Rodriguez Aguilera", "rut": "22782577-4"}, {"correo": "elena.san1608@gmail.com", "nombre": "Elena Victoria San Martín Olate", "rut": "22795719-0"}, {"correo": "amandat.onate@gmail.com", "nombre": "Amanda Isabel Tapia Oñate", "rut": "22819295-3"}, {"correo": "lvega@santasabina.cl", "nombre": "Luis Felipe Vega Salazar", "rut": "22916054-0"}, {"correo": "figueroamartinezchelsea@gmail.com", "nombre": "Chelsea Mabel Figueroa Martínez", "rut": "22271501-6"}, {"correo": "benjamingonzalezchamorro2006@gmail.com", "nombre": "Benjamin Gonzalez Chamorro", "rut": "22265232-4"}, {"correo": "mellab.valentina@gmail.com", "nombre": "Valentina Paz Mella Bobadilla", "rut": "22535139-2"}, {"correo": "fernamorag22@gmail.com", "nombre": "Fernanda Alejandra Mora González", "rut": "23011609-1"}, {"correo": "maurolavet@gmail.com", "nombre": "Mauro Nicolás Olave Torres", "rut": "23276213-6"}], "Historia": [{"correo": "valeriapaolaalvarezfernandez@gmail.com", "nombre": "Valeria Paola Alvarez Fernández", "rut": "27358799-3"}, {"correo": "florencia.caceres.donoso24@gmail.com", "nombre": "Florencia Paloma Cáceres Donoso", "rut": "23006455-5"}, {"correo": "mcaceresv2020@ihcass.cl", "nombre": "Martina Caceres Vergara", "rut": "23241569-k"}, {"correo": "valesca.anahis28@gmail.com", "nombre": "Valesca Anahis Cid Muñoz", "rut": "23038236-0"}, {"correo": "sara_fuentes_82@yahoo.cl", "nombre": "Alonso Durán Fuentes", "rut": "23337342-7"}, {"correo": "sescalonasaavedra@gmail.com", "nombre": "Stephanie Andrea Escalona Saavedra", "rut": "23345673-k"}, {"correo": "angelineb.colegioedwardccp@gmail.com", "nombre": "Javier Alonso Gajardo Basualto", "rut": "22974574-3"}, {"correo": "pamerodriguezf@gmail.com", "nombre": "Carol Esperanza García Rodríguez", "rut": "23004821-5"}, {"correo": "benjamingatica.bgz@gmail.com", "nombre": "Benjamin Vicente Gatica Zapata", "rut": "22788738-9"}, {"correo": "benjaguerrero581@gmail.com", "nombre": "Benjamín Ignacio Guerrero Quiroga", "rut": "22696731-1"}, {"correo": "samartinh@almondale.cl", "nombre": "Sofía Antonia Martin Hurst", "rut": "22971901-7"}, {"correo": "camilabelen2277@gmail.com", "nombre": "Camila Belén Matus Creixell", "rut": "22425298-6"}, {"correo": "elisamillar7@gmail.com", "nombre": "Elisa Millar Faúndez", "rut": "22856241-6"}, {"correo": "elena.san1608@gmail.com", "nombre": "Elena Victoria San Martín Olate", "rut": "22795719-0"}, {"correo": "victoriawega17@gmail.com", "nombre": "Victoria Monserrat Vega Lucero", "rut": "22617442-7"}, {"correo": "sofiaparis0808@gmail.com", "nombre": "Sofia Catalina Paris Lazcano", "rut": "22790587-5"}, {"correo": "fernandabelensalgadoflores758@gmail.com", "nombre": "Fernanda Salgado Flores", "rut": "22732244-6"}, {"correo": "mm4293676@gmail.com", "nombre": "Matías Alonso Muñoz Soto", "rut": "22489792-8"}], "Física": [{"correo": "figueroamartinezchelsea@gmail.com", "nombre": "Chelsea Mabel Figueroa Martínez", "rut": "22271501-6"}, {"correo": "benjamingonzalezchamorro2006@gmail.com", "nombre": "Benjamin Gonzalez Chamorro", "rut": "22265232-4"}, {"correo": "mellab.valentina@gmail.com", "nombre": "Valentina Paz Mella Bobadilla", "rut": "22535139-2"}, {"correo": "fernamorag22@gmail.com", "nombre": "Fernanda Alejandra Mora González", "rut": "23011609-1"}, {"correo": "maurolavet@gmail.com", "nombre": "Mauro Nicolás Olave Torres", "rut": "23276213-6"}], "Orientación": [{"correo": "malarconveloso@gmail.com", "nombre": "Matilda Antonia Alarcon Veloso", "rut": "22849985-4"}, {"correo": "valeriapaolaalvarezfernandez@gmail.com", "nombre": "Valeria Paola Alvarez Fernández", "rut": "27358799-3"}, {"correo": "astualonso123@gmail.com", "nombre": "Alonso Agustin Astudillo Fernandez", "rut": "23002266-6"}, {"correo": "gacituamimi99@gmail.com", "nombre": "Evolet Naybth Isidora Benitez Gacitua", "rut": "23239474-9"}, {"correo": "florencia.caceres.donoso24@gmail.com", "nombre": "Florencia Paloma Cáceres Donoso", "rut": "23006455-5"}, {"correo": "mcaceresv2020@ihcass.cl", "nombre": "Martina Caceres Vergara", "rut": "23241569-k"}, {"correo": "javieracatalan2022@gmail.com", "nombre": "Javiera Yubitza Catalan Mendoza", "rut": "22887105-2"}, {"correo": "aconstanzochamorro@gmail.com", "nombre": "Amanda Alejandra Chamorro Constanzo", "rut": "23205129-9"}, {"correo": "valesca.anahis28@gmail.com", "nombre": "Valesca Anahis Cid Muñoz", "rut": "23038236-0"}, {"correo": "elvzabetthsalamanca@gmail.com", "nombre": "Elizabeth Dayana Cuevas Salamanca", "rut": "23239814-0"}, {"correo": "pipedlc18@gmail.com", "nombre": "Felipe Alonso Diaz Torres", "rut": "22975434-3"}, {"correo": "sara_fuentes_82@yahoo.cl", "nombre": "Alonso Durán Fuentes", "rut": "23337342-7"}, {"correo": "sescalonasaavedra@gmail.com", "nombre": "Stephanie Andrea Escalona Saavedra", "rut": "23345673-k"}, {"correo": "polethferrari@gmail.com", "nombre": "Poleth Mikaela Ferrari Fuetes", "rut": "22.693.316-6"}, {"correo": "figueroamartinezchelsea@gmail.com", "nombre": "Chelsea Mabel Figueroa Martínez", "rut": "22271501-6"}, {"correo": "angelineb.colegioedwardccp@gmail.com", "nombre": "Javier Alonso Gajardo Basualto", "rut": "22974574-3"}, {"correo": "pamerodriguezf@gmail.com", "nombre": "Carol Esperanza García Rodríguez", "rut": "23004821-5"}, {"correo": "benjamingonzalezchamorro2006@gmail.com", "nombre": "Benjamin Gonzalez Chamorro", "rut": "22265232-4"}, {"correo": "fernandagonzalez020908@gmail.com", "nombre": "Fernanda Ignacia González Flores", "rut": "22809749-7"}, {"correo": "benjaguerrero581@gmail.com", "nombre": "Benjamín Ignacio Guerrero Quiroga", "rut": "22696731-1"}, {"correo": "francisca.igd.12@gmail.com", "nombre": "Francisca Guzmán Díaz", "rut": "23351472-1"}, {"correo": "chormaz.dickinson@gmail.com", "nombre": "Christian Hormazabal Dickinson", "rut": "22423736-7"}, {"correo": "angelinneinzunzap09@gmail.com", "nombre": "Angelinne Millaray Inzunza Peña", "rut": "22764459-1"}, {"correo": "bbarbarajerez.tapia@gmail.com", "nombre": "Barbara Jerez", "rut": "22765962-8"}, {"correo": "samartinh@almondale.cl", "nombre": "Sofía Antonia Martin Hurst", "rut": "22971901-7"}, {"correo": "camilabelen2277@gmail.com", "nombre": "Camila Belén Matus Creixell", "rut": "22425298-6"}, {"correo": "mellab.valentina@gmail.com", "nombre": "Valentina Paz Mella Bobadilla", "rut": "22535139-2"}, {"correo": "elisamillar7@gmail.com", "nombre": "Elisa Millar Faúndez", "rut": "22856241-6"}, {"correo": "fernamorag22@gmail.com", "nombre": "Fernanda Alejandra Mora González", "rut": "23011609-1"}, {"correo": "maurolavet@gmail.com", "nombre": "Mauro Nicolás Olave Torres", "rut": "23276213-6"}, {"correo": "antonella25.olivares.02@gmail.com", "nombre": "Antonella Paz Olivares Vera", "rut": "22652824-5"}, {"correo": "parrasofia1148@gmail.com", "nombre": "Sofía Antonia Parra Barrientos", "rut": "22877452-9"}, {"correo": "penadiannelys01@gmail.com", "nombre": "Diannelys Sofía Peña Rossodivita", "rut": "26287360-9"}, {"correo": "cota.ramirez.coddou@gmail.com", "nombre": "Constanza Beatriz Ramírez Coddou", "rut": "23112415-2"}, {"correo": "agu.escobar1908@gmail.com", "nombre": "Agustina Del Pilar Riquelme Escobar", "rut": "22777429-0"}, {"correo": "seba26andres@gmail.com", "nombre": "Sebastián Andrés Riquelme Oñate", "rut": "22730058-2"}, {"correo": "keilayazminrobles@gmail.com", "nombre": "Keila Yazmin Robles Espinoza", "rut": "22608509-2"}, {"correo": "luciorodriguez10000@gmail.com", "nombre": "Lucio Alejandro Rodriguez Aguilera", "rut": "22782577-4"}, {"correo": "fersaez1002@gmail.com", "nombre": "Fernanda Dannae Sáez Rodriguez", "rut": "23247015-1"}, {"correo": "elena.san1608@gmail.com", "nombre": "Elena Victoria San Martín Olate", "rut": "22795719-0"}, {"correo": "cristobal.silva.medina.30@gmail.com", "nombre": "Cristóbal Ignacio Silva Medina", "rut": "22967956-2"}, {"correo": "amandat.onate@gmail.com", "nombre": "Amanda Isabel Tapia Oñate", "rut": "22819295-3"}, {"correo": "ampyvallejosv@gmail.com", "nombre": "Amparo Isabella Vallejos Valenzuela", "rut": "22784926-6"}, {"correo": "victoriawega17@gmail.com", "nombre": "Victoria Monserrat Vega Lucero", "rut": "22617442-7"}, {"correo": "lvega@santasabina.cl", "nombre": "Luis Felipe Vega Salazar", "rut": "22916054-0"}, {"correo": "valppetitbrenilh@gmail.com", "nombre": "Mateo Alonso Sebastián Zúñiga Petit-Brenilh", "rut": "22741483-9"}, {"correo": "alexlabra66@gmail.com", "nombre": "Alex Antonio Labra Villegas", "rut": "22377947-6"}, {"correo": "patriciiovasros@gmail.com", "nombre": "Patricio Vásquez Rosales", "rut": "22863079-9"}, {"correo": "valentinaabelenp@gmail.com", "nombre": "Valentina Portiño Cabezas", "rut": "22820638-5"}, {"correo": "sofiaparis0808@gmail.com", "nombre": "Sofia Catalina Paris Lazcano", "rut": "22790587-5"}, {"correo": "anais2009.av@gmail.com", "nombre": "Anais Patricia Villegas Aarcón", "rut": "23011347-5"}, {"correo": "fernandabelensalgadoflores758@gmail.com", "nombre": "Fernanda Salgado Flores", "rut": "22732244-6"}, {"correo": "stefania.zorritolover@gmail.com", "nombre": "Estefania Muñoz Villanueva", "rut": "22763181-3"}, {"correo": "carmengloria3105@gmail.com", "nombre": "Carmen Gloria Silva Bravo", "rut": "23034663-1"}, {"correo": "catalinapedrero73@gmail.com", "nombre": "Catalina Pedreros Aguayo", "rut": "22495082-9"}, {"correo": "mm4293676@gmail.com", "nombre": "Matías Alonso Muñoz Soto", "rut": "22489792-8"}, {"correo": "benjamingatica.bgz@gmail.com", "nombre": "Benjamin Vicente Gatica Zapata", "rut": "22788738-9"}, {"correo": "trinidadreyesrecabal@icloud.com", "nombre": "Florencia Reyes", "rut": "23057548-7"}, {"correo": "reyescanoagustin@gmail.com", "nombre": "Jorge Agustin Cano Reyes", "rut": "22452097-2"}, {"correo": "echeverriacris2009@gmail.com", "nombre": "Cristóbal Vicente Echeverría Oliva", "rut": "23159815-4"}]};
 
-let sesionActiva = null;
-let timerInterval = null;
-let timerTotalSecs = 0;
+let sesion = null;
+let timerIv = null;
+let timerTotal = 0;
 let liveUnsub = null;
-let todosRegistros = [];
-let materiaSeleccionada = null;
+let allRegs = [];
+let matSel = null;
 
-// ─── ROUTER ───
-const params = new URLSearchParams(window.location.search);
-const routeSid = params.get('sid'), routeTok = params.get('tok');
-if (routeSid) {
+// Estado verificación: rut -> true(presente)/false(ausente)
+let estadoVerif = {};
+
+// ── ROUTER ──────────────────────────────────────────────────
+const p = new URLSearchParams(location.search);
+if (p.get('sid')) {
   document.getElementById('profe-page').classList.remove('active');
   document.getElementById('alumno-page').classList.add('active');
-  cargarVistaAlumno(routeSid, routeTok);
+  cargarAlumno(p.get('sid'), p.get('tok'));
 } else {
   initProfe();
 }
 
-// ─── TABS ───
-window.showTab = function(id) {
-  ['tab-sesion','tab-registros','tab-alumnos'].forEach(t =>
-    document.getElementById(t).style.display = t===id ? 'block' : 'none');
+// ── TABS ────────────────────────────────────────────────────
+window.showTab = id => {
+  ['ts','tr','ta'].forEach(t =>
+    document.getElementById(t).style.display = t===id?'block':'none');
   document.querySelectorAll('.tab').forEach((b,i) =>
-    b.classList.toggle('active', ['tab-sesion','tab-registros','tab-alumnos'][i]===id));
-  if (id==='tab-registros') cargarYRenderRegistros();
-  if (id==='tab-alumnos') cargarYRenderAlumnos();
+    b.classList.toggle('active',['ts','tr','ta'][i]===id));
+  if (id==='tr') cargarRegs();
+  if (id==='ta') cargarAlumnos();
 };
 
-// ─── RENDER MATERIAS ───
-function renderMaterias() {
-  const grid = document.getElementById('materias-grid');
-  grid.innerHTML = Object.entries(MATERIAS).map(([key, m]) =>
-    `<button class="materia-btn" data-key="${key}" onclick="seleccionarMateria('${key}')">${m.nombre}</button>`
-  ).join('');
+// ── MATERIAS ────────────────────────────────────────────────
+function renderMaterias(){
+  document.getElementById('mat-grid').innerHTML =
+    Object.entries(MATERIAS).map(([k,m])=>
+      `<button class="mat-btn" data-k="${k}" onclick="selMat('${k}')">${m.nombre}</button>`
+    ).join('');
 }
 
-window.seleccionarMateria = function(key) {
-  materiaSeleccionada = key;
-  document.querySelectorAll('.materia-btn').forEach(b =>
-    b.classList.toggle('selected', b.dataset.key === key));
+window.selMat = k => {
+  matSel = k;
+  document.querySelectorAll('.mat-btn').forEach(b=>b.classList.toggle('sel',b.dataset.k===k));
   const sel = document.getElementById('sel-fecha');
   sel.disabled = false;
   sel.innerHTML = '<option value="">— elige una fecha —</option>' +
-    MATERIAS[key].fechas.map(f =>
-      `<option value="${f.fecha}" data-col="${f.col}">${f.label}</option>`
-    ).join('');
-  document.getElementById('btn-activar').disabled = true;
-  sel.onchange = () => {
-    document.getElementById('btn-activar').disabled = !sel.value;
-  };
+    MATERIAS[k].fechas.map(f=>`<option value="${f.fecha}" data-col="${f.col}">${f.label}</option>`).join('');
+  document.getElementById('btn-act').disabled = true;
+  sel.onchange = () => document.getElementById('btn-act').disabled = !sel.value;
 };
 
-// ─── SESIÓN ───
-window.iniciarSesion = async function() {
+// ── SESIÓN ──────────────────────────────────────────────────
+window.iniciarSesion = async () => {
   const sel = document.getElementById('sel-fecha');
-  const fechaVal = sel.value;
-  const colIdx = parseInt(sel.selectedOptions[0]?.dataset.col);
-  const fechaLabel = sel.selectedOptions[0]?.text;
-  const minutos = parseInt(document.getElementById('sesion-minutos').value)||15;
-  if (!materiaSeleccionada || !fechaVal) { alert('Elige materia y fecha.'); return; }
-
-  const materia = MATERIAS[materiaSeleccionada];
+  const fecha = sel.value;
+  const col = parseInt(sel.selectedOptions[0]?.dataset.col);
+  const label = sel.selectedOptions[0]?.text;
+  const min = parseInt(document.getElementById('ses-min').value)||15;
+  if (!matSel||!fecha){alert('Elige materia y fecha.');return;}
+  const m = MATERIAS[matSel];
   const id = Date.now().toString(36)+Math.random().toString(36).slice(2,5);
-  const token = Math.random().toString(36).slice(2)+Date.now().toString(36);
-  sesionActiva = {
-    id, token, minutos, inicio: Date.now(),
-    materiaKey: materiaSeleccionada,
-    materiaNombre: materia.nombre,
-    materiaArea: materia.area,
-    fecha: fechaVal,
-    fechaLabel,
-    colIdx,
-    activa: true
-  };
-  await setDoc(doc(db,'sesiones',id), sesionActiva);
-  localStorage.setItem('preu_sesion_id', id);
+  const tok = Math.random().toString(36).slice(2)+Date.now().toString(36);
+  sesion = {id,tok,min,inicio:Date.now(),matKey:matSel,matNom:m.nombre,matArea:m.area,fecha,fechaLabel:label,colIdx:col,activa:true};
+  await setDoc(doc(db,'sesiones',id), sesion);
+  localStorage.setItem('preu_sid',id);
   mostrarQR();
   suscribirLive(id);
-  actualizarHeader(materia.nombre, fechaLabel);
-  document.getElementById('live-banner').classList.add('on');
-  document.getElementById('live-materia').textContent = materia.nombre;
-  document.getElementById('live-fecha').textContent = fechaLabel;
-  document.getElementById('btn-regenerar').style.display = '';
-  document.getElementById('cierre-panel').classList.remove('show');
+  setHeader(m.nombre, label);
+  document.getElementById('live-bar').classList.add('on');
+  document.getElementById('live-mat').textContent = m.nombre;
+  document.getElementById('live-fec').textContent = label;
+  document.getElementById('btn-regen').style.display='';
 };
 
-window.cerrarSesion = function() {
-  if (!sesionActiva) return;
-  document.getElementById('cierre-panel').classList.toggle('show');
+window.pedirCierre = () => {
+  if (!sesion){alert('No hay sesión activa.');return;}
+  abrirVerificacion();
 };
 
-window.cerrarSesionFinal = async function() {
-  if (!sesionActiva) return;
-  // Obtener alumnos del área y marcar ausentes
-  await marcarAusentes();
-  await setDoc(doc(db,'sesiones',sesionActiva.id),{activa:false},{merge:true});
-  sesionActiva = null;
-  localStorage.removeItem('preu_sesion_id');
-  if (timerInterval) clearInterval(timerInterval);
-  if (liveUnsub) liveUnsub();
-  document.getElementById('qr-panel').style.display='none';
-  document.getElementById('qr-placeholder').style.display='';
-  document.getElementById('btn-regenerar').style.display='none';
-  document.getElementById('live-banner').classList.remove('on');
-  document.getElementById('cierre-panel').classList.remove('show');
-  actualizarHeader(null);
-  document.getElementById('sesion-live-table').innerHTML='<div class="empty-state">Sesión cerrada — revisa los registros</div>';
-  document.getElementById('conteo-tag').textContent='0 presentes';
-};
-
-async function marcarAusentes() {
-  if (!sesionActiva) return;
-  const sesId = sesionActiva.id;
-  const fecha = sesionActiva.fecha;
-  const materiaNombre = sesionActiva.materiaNombre;
-  const materiaKey = sesionActiva.materiaKey;
-
-  // Obtener todos los alumnos del área correspondiente
-  const snapAlumnos = await getDocs(collection(db,'alumnos'));
-  let alumnos = snapAlumnos.docs.map(d=>d.data());
-  // Filtrar por área si aplica
-  if (sesionActiva.materiaArea) {
-    alumnos = alumnos.filter(a => a.area === sesionActiva.materiaArea);
-  }
-
-  // Obtener presentes
-  const snapRegs = await getDocs(query(collection(db,'registros'),where('sesion_id','==',sesId)));
-  const presentes = new Set(snapRegs.docs.map(d=>d.data().rut));
-
-  const batch = writeBatch(db);
-  for (const al of alumnos) {
-    if (!presentes.has(al.rut)) {
-      const regId = sesId+'_ausente_'+al.rut.replace(/[^0-9kK]/g,'');
-      batch.set(doc(db,'registros',regId),{
-        id: regId,
-        sesion_id: sesId,
-        sesion_nombre: materiaNombre,
-        sesion_fecha: fecha,
-        sesion_materia_key: materiaKey,
-        nombre: al.nombre,
-        rut: al.rut,
-        correo: al.correo||'',
-        estado: '0',
-        timestamp: Date.now()
-      });
-    }
-    // Marcar presentes con estado 1
-    const regPres = sesId+'_'+al.rut.replace(/[^0-9kK]/g,'');
-    const snap = await getDoc(doc(db,'registros',regPres));
-    if (snap.exists()) {
-      batch.update(doc(db,'registros',regPres),{estado:'1'});
-    }
-  }
-  await batch.commit();
-}
-
-window.regenerarQR = async function() {
-  if (!sesionActiva) return;
-  sesionActiva.token = Math.random().toString(36).slice(2)+Date.now().toString(36);
-  sesionActiva.inicio = Date.now();
-  await setDoc(doc(db,'sesiones',sesionActiva.id),{token:sesionActiva.token,inicio:sesionActiva.inicio},{merge:true});
+window.regenerarQR = async () => {
+  if (!sesion) return;
+  sesion.tok = Math.random().toString(36).slice(2)+Date.now().toString(36);
+  sesion.inicio = Date.now();
+  await setDoc(doc(db,'sesiones',sesion.id),{tok:sesion.tok,inicio:sesion.inicio},{merge:true});
+  // Actualizar campo "token" también (usado por la vista alumno)
+  await setDoc(doc(db,'sesiones',sesion.id),{token:sesion.tok},{merge:true});
   mostrarQR();
 };
 
-function mostrarQR() {
-  if (!sesionActiva) return;
-  document.getElementById('qr-placeholder').style.display='none';
+function mostrarQR(){
+  if (!sesion) return;
+  document.getElementById('qr-ph').style.display='none';
   document.getElementById('qr-panel').style.display='';
-  document.getElementById('qr-nombre-display').textContent = sesionActiva.materiaNombre;
-  document.getElementById('qr-fecha-display').textContent = sesionActiva.fechaLabel;
-  const url = window.location.origin+window.location.pathname+'?sid='+sesionActiva.id+'&tok='+sesionActiva.token;
-  const qrDiv = document.getElementById('qrcode');
-  qrDiv.innerHTML='';
-  new QRCode(qrDiv,{text:url,width:190,height:190,colorDark:'#2D3748',colorLight:'#ffffff'});
-  timerTotalSecs = sesionActiva.minutos*60;
-  if (timerInterval) clearInterval(timerInterval);
-  timerInterval = setInterval(tickTimer,1000);
+  document.getElementById('qr-mat').textContent = sesion.matNom;
+  document.getElementById('qr-fec').textContent = sesion.fechaLabel;
+  const url = location.origin+location.pathname+'?sid='+sesion.id+'&tok='+sesion.tok;
+  document.getElementById('qrcode').innerHTML='';
+  new QRCode(document.getElementById('qrcode'),{text:url,width:185,height:185,colorDark:'#2D3748',colorLight:'#ffffff'});
+  timerTotal = sesion.min*60;
+  if(timerIv) clearInterval(timerIv);
+  timerIv = setInterval(tickTimer,1000);
   tickTimer();
 }
 
-function tickTimer() {
-  if (!sesionActiva) return;
-  const rest = Math.max(0, timerTotalSecs-Math.floor((Date.now()-sesionActiva.inicio)/1000));
-  const m = Math.floor(rest/60), s = rest%60;
-  document.getElementById('timer-text').textContent = rest>0
+function tickTimer(){
+  if(!sesion) return;
+  const rest = Math.max(0, timerTotal-Math.floor((Date.now()-sesion.inicio)/1000));
+  const m=Math.floor(rest/60), s=rest%60;
+  document.getElementById('timer-txt').textContent = rest>0
     ? `Válido por ${m}:${String(s).padStart(2,'0')} min`
     : 'QR expirado — regenera para continuar';
-  document.getElementById('timer-bar').style.width=(rest/timerTotalSecs*100)+'%';
+  document.getElementById('timer-bar').style.width=(rest/timerTotal*100)+'%';
   document.getElementById('timer-bar').style.background=rest===0?'var(--rojo)':'var(--calipso)';
 }
 
-function suscribirLive(sid) {
-  if (liveUnsub) liveUnsub();
-  liveUnsub = onSnapshot(query(collection(db,'registros'),where('sesion_id','==',sid),where('estado','!=','0')), snap => {
-    const regs = snap.docs.map(d=>d.data()).filter(r=>r.estado!=='0').sort((a,b)=>a.timestamp-b.timestamp);
-    document.getElementById('conteo-tag').textContent = regs.length+' presentes';
-    document.getElementById('live-num').textContent = regs.length;
-    const wrap = document.getElementById('sesion-live-table');
-    if (!regs.length){wrap.innerHTML='<div class="empty-state">Esperando alumnos...</div>';return;}
-    wrap.innerHTML=`<div class="table-wrap"><table>
-      <thead><tr><th>Nombre</th><th>RUT</th><th>Correo</th><th>Hora</th></tr></thead>
-      <tbody>${regs.map(r=>`<tr>
-        <td><strong>${r.nombre}</strong></td><td>${r.rut}</td>
-        <td style="color:var(--texto2)">${r.correo}</td>
-        <td><span class="chip">${new Date(r.timestamp).toLocaleTimeString('es-CL',{hour:'2-digit',minute:'2-digit'})}</span></td>
-      </tr>`).join('')}</tbody>
-    </table></div>`;
+// ── LIVE (tiempo real) ───────────────────────────────────────
+function suscribirLive(sid){
+  if(liveUnsub) liveUnsub();
+  // Escuchar TODOS los registros de la sesión en tiempo real
+  liveUnsub = onSnapshot(
+    query(collection(db,'registros'), where('sesion_id','==',sid)),
+    snap => {
+      // Solo mostrar presentes (estado '1' o sin estado aún = recién marcaron)
+      const regs = snap.docs.map(d=>d.data())
+        .filter(r => r.estado==='1' || !r.estado)
+        .sort((a,b)=>a.timestamp-b.timestamp);
+
+      document.getElementById('conteo-tag').textContent = regs.length+' presentes';
+      document.getElementById('live-n').textContent = regs.length;
+
+      const wrap = document.getElementById('live-table');
+      if(!regs.length){wrap.innerHTML='<div class="empty">Esperando que los alumnos escaneen el QR...</div>';return;}
+      wrap.innerHTML=`<div class="tw"><table>
+        <thead><tr><th>Nombre</th><th>RUT</th><th>Correo</th><th>Hora</th></tr></thead>
+        <tbody>${regs.map(r=>`<tr>
+          <td><strong>${r.nombre}</strong></td>
+          <td>${r.rut}</td>
+          <td style="color:var(--texto2)">${r.correo}</td>
+          <td><span class="chip-v">${new Date(r.timestamp).toLocaleTimeString('es-CL',{hour:'2-digit',minute:'2-digit'})}</span></td>
+        </tr>`).join('')}</tbody>
+      </table></div>`;
+    }
+  );
+}
+
+function setHeader(mat, fec){
+  document.getElementById('h-dot').classList.toggle('on',!!mat);
+  document.getElementById('h-sesion').textContent = mat ? mat+(fec?' · '+fec:'') : 'Sin sesión activa';
+}
+
+// ── VERIFICACIÓN ─────────────────────────────────────────────
+window.abrirVerificacion = async () => {
+  if(!sesion) return;
+  // Obtener alumnos del área
+  const lista = ALUMNOS[sesion.matKey] || [];
+
+  // Obtener presentes actuales desde Firebase
+  const snap = await getDocs(query(collection(db,'registros'),where('sesion_id','==',sesion.id)));
+  const presentesRut = new Set(
+    snap.docs.map(d=>d.data()).filter(r=>r.estado==='1'||!r.estado).map(r=>r.rut)
+  );
+  const presentesCorriendo = new Map(
+    snap.docs.map(d=>d.data()).filter(r=>r.estado==='1'||!r.estado).map(r=>[r.rut, r])
+  );
+
+  // Inicializar estado: presente si escaneó, ausente si no
+  estadoVerif = {};
+  lista.forEach(a => {
+    estadoVerif[a.rut] = presentesRut.has(a.rut);
   });
+
+  window._verifLista = lista;
+  window._verifPresMap = presentesCorriendo;
+
+  document.getElementById('verif-title').textContent = sesion.matNom;
+  document.getElementById('verif-sub').textContent = sesion.fechaLabel+' · '+lista.length+' alumnos en el área';
+  document.getElementById('verif-buscar').value = '';
+  renderVerif('');
+  actualizarStats();
+  document.getElementById('verif-overlay').classList.add('show');
+};
+
+function renderVerif(busq){
+  const lista = window._verifLista || [];
+  const filtrada = busq
+    ? lista.filter(a=>a.nombre.toLowerCase().includes(busq.toLowerCase())||a.rut.includes(busq))
+    : lista;
+
+  document.getElementById('verif-body').innerHTML = filtrada.map(a => {
+    const pres = estadoVerif[a.rut];
+    const badge = pres
+      ? '<span class="badge bg">✓ Presente</span>'
+      : '<span class="badge br">✗ Ausente</span>';
+    return `<div class="alu-row">
+      <input type="checkbox" class="alu-check" data-rut="${a.rut}"
+        ${pres?'checked':''} onchange="toggleVerif('${a.rut}',this.checked)"/>
+      <div class="alu-info">
+        <div class="alu-name">${a.nombre}</div>
+        <div class="alu-rut">${a.rut}</div>
+      </div>
+      <div class="alu-estado">${badge}</div>
+    </div>`;
+  }).join('') || '<div class="empty">Sin resultados</div>';
 }
 
-function actualizarHeader(materia, fecha) {
-  const dot = document.getElementById('header-dot');
-  const txt = document.getElementById('header-sesion');
-  if (materia) {
-    dot.classList.add('on'); txt.textContent = materia + (fecha ? ' · '+fecha : '');
-  } else {
-    dot.classList.remove('on'); txt.textContent = 'Sin sesión activa';
+window.toggleVerif = (rut, checked) => {
+  estadoVerif[rut] = checked;
+  // Actualizar badge en la misma fila
+  const row = document.querySelector(`.alu-check[data-rut="${rut}"]`)?.closest('.alu-row');
+  if(row){
+    row.querySelector('.alu-estado').innerHTML = checked
+      ? '<span class="badge bg">✓ Presente</span>'
+      : '<span class="badge br">✗ Ausente</span>';
   }
+  actualizarStats();
+};
+
+function actualizarStats(){
+  const vals = Object.values(estadoVerif);
+  const p = vals.filter(Boolean).length;
+  const a = vals.filter(v=>!v).length;
+  document.getElementById('vs-p').textContent = p+' presentes';
+  document.getElementById('vs-a').textContent = a+' ausentes';
 }
 
-// ─── REGISTROS ───
-async function cargarYRenderRegistros() {
-  document.getElementById('tabla-registros').innerHTML='<div class="loading"><span class="spinner"></span>Cargando...</div>';
+window.filtrarVerif = () => {
+  renderVerif(document.getElementById('verif-buscar').value);
+};
+
+window.cerrarVerifSinFinalizar = () => {
+  document.getElementById('verif-overlay').classList.remove('show');
+};
+
+window.confirmarCierre = async () => {
+  if(!sesion) return;
+  const lista = window._verifLista || [];
+  const presMap = window._verifPresMap || new Map();
+
+  const batch = writeBatch(db);
+
+  for(const a of lista){
+    const presente = estadoVerif[a.rut];
+    const regId = sesion.id+'_'+a.rut.replace(/[^0-9kK]/g,'');
+
+    if(presente){
+      // Si ya existe (escaneó QR), asegurarse de tener estado '1'
+      if(presMap.has(a.rut)){
+        batch.update(doc(db,'registros',regId),{estado:'1'});
+      } else {
+        // Marcado manualmente como presente por el profesor
+        batch.set(doc(db,'registros',regId),{
+          id:regId, sesion_id:sesion.id,
+          sesion_nombre:sesion.matNom, sesion_fecha:sesion.fecha,
+          sesion_materia_key:sesion.matKey,
+          nombre:a.nombre, rut:a.rut, correo:a.correo||'',
+          estado:'1', marcado_manual:true, timestamp:Date.now()
+        });
+      }
+    } else {
+      // Ausente
+      batch.set(doc(db,'registros',regId),{
+        id:regId, sesion_id:sesion.id,
+        sesion_nombre:sesion.matNom, sesion_fecha:sesion.fecha,
+        sesion_materia_key:sesion.matKey,
+        nombre:a.nombre, rut:a.rut, correo:a.correo||'',
+        estado:'0', timestamp:Date.now()
+      },{merge:true});
+    }
+  }
+
+  await batch.commit();
+  await setDoc(doc(db,'sesiones',sesion.id),{activa:false},{merge:true});
+
+  // Reset UI
+  sesion = null;
+  localStorage.removeItem('preu_sid');
+  if(timerIv) clearInterval(timerIv);
+  if(liveUnsub) liveUnsub();
+  document.getElementById('qr-panel').style.display='none';
+  document.getElementById('qr-ph').style.display='';
+  document.getElementById('btn-regen').style.display='none';
+  document.getElementById('live-bar').classList.remove('on');
+  document.getElementById('live-table').innerHTML='<div class="empty">Sesión finalizada — revisa los registros en la pestaña Registros</div>';
+  document.getElementById('conteo-tag').textContent='0 presentes';
+  setHeader(null);
+  document.getElementById('verif-overlay').classList.remove('show');
+};
+
+// ── REGISTROS ────────────────────────────────────────────────
+async function cargarRegs(){
+  document.getElementById('t-reg').innerHTML='<div class="loading"><span class="sp"></span>Cargando...</div>';
   const snap = await getDocs(collection(db,'registros'));
-  todosRegistros = snap.docs.map(d=>d.data());
-  const materias = [...new Set(todosRegistros.map(r=>r.sesion_nombre))];
-  const sel = document.getElementById('filtro-materia');
-  sel.innerHTML='<option value="">Todas</option>'+materias.map(m=>`<option value="${m}">${m}</option>`).join('');
-  filtrarRegistros();
+  allRegs = snap.docs.map(d=>d.data());
+  const mats = [...new Set(allRegs.map(r=>r.sesion_nombre))];
+  document.getElementById('f-mat').innerHTML='<option value="">Todas</option>'+mats.map(m=>`<option>${m}</option>`).join('');
+  filtrarReg();
 }
 
-window.filtrarRegistros = function() {
-  const fm = document.getElementById('filtro-materia').value;
-  const fe = document.getElementById('filtro-estado').value;
-  const fa = document.getElementById('filtro-alumno').value.toLowerCase();
-  let regs = todosRegistros;
-  if (fm) regs = regs.filter(r=>r.sesion_nombre===fm);
-  if (fe) regs = regs.filter(r=>r.estado===fe);
-  if (fa) regs = regs.filter(r=>r.nombre.toLowerCase().includes(fa)||r.rut.toLowerCase().includes(fa));
-  regs = regs.sort((a,b)=>a.timestamp-b.timestamp);
-
-  const total = regs.length;
-  const pres = regs.filter(r=>r.estado==='1').length;
-  const aus = regs.filter(r=>r.estado==='0').length;
-  const just = regs.filter(r=>r.estado==='J').length;
-  const sesiones = new Set(regs.map(r=>r.sesion_id)).size;
-
-  document.getElementById('metrics-wrap').innerHTML=`
-    <div class="metric"><div class="metric-val">${total}</div><div class="metric-label">Registros</div></div>
-    <div class="metric" style="border-left-color:var(--verde)"><div class="metric-val" style="color:var(--verde)">${pres}</div><div class="metric-label">Presentes</div></div>
-    <div class="metric" style="border-left-color:var(--rojo)"><div class="metric-val" style="color:var(--rojo)">${aus}</div><div class="metric-label">Ausentes</div></div>`;
-
-  const wrap = document.getElementById('tabla-registros');
-  if (!regs.length){wrap.innerHTML='<div class="empty-state">Sin registros para este filtro</div>';return;}
-
+window.filtrarReg = () => {
+  const fm=document.getElementById('f-mat').value;
+  const fe=document.getElementById('f-est').value;
+  const fa=document.getElementById('f-alu').value.toLowerCase();
+  let regs=allRegs;
+  if(fm) regs=regs.filter(r=>r.sesion_nombre===fm);
+  if(fe) regs=regs.filter(r=>r.estado===fe);
+  if(fa) regs=regs.filter(r=>r.nombre?.toLowerCase().includes(fa)||r.rut?.includes(fa));
+  regs=regs.sort((a,b)=>a.timestamp-b.timestamp);
+  const p=regs.filter(r=>r.estado==='1').length;
+  const a=regs.filter(r=>r.estado==='0').length;
+  const ses=new Set(regs.map(r=>r.sesion_id)).size;
+  document.getElementById('metrics').innerHTML=`
+    <div class="metric"><div class="mv">${regs.length}</div><div class="ml">Registros</div></div>
+    <div class="metric" style="border-left-color:var(--verde)"><div class="mv" style="color:var(--verde)">${p}</div><div class="ml">Presentes</div></div>
+    <div class="metric" style="border-left-color:var(--rojo)"><div class="mv" style="color:var(--rojo)">${a}</div><div class="ml">Ausentes</div></div>`;
+  const wrap=document.getElementById('t-reg');
+  if(!regs.length){wrap.innerHTML='<div class="empty">Sin registros para este filtro</div>';return;}
   wrap.innerHTML=`<table>
     <thead><tr><th>Nombre</th><th>RUT</th><th>Materia</th><th>Fecha</th><th>Estado</th></tr></thead>
     <tbody>${regs.map(r=>{
-      const estado = r.estado==='1'
-        ? '<span class="badge badge-green">✓ Presente</span>'
-        : r.estado==='0'
-          ? '<span class="badge badge-red">✗ Ausente</span>'
-          : '<span class="badge badge-amber">J Justificado</span>';
-      return `<tr>
-        <td><strong>${r.nombre}</strong></td>
-        <td>${r.rut}</td>
-        <td>${r.sesion_nombre}</td>
-        <td>${r.sesion_fecha}</td>
-        <td>${estado}</td>
-      </tr>`;
+      const e=r.estado==='1'?'<span class="badge bg">✓ Presente</span>'
+        :r.estado==='0'?'<span class="badge br">✗ Ausente</span>'
+        :'<span class="badge ba">J Justificado</span>';
+      return `<tr><td><strong>${r.nombre}</strong></td><td>${r.rut}</td><td>${r.sesion_nombre}</td><td>${r.sesion_fecha}</td><td>${e}</td></tr>`;
     }).join('')}</tbody>
   </table>`;
 };
 
-window.exportarCSV = function() {
-  const fm = document.getElementById('filtro-materia').value;
-  const fe = document.getElementById('filtro-estado').value;
-  let regs = todosRegistros;
-  if (fm) regs = regs.filter(r=>r.sesion_nombre===fm);
-  if (fe) regs = regs.filter(r=>r.estado===fe);
-  const rows = regs.map(r=>[r.nombre,r.rut,r.correo||'',r.sesion_nombre,r.sesion_fecha,r.estado||'1']
-    .map(v=>`"${v}"`).join(','));
+window.exportarCSV = () => {
+  const fm=document.getElementById('f-mat').value;
+  const fe=document.getElementById('f-est').value;
+  let regs=allRegs;
+  if(fm) regs=regs.filter(r=>r.sesion_nombre===fm);
+  if(fe) regs=regs.filter(r=>r.estado===fe);
+  const rows=regs.map(r=>[r.nombre,r.rut,r.correo||'',r.sesion_nombre,r.sesion_fecha,r.estado||'1'].map(v=>`"${v}"`).join(','));
   const csv=['nombre,rut,correo,materia,fecha,estado',...rows].join('\n');
   const blob=new Blob(['\uFEFF'+csv],{type:'text/csv;charset=utf-8;'});
   const a=document.createElement('a');a.href=URL.createObjectURL(blob);
   a.download='asistencia_preudd_'+new Date().toISOString().slice(0,10)+'.csv';a.click();
 };
 
-// ─── ALUMNOS ───
-window.importarAlumnos = async function() {
-  const raw = document.getElementById('import-text').value.trim();
-  if (!raw) return;
-  const lineas = raw.split('\n').map(l=>l.trim()).filter(Boolean);
-  let importados = 0;
-  for (const linea of lineas) {
-    const cols = linea.split(/\t|,/).map(c=>c.trim().replace(/^"|"$/g,''));
-    if (cols.length<2||cols[0].toLowerCase()==='nombre') continue;
-    const [nombre,rut,correo=''] = cols;
+// ── ALUMNOS ──────────────────────────────────────────────────
+window.importarAlumnos = async () => {
+  const raw=document.getElementById('imp-txt').value.trim();if(!raw)return;
+  const lineas=raw.split('\n').map(l=>l.trim()).filter(Boolean);
+  let n=0;
+  for(const l of lineas){
+    const c=l.split(/\t|,/).map(x=>x.trim().replace(/^"|"$/g,''));
+    if(c.length<2||c[0].toLowerCase()==='nombre') continue;
+    const [nombre,rut,correo='']=c;
     const id='rut_'+rut.replace(/[^0-9kK]/g,'');
-    const exists=await getDoc(doc(db,'alumnos',id));
-    if (!exists.exists()){await setDoc(doc(db,'alumnos',id),{id,nombre,rut,correo});importados++;}
+    const ex=await getDoc(doc(db,'alumnos',id));
+    if(!ex.exists()){await setDoc(doc(db,'alumnos',id),{id,nombre,rut,correo});n++;}
   }
-  const st=document.getElementById('import-status');
-  st.className='msg msg-success';st.style.display='block';
-  st.textContent=`${importados} alumno${importados!==1?'s':''} importados.`;
-  document.getElementById('import-text').value='';
+  const st=document.getElementById('imp-st');
+  st.className='msg ms';st.style.display='block';
+  st.textContent=`${n} alumno${n!==1?'s':''} importados.`;
+  document.getElementById('imp-txt').value='';
   setTimeout(()=>st.style.display='none',4000);
-  cargarYRenderAlumnos();
+  cargarAlumnos();
 };
-window.leerCSV=function(input){const file=input.files[0];if(!file)return;const r=new FileReader();r.onload=e=>{document.getElementById('import-text').value=e.target.result;window.importarAlumnos();};r.readAsText(file,'UTF-8');};
-window.agregarManual=function(){document.getElementById('modal-manual').style.display='block';};
-window.guardarManual=async function(){
-  const nombre=document.getElementById('m-nombre').value.trim();
-  const rut=document.getElementById('m-rut').value.trim();
-  const correo=document.getElementById('m-correo').value.trim();
-  if(!nombre||!rut){alert('Nombre y RUT requeridos.');return;}
-  const id='rut_'+rut.replace(/[^0-9kK]/g,'');
-  await setDoc(doc(db,'alumnos',id),{id,nombre,rut,correo});
-  document.getElementById('modal-manual').style.display='none';
-  ['m-nombre','m-rut','m-correo'].forEach(f=>document.getElementById(f).value='');
-  cargarYRenderAlumnos();
+window.leerCSV=input=>{const f=input.files[0];if(!f)return;const r=new FileReader();r.onload=e=>{document.getElementById('imp-txt').value=e.target.result;window.importarAlumnos();};r.readAsText(f,'UTF-8');};
+window.guardarManual=async()=>{
+  const n=document.getElementById('m-n').value.trim(),r=document.getElementById('m-r').value.trim(),c=document.getElementById('m-c').value.trim();
+  if(!n||!r){alert('Nombre y RUT requeridos.');return;}
+  const id='rut_'+r.replace(/[^0-9kK]/g,'');
+  await setDoc(doc(db,'alumnos',id),{id,nombre:n,rut:r,correo:c});
+  document.getElementById('mod-manual').style.display='none';
+  ['m-n','m-r','m-c'].forEach(x=>document.getElementById(x).value='');
+  cargarAlumnos();
 };
-window.eliminarAlumno=async function(id){if(!confirm('¿Eliminar?'))return;await deleteDoc(doc(db,'alumnos',id));cargarYRenderAlumnos();};
-window.limpiarAlumnos=async function(){if(!confirm('¿Eliminar TODOS?'))return;const s=await getDocs(collection(db,'alumnos'));for(const d of s.docs)await deleteDoc(d.ref);cargarYRenderAlumnos();};
-
-async function cargarYRenderAlumnos(){
-  document.getElementById('tabla-alumnos').innerHTML='<div class="loading"><span class="spinner"></span>Cargando...</div>';
+window.eliminarAlumno=async id=>{if(!confirm('¿Eliminar?'))return;await deleteDoc(doc(db,'alumnos',id));cargarAlumnos();};
+window.limpiarAlumnos=async()=>{if(!confirm('¿Eliminar TODOS?'))return;const s=await getDocs(collection(db,'alumnos'));for(const d of s.docs)await deleteDoc(d.ref);cargarAlumnos();};
+async function cargarAlumnos(){
+  document.getElementById('t-alu').innerHTML='<div class="loading"><span class="sp"></span>Cargando...</div>';
   const snap=await getDocs(collection(db,'alumnos'));
-  const alumnos=snap.docs.map(d=>d.data());
-  const wrap=document.getElementById('tabla-alumnos');
-  if(!alumnos.length){wrap.innerHTML='<div class="empty-state">Sin alumnos</div>';return;}
-  wrap.innerHTML=`<div class="table-wrap"><table>
+  const al=snap.docs.map(d=>d.data());
+  const w=document.getElementById('t-alu');
+  if(!al.length){w.innerHTML='<div class="empty">Sin alumnos</div>';return;}
+  w.innerHTML=`<div class="tw"><table>
     <thead><tr><th>#</th><th>Nombre</th><th>RUT</th><th>Correo</th><th>Área</th><th></th></tr></thead>
-    <tbody>${alumnos.map((a,i)=>`<tr>
+    <tbody>${al.map((a,i)=>`<tr>
       <td style="color:var(--texto2);font-size:11px;font-weight:700">${String(i+1).padStart(2,'0')}</td>
       <td><strong>${a.nombre}</strong></td><td>${a.rut}</td>
       <td style="color:var(--texto2)">${a.correo||'—'}</td>
-      <td>${a.area?`<span class="badge badge-cal">${a.area}</span>`:'—'}</td>
-      <td><button class="btn btn-danger btn-sm" onclick="eliminarAlumno('${a.id}')">✕</button></td>
+      <td>${a.area?`<span class="badge bc">${a.area}</span>`:'—'}</td>
+      <td><button class="btn btn-r btn-xs" onclick="eliminarAlumno('${a.id}')">✕</button></td>
     </tr>`).join('')}</tbody>
   </table></div>`;
 }
 
-// ─── VISTA ALUMNO ───
-async function cargarVistaAlumno(sid, tok) {
+// ── VISTA ALUMNO ─────────────────────────────────────────────
+async function cargarAlumno(sid,tok){
   const snap=await getDoc(doc(db,'sesiones',sid));
-  const info=document.getElementById('alumno-sesion-info');
-  const btn=document.getElementById('al-submit-btn');
+  const info=document.getElementById('alu-info');
+  const btn=document.getElementById('al-btn');
   if(!snap.exists()){info.textContent='⚠ Sesión no encontrada.';btn.disabled=true;return;}
-  const sesion=snap.data();
-  if(!sesion.activa){info.textContent='⚠ Esta sesión ya fue cerrada.';btn.disabled=true;return;}
-  if(sesion.token!==tok){info.textContent='⚠ QR inválido. Solicita uno nuevo.';btn.disabled=true;return;}
-  if((Date.now()-sesion.inicio)/60000>sesion.minutos){info.textContent='⚠ QR expirado. Solicita uno nuevo.';btn.disabled=true;return;}
-  info.textContent=sesion.materiaNombre+' · '+sesion.fechaLabel;
-  window._sesionAlumno=sesion;
+  const s=snap.data();
+  const tokenCorrecto = s.tok || s.token;
+  if(!s.activa){info.textContent='⚠ Esta sesión ya fue cerrada.';btn.disabled=true;return;}
+  if(tokenCorrecto!==tok){info.textContent='⚠ QR inválido. Solicita uno nuevo al profesor.';btn.disabled=true;return;}
+  if((Date.now()-s.inicio)/60000>s.min){info.textContent='⚠ QR expirado. Solicita uno nuevo.';btn.disabled=true;return;}
+  info.textContent=(s.matNom||s.materiaNombre)+' · '+(s.fechaLabel||s.fecha);
+  window._ses=s;
 }
 
-window.marcarAsistencia=async function(){
-  const sesion=window._sesionAlumno;
-  const nombre=document.getElementById('al-nombre').value.trim();
-  const rut=document.getElementById('al-rut').value.trim();
-  const correo=document.getElementById('al-correo').value.trim();
-  const errEl=document.getElementById('al-error');
-  if(!nombre||!rut||!correo){errEl.style.display='block';errEl.textContent='Completa todos los campos.';return;}
-  if(!sesion){errEl.style.display='block';errEl.textContent='Sesión no válida.';return;}
-  if((Date.now()-sesion.inicio)/60000>sesion.minutos){errEl.style.display='block';errEl.textContent='QR expirado.';return;}
-  const regId=sesion.id+'_'+rut.replace(/[^0-9kK]/g,'');
-  const exists=await getDoc(doc(db,'registros',regId));
-  if(exists.exists()&&exists.data().estado!=='0'){errEl.style.display='block';errEl.textContent='Ya registraste asistencia en esta sesión.';return;}
-  const btn=document.getElementById('al-submit-btn');
+window.marcarAsistencia=async()=>{
+  const s=window._ses;
+  const n=document.getElementById('al-n').value.trim();
+  const r=document.getElementById('al-r').value.trim();
+  const c=document.getElementById('al-c').value.trim();
+  const err=document.getElementById('al-err');
+  if(!n||!r||!c){err.style.display='block';err.textContent='Completa todos los campos.';return;}
+  if(!s){err.style.display='block';err.textContent='Sesión no válida.';return;}
+  if((Date.now()-s.inicio)/60000>s.min){err.style.display='block';err.textContent='QR expirado.';return;}
+  const regId=s.id+'_'+r.replace(/[^0-9kK]/g,'');
+  const ex=await getDoc(doc(db,'registros',regId));
+  if(ex.exists()&&ex.data().estado==='1'){err.style.display='block';err.textContent='Ya registraste asistencia.';return;}
+  const btn=document.getElementById('al-btn');
   btn.disabled=true;btn.textContent='Registrando...';
   await setDoc(doc(db,'registros',regId),{
-    id:regId,sesion_id:sesion.id,sesion_nombre:sesion.materiaNombre,
-    sesion_fecha:sesion.fecha,sesion_materia_key:sesion.materiaKey,
-    nombre,rut,correo,estado:'1',timestamp:Date.now()
+    id:regId,sesion_id:s.id,
+    sesion_nombre:s.matNom||s.materiaNombre,
+    sesion_fecha:s.fecha,
+    sesion_materia_key:s.matKey||s.materiaKey,
+    nombre:n,rut:r,correo:c,estado:'1',timestamp:Date.now()
   });
-  document.getElementById('alumno-form-wrap').style.display='none';
-  document.getElementById('alumno-success').style.display='block';
-  document.getElementById('success-detail').textContent=nombre+', quedaste registrado en '+sesion.materiaNombre+' · '+sesion.fechaLabel+'.';
+  document.getElementById('alu-form').style.display='none';
+  document.getElementById('alu-ok').style.display='block';
+  document.getElementById('ok-det').textContent=n+', quedaste registrado en '+(s.matNom||s.materiaNombre)+' · '+(s.fechaLabel||s.fecha)+'.';
 };
 
-// ─── INIT ───
+// ── INIT ─────────────────────────────────────────────────────
 async function initProfe(){
   renderMaterias();
-  const lastId=localStorage.getItem('preu_sesion_id');
+  const lastId=localStorage.getItem('preu_sid');
   if(lastId){
     const snap=await getDoc(doc(db,'sesiones',lastId));
     if(snap.exists()&&snap.data().activa){
-      sesionActiva=snap.data();
-      materiaSeleccionada=sesionActiva.materiaKey;
-      document.querySelectorAll('.materia-btn').forEach(b=>b.classList.toggle('selected',b.dataset.key===materiaSeleccionada));
+      sesion=snap.data();
+      matSel=sesion.matKey||sesion.materiaKey;
+      document.querySelectorAll('.mat-btn').forEach(b=>b.classList.toggle('sel',b.dataset.k===matSel));
       mostrarQR();
       suscribirLive(lastId);
-      actualizarHeader(sesionActiva.materiaNombre, sesionActiva.fechaLabel);
-      document.getElementById('live-banner').classList.add('on');
-      document.getElementById('live-materia').textContent=sesionActiva.materiaNombre;
-      document.getElementById('live-fecha').textContent=sesionActiva.fechaLabel;
-      document.getElementById('btn-regenerar').style.display='';
+      setHeader(sesion.matNom||sesion.materiaNombre, sesion.fechaLabel);
+      document.getElementById('live-bar').classList.add('on');
+      document.getElementById('live-mat').textContent=sesion.matNom||sesion.materiaNombre;
+      document.getElementById('live-fec').textContent=sesion.fechaLabel||sesion.fecha;
+      document.getElementById('btn-regen').style.display='';
     }
   }
 }
