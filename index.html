@@ -8,268 +8,268 @@
 <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
 <style>
 :root{
-  --calipso:#369C9B;--calipso-dark:#2a7978;--calipso-light:#e8f5f5;--calipso-mid:#c2e4e4;
-  --marengo:#2D3748;--marengo-light:#3d4f66;--fondo:#F2F7F7;--blanco:#ffffff;
-  --texto:#2D3748;--texto2:#6b7a90;--borde:rgba(45,55,72,0.12);--borde2:rgba(45,55,72,0.22);
-  --rojo:#c0392b;--rojo-bg:#fdf0ef;--rojo-mid:rgba(192,57,43,0.18);
-  --verde:#1e7e4a;--verde-bg:#eaf7f0;--verde-mid:rgba(30,126,74,0.18);
-  --amber:#7a5200;--amber-bg:#fff8e6;--amber-mid:rgba(122,82,0,0.15);
-  --r:8px;--r-lg:14px;
+  --cal:#369C9B;--cal-d:#2a7978;--cal-l:#e8f5f5;--cal-m:#c2e4e4;
+  --mar:#2D3748;--mar-l:#3d4f66;--fondo:#F2F7F7;--bl:#ffffff;
+  --tx:#2D3748;--tx2:#6b7a90;--bd:rgba(45,55,72,0.12);--bd2:rgba(45,55,72,0.22);
+  --rj:#c0392b;--rj-l:#fdf0ef;--rj-m:rgba(192,57,43,0.18);
+  --vd:#1e7e4a;--vd-l:#eaf7f0;--vd-m:rgba(30,126,74,0.18);
+  --am:#7a5200;--am-l:#fff8e6;--am-m:rgba(122,82,0,0.15);
+  --r:8px;--rl:14px;
 }
 *{box-sizing:border-box;margin:0;padding:0;}
-body{background:var(--fondo);color:var(--texto);min-height:100vh;font-family:'Poppins',sans-serif;}
+body{background:var(--fondo);color:var(--tx);min-height:100vh;font-family:'Poppins',sans-serif;}
 .page{display:none;}.page.active{display:block;}
 
-/* HEADER */
-header{background:var(--marengo);padding:0 28px;height:58px;display:flex;align-items:center;justify-content:space-between;}
-.logo{font-size:19px;font-weight:800;color:var(--calipso);}
-.hd{width:1px;height:18px;background:rgba(255,255,255,0.15);margin:0 10px;}
-.h-sub{font-size:11px;color:rgba(255,255,255,0.4);font-weight:600;letter-spacing:.07em;text-transform:uppercase;}
-.h-right{display:flex;align-items:center;gap:7px;font-size:12px;color:rgba(255,255,255,0.4);font-weight:500;}
+header{background:var(--mar);padding:0 28px;height:58px;display:flex;align-items:center;justify-content:space-between;}
+.logo{font-size:19px;font-weight:800;color:var(--cal);}
+.hdiv{width:1px;height:18px;background:rgba(255,255,255,0.15);margin:0 10px;}
+.hsub{font-size:11px;color:rgba(255,255,255,0.4);font-weight:600;letter-spacing:.07em;text-transform:uppercase;}
+.hright{display:flex;align-items:center;gap:7px;font-size:12px;color:rgba(255,255,255,0.4);font-weight:500;}
 .dot{width:7px;height:7px;border-radius:50%;background:rgba(255,255,255,0.18);flex-shrink:0;transition:background .3s;}
-.dot.on{background:var(--calipso);animation:pulse 2s infinite;}
-@keyframes pulse{0%,100%{opacity:1}50%{opacity:.3}}
+.dot.on{background:var(--cal);animation:blink 2s infinite;}
+@keyframes blink{0%,100%{opacity:1}50%{opacity:.3}}
 
-/* TABS */
-.tabs{background:var(--blanco);border-bottom:2px solid var(--calipso);display:flex;padding:0 28px;gap:2px;}
-.tab{padding:0 18px;height:44px;font-size:13px;font-weight:600;font-family:'Poppins',sans-serif;cursor:pointer;border:none;background:transparent;color:var(--texto2);border-bottom:3px solid transparent;margin-bottom:-2px;transition:all .15s;}
-.tab:hover{color:var(--marengo);}
-.tab.active{color:var(--calipso);border-bottom-color:var(--calipso);}
+.tabs{background:var(--bl);border-bottom:2px solid var(--cal);display:flex;padding:0 28px;gap:2px;}
+.tab{padding:0 18px;height:44px;font-size:13px;font-weight:600;font-family:'Poppins',sans-serif;cursor:pointer;border:none;background:transparent;color:var(--tx2);border-bottom:3px solid transparent;margin-bottom:-2px;transition:all .15s;}
+.tab:hover{color:var(--mar);}
+.tab.active{color:var(--cal);border-bottom-color:var(--cal);}
 
-/* LAYOUT */
 .content{padding:24px 28px;max-width:980px;margin:0 auto;}
-.card{background:var(--blanco);border:1px solid var(--borde);border-radius:var(--r-lg);padding:20px 24px;margin-bottom:16px;}
-.ch{display:flex;align-items:center;justify-content:space-between;margin-bottom:16px;padding-bottom:12px;border-bottom:1px solid var(--borde);}
-.ct{font-size:12px;font-weight:700;color:var(--marengo);letter-spacing:.05em;text-transform:uppercase;}
-.grid2{display:grid;grid-template-columns:1fr 1fr;gap:16px;}
-@media(max-width:640px){.grid2{grid-template-columns:1fr;}}
-.grid3{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin-bottom:16px;}
-@media(max-width:500px){.grid3{grid-template-columns:1fr 1fr;}}
+.card{background:var(--bl);border:1px solid var(--bd);border-radius:var(--rl);padding:20px 24px;margin-bottom:16px;}
+.ch{display:flex;align-items:center;justify-content:space-between;margin-bottom:16px;padding-bottom:12px;border-bottom:1px solid var(--bd);}
+.ct{font-size:12px;font-weight:700;color:var(--mar);letter-spacing:.05em;text-transform:uppercase;}
+.g2{display:grid;grid-template-columns:1fr 1fr;gap:16px;}
+@media(max-width:640px){.g2{grid-template-columns:1fr;}}
+.g3{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin-bottom:16px;}
+@media(max-width:500px){.g3{grid-template-columns:1fr 1fr;}}
 
-/* FORM */
-input,select,textarea{width:100%;padding:9px 13px;border:1px solid var(--borde2);border-radius:var(--r);background:var(--fondo);color:var(--texto);font-size:14px;font-weight:500;font-family:'Poppins',sans-serif;outline:none;transition:all .15s;}
-input:focus,select:focus,textarea:focus{border-color:var(--calipso);background:var(--blanco);box-shadow:0 0 0 3px rgba(54,156,155,0.1);}
-label{font-size:11px;font-weight:700;color:var(--texto2);display:block;margin-bottom:5px;letter-spacing:.03em;text-transform:uppercase;}
+input,select,textarea{width:100%;padding:9px 13px;border:1px solid var(--bd2);border-radius:var(--r);background:var(--fondo);color:var(--tx);font-size:14px;font-weight:500;font-family:'Poppins',sans-serif;outline:none;transition:all .15s;}
+input:focus,select:focus,textarea:focus{border-color:var(--cal);background:var(--bl);box-shadow:0 0 0 3px rgba(54,156,155,0.1);}
+label{font-size:11px;font-weight:700;color:var(--tx2);display:block;margin-bottom:5px;letter-spacing:.03em;text-transform:uppercase;}
 .field{margin-bottom:14px;}
 
-/* BUTTONS */
-.btn{display:inline-flex;align-items:center;gap:5px;padding:8px 16px;border-radius:var(--r);border:1.5px solid var(--borde2);cursor:pointer;font-size:13px;font-weight:600;font-family:'Poppins',sans-serif;transition:all .15s;background:var(--blanco);color:var(--texto);}
-.btn:hover{border-color:var(--calipso);color:var(--calipso);}
+.btn{display:inline-flex;align-items:center;gap:5px;padding:8px 16px;border-radius:var(--r);border:1.5px solid var(--bd2);cursor:pointer;font-size:13px;font-weight:600;font-family:'Poppins',sans-serif;transition:all .15s;background:var(--bl);color:var(--tx);}
+.btn:hover{border-color:var(--cal);color:var(--cal);}
 .btn:disabled{opacity:.4;cursor:not-allowed;pointer-events:none;}
-.btn-p{background:var(--calipso);color:#fff;border-color:var(--calipso);}
-.btn-p:hover{background:var(--calipso-dark);border-color:var(--calipso-dark);color:#fff;}
-.btn-d{background:var(--marengo);color:#fff;border-color:var(--marengo);}
-.btn-d:hover{background:var(--marengo-light);color:#fff;border-color:var(--marengo-light);}
-.btn-r{color:var(--rojo);border-color:var(--rojo-mid);}
-.btn-r:hover{background:var(--rojo-bg);border-color:var(--rojo);color:var(--rojo);}
-.btn-g{color:var(--verde);border-color:var(--verde-mid);}
-.btn-g:hover{background:var(--verde-bg);border-color:var(--verde);color:var(--verde);}
-.btn-sm{padding:4px 11px;font-size:11px;}
-.btn-xs{padding:3px 8px;font-size:10px;}
+.bp{background:var(--cal);color:#fff;border-color:var(--cal);}
+.bp:hover{background:var(--cal-d);border-color:var(--cal-d);color:#fff;}
+.bd2c{background:var(--mar);color:#fff;border-color:var(--mar);}
+.bd2c:hover{background:var(--mar-l);color:#fff;border-color:var(--mar-l);}
+.br{color:var(--rj);border-color:var(--rj-m);}
+.br:hover{background:var(--rj-l);border-color:var(--rj);color:var(--rj);}
+.bg{color:var(--vd);border-color:var(--vd-m);}
+.bg:hover{background:var(--vd-l);border-color:var(--vd);color:var(--vd);}
+.bsm{padding:4px 11px;font-size:11px;}
+.bxs{padding:3px 8px;font-size:10px;}
 
-/* MATERIA CHIPS */
-.mat-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:8px;}
-@media(max-width:580px){.mat-grid{grid-template-columns:repeat(2,1fr);}}
-.mat-btn{padding:10px 8px;border-radius:var(--r);border:1.5px solid var(--borde);cursor:pointer;background:var(--fondo);font-family:'Poppins',sans-serif;font-size:11px;font-weight:700;color:var(--texto2);text-align:center;transition:all .15s;line-height:1.3;}
-.mat-btn:hover{border-color:var(--calipso);color:var(--calipso);background:var(--calipso-light);}
-.mat-btn.sel{border-color:var(--calipso);background:var(--calipso);color:#fff;border-width:2px;}
+.mg{display:grid;grid-template-columns:repeat(4,1fr);gap:8px;}
+@media(max-width:580px){.mg{grid-template-columns:repeat(2,1fr);}}
+.mb2{padding:10px 8px;border-radius:var(--r);border:1.5px solid var(--bd);cursor:pointer;background:var(--fondo);font-family:'Poppins',sans-serif;font-size:11px;font-weight:700;color:var(--tx2);text-align:center;transition:all .15s;line-height:1.3;}
+.mb2:hover{border-color:var(--cal);color:var(--cal);background:var(--cal-l);}
+.mb2.sel{border-color:var(--cal);background:var(--cal);color:#fff;border-width:2px;}
 
-/* METRICS */
-.metric{background:var(--blanco);border:1px solid var(--borde);border-radius:var(--r-lg);padding:14px 18px;border-left:3px solid var(--calipso);}
-.mv{font-size:26px;font-weight:800;color:var(--marengo);line-height:1;margin-bottom:2px;}
-.ml{font-size:10px;font-weight:700;color:var(--texto2);letter-spacing:.07em;text-transform:uppercase;}
+.metric{background:var(--bl);border:1px solid var(--bd);border-radius:var(--rl);padding:14px 18px;border-left:3px solid var(--cal);}
+.mv{font-size:26px;font-weight:800;color:var(--mar);line-height:1;margin-bottom:2px;}
+.ml{font-size:10px;font-weight:700;color:var(--tx2);letter-spacing:.07em;text-transform:uppercase;}
 
-/* TABLE */
 .tw{overflow-x:auto;}
 table{width:100%;border-collapse:collapse;font-size:13px;}
-thead tr{border-bottom:2px solid var(--calipso-mid);}
-th{padding:8px 12px;text-align:left;font-size:10px;font-weight:700;color:var(--calipso-dark);text-transform:uppercase;letter-spacing:.08em;}
-td{padding:9px 12px;border-bottom:1px solid var(--borde);color:var(--texto);font-weight:500;}
+thead tr{border-bottom:2px solid var(--cal-m);}
+th{padding:8px 12px;text-align:left;font-size:10px;font-weight:700;color:var(--cal-d);text-transform:uppercase;letter-spacing:.08em;}
+td{padding:9px 12px;border-bottom:1px solid var(--bd);color:var(--tx);font-weight:500;}
 tr:last-child td{border-bottom:none;}
-tbody tr:hover td{background:var(--calipso-light);}
+tbody tr:hover td{background:var(--cal-l);}
 
-/* BADGES */
 .badge{display:inline-flex;align-items:center;gap:3px;padding:2px 9px;border-radius:999px;font-size:11px;font-weight:700;}
-.bg{background:var(--verde-bg);color:var(--verde);border:1px solid var(--verde-mid);}
-.br{background:var(--rojo-bg);color:var(--rojo);border:1px solid var(--rojo-mid);}
-.ba{background:var(--amber-bg);color:var(--amber);border:1px solid var(--amber-mid);}
-.bc{background:var(--calipso-light);color:var(--calipso-dark);border:1px solid var(--calipso-mid);}
-.tag{display:inline-flex;align-items:center;gap:4px;background:var(--calipso-light);color:var(--calipso-dark);font-size:11px;font-weight:700;padding:3px 10px;border-radius:999px;border:1px solid var(--calipso-mid);}
+.bgn{background:var(--vd-l);color:var(--vd);border:1px solid var(--vd-m);}
+.brd{background:var(--rj-l);color:var(--rj);border:1px solid var(--rj-m);}
+.bam{background:var(--am-l);color:var(--am);border:1px solid var(--am-m);}
+.bcal{background:var(--cal-l);color:var(--cal-d);border:1px solid var(--cal-m);}
+.tag{display:inline-flex;align-items:center;gap:4px;background:var(--cal-l);color:var(--cal-d);font-size:11px;font-weight:700;padding:3px 10px;border-radius:999px;border:1px solid var(--cal-m);}
 
-/* QR */
-.qr-w{display:flex;flex-direction:column;align-items:center;gap:14px;padding:12px 0 6px;}
-.qr-box{background:var(--blanco);border:2px solid var(--calipso-mid);border-radius:12px;padding:12px;}
+.qrw{display:flex;flex-direction:column;align-items:center;gap:14px;padding:12px 0 6px;}
+.qrbox{background:var(--bl);border:2px solid var(--cal-m);border-radius:12px;padding:12px;}
 #qrcode canvas,#qrcode img{border-radius:5px;display:block;}
-.qr-info{text-align:center;}
-.qr-info strong{display:block;font-size:14px;font-weight:800;color:var(--marengo);margin-bottom:2px;}
-.qr-info span{font-size:12px;color:var(--texto2);font-weight:500;}
-.timer-w{display:flex;flex-direction:column;align-items:center;gap:6px;width:100%;}
-.timer-t{width:190px;height:4px;background:var(--calipso-mid);border-radius:2px;overflow:hidden;}
-.timer-f{height:100%;background:var(--calipso);transition:width 1s linear;border-radius:2px;}
-.timer-l{font-size:11px;font-weight:600;color:var(--texto2);}
+.qri{text-align:center;}
+.qri strong{display:block;font-size:14px;font-weight:800;color:var(--mar);margin-bottom:2px;}
+.qri span{font-size:12px;color:var(--tx2);font-weight:500;}
+.timerw{display:flex;flex-direction:column;align-items:center;gap:6px;width:100%;}
+.timert{width:190px;height:4px;background:var(--cal-m);border-radius:2px;overflow:hidden;}
+.timerf{height:100%;background:var(--cal);transition:width 1s linear;border-radius:2px;}
+.timerl{font-size:11px;font-weight:600;color:var(--tx2);}
 .pr{display:flex;align-items:center;gap:5px;}
 
-/* LIVE BANNER */
-.live-bar{background:var(--marengo);border-radius:var(--r-lg);padding:12px 20px;margin-bottom:16px;display:none;align-items:center;justify-content:space-between;gap:14px;}
-.live-bar.on{display:flex;}
-.live-n{font-size:30px;font-weight:800;color:#fff;line-height:1;}
-.live-sep{width:1px;height:32px;background:rgba(255,255,255,0.1);}
-.live-mat{font-size:13px;font-weight:700;color:var(--calipso);}
-.live-fec{font-size:11px;font-weight:500;color:rgba(255,255,255,0.4);}
+.livebar{background:var(--mar);border-radius:var(--rl);padding:12px 20px;margin-bottom:16px;display:none;align-items:center;justify-content:space-between;gap:14px;}
+.livebar.on{display:flex;}
+.liven{font-size:30px;font-weight:800;color:#fff;line-height:1;}
+.livesep{width:1px;height:32px;background:rgba(255,255,255,0.1);}
+.livemat{font-size:13px;font-weight:700;color:var(--cal);}
+.livefec{font-size:11px;font-weight:500;color:rgba(255,255,255,0.4);}
 
-/* ── PANEL VERIFICACIÓN ── */
-.verif-overlay{display:none;position:fixed;inset:0;background:rgba(45,55,72,0.6);z-index:100;align-items:center;justify-content:center;padding:16px;}
-.verif-overlay.show{display:flex;}
-.verif-modal{background:var(--blanco);border-radius:var(--r-lg);width:100%;max-width:700px;max-height:90vh;display:flex;flex-direction:column;overflow:hidden;}
-.verif-header{padding:18px 22px 14px;border-bottom:1px solid var(--borde);flex-shrink:0;}
-.verif-title{font-size:16px;font-weight:800;color:var(--marengo);margin-bottom:2px;}
-.verif-sub{font-size:12px;font-weight:500;color:var(--texto2);}
-.verif-search{padding:12px 22px;border-bottom:1px solid var(--borde);flex-shrink:0;}
-.verif-search input{margin:0;}
-.verif-body{overflow-y:auto;flex:1;}
-.verif-footer{padding:14px 22px;border-top:1px solid var(--borde);flex-shrink:0;display:flex;align-items:center;justify-content:space-between;gap:10px;flex-wrap:wrap;}
-.verif-stats{display:flex;gap:12px;}
-.vs{font-size:12px;font-weight:600;}
-.vs-p{color:var(--verde);}
-.vs-a{color:var(--rojo);}
+/* VERIFICACIÓN */
+.voverlay{display:none;position:fixed;inset:0;background:rgba(45,55,72,0.6);z-index:100;align-items:center;justify-content:center;padding:16px;}
+.voverlay.show{display:flex;}
+.vmodal{background:var(--bl);border-radius:var(--rl);width:100%;max-width:700px;max-height:90vh;display:flex;flex-direction:column;overflow:hidden;}
+.vhead{padding:18px 22px 14px;border-bottom:1px solid var(--bd);flex-shrink:0;}
+.vtitle{font-size:16px;font-weight:800;color:var(--mar);margin-bottom:2px;}
+.vsub{font-size:12px;font-weight:500;color:var(--tx2);}
+.vsearch{padding:12px 22px;border-bottom:1px solid var(--bd);flex-shrink:0;}
+.vsearch input{margin:0;}
+.vbody{overflow-y:auto;flex:1;}
+.vfoot{padding:14px 22px;border-top:1px solid var(--bd);flex-shrink:0;display:flex;align-items:center;justify-content:space-between;gap:10px;flex-wrap:wrap;}
+.vstats{display:flex;gap:10px;}
+.vs{font-size:12px;font-weight:700;}
+.vsp{color:var(--vd);}
+.vsa{color:var(--rj);}
 
-/* Filas del listado */
-.alu-row{display:flex;align-items:center;padding:10px 22px;border-bottom:1px solid var(--borde);gap:12px;transition:background .1s;}
-.alu-row:hover{background:var(--fondo);}
-.alu-row:last-child{border-bottom:none;}
-.alu-check{width:20px;height:20px;border-radius:5px;border:2px solid var(--borde2);cursor:pointer;appearance:none;flex-shrink:0;transition:all .15s;background:var(--fondo);}
-.alu-check:checked{background:var(--calipso);border-color:var(--calipso);}
-.alu-check:checked::after{content:'✓';color:#fff;font-size:12px;display:flex;align-items:center;justify-content:center;font-weight:700;line-height:20px;}
-.alu-info{flex:1;}
-.alu-name{font-size:13px;font-weight:700;color:var(--marengo);}
-.alu-rut{font-size:11px;font-weight:500;color:var(--texto2);}
-.alu-estado{flex-shrink:0;}
+.arow{display:flex;align-items:center;padding:10px 22px;border-bottom:1px solid var(--bd);gap:12px;transition:background .1s;}
+.arow:hover{background:var(--fondo);}
+.arow:last-child{border-bottom:none;}
+.achk{width:20px;height:20px;border-radius:5px;border:2px solid var(--bd2);cursor:pointer;appearance:none;-webkit-appearance:none;flex-shrink:0;transition:all .15s;background:var(--fondo);position:relative;}
+.achk:checked{background:var(--cal);border-color:var(--cal);}
+.achk:checked::after{content:"✓";color:#fff;font-size:12px;font-weight:700;position:absolute;inset:0;display:flex;align-items:center;justify-content:center;}
+.ainf{flex:1;}
+.aname{font-size:13px;font-weight:700;color:var(--mar);}
+.arut{font-size:11px;font-weight:500;color:var(--tx2);}
 
-/* MISC */
+/* REGISTROS - NUEVA SECCIÓN */
+.reg-selectors{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:16px;}
+@media(max-width:580px){.reg-selectors{grid-template-columns:1fr;}}
+
+/* Barra de progreso asistencia */
+.prog-bar-wrap{margin:4px 0;}
+.prog-bar-bg{background:var(--rj-l);border-radius:999px;height:6px;overflow:hidden;}
+.prog-bar-fill{height:100%;background:var(--vd);border-radius:999px;transition:width .4s;}
+.prog-pct{font-size:11px;font-weight:700;color:var(--tx2);margin-top:3px;}
+
+/* Cards resumen por área */
+.area-cards{display:grid;grid-template-columns:repeat(auto-fill,minmax(200px,1fr));gap:12px;margin-bottom:16px;}
+.area-card{background:var(--bl);border:1px solid var(--bd);border-radius:var(--rl);padding:16px 18px;cursor:pointer;transition:all .15s;border-left:3px solid var(--cal);}
+.area-card:hover{border-color:var(--cal);background:var(--cal-l);}
+.area-card.active{border-color:var(--cal);background:var(--cal-l);border-width:2px;}
+.ac-nombre{font-size:13px;font-weight:700;color:var(--mar);margin-bottom:8px;}
+.ac-stats{display:flex;gap:8px;align-items:center;}
+.ac-pres{font-size:11px;font-weight:700;color:var(--vd);}
+.ac-aus{font-size:11px;font-weight:700;color:var(--rj);}
+.ac-dot{font-size:10px;color:var(--bd2);}
+
+/* Filtro fecha sesión */
+.sesion-pills{display:flex;gap:6px;flex-wrap:wrap;margin-bottom:14px;}
+.spill{padding:5px 12px;border-radius:999px;border:1.5px solid var(--bd);background:var(--bl);font-size:11px;font-weight:700;color:var(--tx2);cursor:pointer;transition:all .15s;font-family:'Poppins',sans-serif;}
+.spill:hover{border-color:var(--cal);color:var(--cal);}
+.spill.active{background:var(--mar);color:#fff;border-color:var(--mar);}
+
 .msg{border-radius:var(--r);padding:9px 13px;font-size:12px;font-weight:600;margin-top:10px;display:none;}
-.ms{background:var(--verde-bg);color:var(--verde);border:1px solid var(--verde-mid);}
-.me{background:var(--rojo-bg);color:var(--rojo);border:1px solid var(--rojo-mid);}
-.empty{text-align:center;padding:36px 20px;color:var(--texto2);font-size:13px;font-weight:500;}
-.loading{text-align:center;padding:22px;color:var(--texto2);font-size:13px;font-weight:500;}
-.sp{display:inline-block;width:13px;height:13px;border:2px solid var(--calipso-mid);border-top-color:var(--calipso);border-radius:50%;animation:spin .7s linear infinite;margin-right:5px;vertical-align:middle;}
+.ms{background:var(--vd-l);color:var(--vd);border:1px solid var(--vd-m);}
+.me{background:var(--rj-l);color:var(--rj);border:1px solid var(--rj-m);}
+.empty{text-align:center;padding:36px 20px;color:var(--tx2);font-size:13px;font-weight:500;}
+.loading{text-align:center;padding:22px;color:var(--tx2);font-size:13px;font-weight:500;}
+.sp{display:inline-block;width:13px;height:13px;border:2px solid var(--cal-m);border-top-color:var(--cal);border-radius:50%;animation:spin .7s linear infinite;margin-right:5px;vertical-align:middle;}
 @keyframes spin{to{transform:rotate(360deg)}}
 .flex{display:flex;gap:8px;align-items:center;flex-wrap:wrap;}
 .mt{margin-top:14px;}
-.chip{display:inline-block;background:var(--marengo);color:#fff;font-size:10px;font-weight:700;padding:2px 7px;border-radius:4px;letter-spacing:.05em;text-transform:uppercase;}
-.chip-v{display:inline-block;background:var(--verde);color:#fff;font-size:10px;font-weight:700;padding:2px 7px;border-radius:4px;}
+.chip{display:inline-block;background:var(--mar);color:#fff;font-size:10px;font-weight:700;padding:2px 7px;border-radius:4px;letter-spacing:.05em;text-transform:uppercase;}
+.chipv{display:inline-block;background:var(--vd);color:#fff;font-size:10px;font-weight:700;padding:2px 7px;border-radius:4px;}
 
-/* ALUMNO PAGE */
-.alu-bg{min-height:100vh;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:20px;background:var(--marengo);}
-.alu-card{background:var(--blanco);border-radius:18px;padding:32px 28px;width:100%;max-width:400px;}
-.alu-logo{font-size:20px;font-weight:800;color:var(--calipso);margin-bottom:5px;}
-.alu-div{height:2px;background:var(--calipso);width:36px;margin:10px 0 16px;}
-.alu-title{font-size:19px;font-weight:800;color:var(--marengo);margin-bottom:3px;line-height:1.2;}
-.alu-sub{font-size:12px;font-weight:500;color:var(--texto2);margin-bottom:22px;}
-.btn-sub{width:100%;padding:13px;background:var(--calipso);color:#fff;border:none;border-radius:var(--r);font-size:14px;font-weight:700;font-family:'Poppins',sans-serif;cursor:pointer;transition:background .15s;}
-.btn-sub:hover{background:var(--calipso-dark);}
-.btn-sub:disabled{background:var(--calipso-mid);cursor:not-allowed;color:var(--calipso-dark);}
-.ok-w{text-align:center;padding:12px 0;}
-.ok-c{width:68px;height:68px;border-radius:50%;background:var(--calipso);display:flex;align-items:center;justify-content:center;margin:0 auto 16px;}
-.ok-sv{width:30px;height:30px;stroke:#fff;stroke-width:3;fill:none;}
-.ok-t{font-size:19px;font-weight:800;color:var(--marengo);margin-bottom:5px;}
-.ok-s{font-size:12px;font-weight:500;color:var(--texto2);line-height:1.6;}
-.alu-ft{margin-top:18px;text-align:center;font-size:10px;font-weight:600;color:rgba(255,255,255,0.22);letter-spacing:.08em;text-transform:uppercase;}
+/* ALUMNO */
+.abg{min-height:100vh;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:20px;background:var(--mar);}
+.acard{background:var(--bl);border-radius:18px;padding:32px 28px;width:100%;max-width:400px;}
+.alogo{font-size:20px;font-weight:800;color:var(--cal);margin-bottom:5px;}
+.adiv{height:2px;background:var(--cal);width:36px;margin:10px 0 16px;}
+.atitle{font-size:19px;font-weight:800;color:var(--mar);margin-bottom:3px;line-height:1.2;}
+.asubt{font-size:12px;font-weight:500;color:var(--tx2);margin-bottom:22px;}
+.bsub{width:100%;padding:13px;background:var(--cal);color:#fff;border:none;border-radius:var(--r);font-size:14px;font-weight:700;font-family:'Poppins',sans-serif;cursor:pointer;transition:background .15s;}
+.bsub:hover{background:var(--cal-d);}
+.bsub:disabled{background:var(--cal-m);cursor:not-allowed;color:var(--cal-d);}
+.okw{text-align:center;padding:12px 0;}
+.okc{width:68px;height:68px;border-radius:50%;background:var(--cal);display:flex;align-items:center;justify-content:center;margin:0 auto 16px;}
+.oksv{width:30px;height:30px;stroke:#fff;stroke-width:3;fill:none;}
+.okt{font-size:19px;font-weight:800;color:var(--mar);margin-bottom:5px;}
+.oks{font-size:12px;font-weight:500;color:var(--tx2);line-height:1.6;}
+.aft{margin-top:18px;text-align:center;font-size:10px;font-weight:600;color:rgba(255,255,255,0.22);letter-spacing:.08em;text-transform:uppercase;}
 </style>
 </head>
 <body>
 
-<!-- ══ PROFESOR ══════════════════════════════════════════ -->
+<!-- PROFESOR -->
 <div id="profe-page" class="page active">
 <header>
   <div class="flex" style="gap:0">
     <div class="logo">PREUDD</div>
-    <div class="hd"></div>
-    <div class="h-sub">Asistencia 2026</div>
+    <div class="hdiv"></div>
+    <div class="hsub">Asistencia 2026</div>
   </div>
-  <div class="h-right">
+  <div class="hright">
     <span class="dot" id="h-dot"></span>
-    <span id="h-sesion">Sin sesión activa</span>
+    <span id="h-ses">Sin sesión activa</span>
   </div>
 </header>
 <div class="tabs">
-  <button class="tab active" onclick="showTab('ts')">Sesión</button>
-  <button class="tab" onclick="showTab('tr')">Registros</button>
-  <button class="tab" onclick="showTab('ta')">Alumnos</button>
+  <button class="tab active" data-tab="ts">Sesión</button>
+  <button class="tab" data-tab="tr">Registros</button>
+  <button class="tab" data-tab="ta">Alumnos</button>
+  <button class="tab" data-tab="tg">Guía</button>
 </div>
 
 <!-- TAB SESIÓN -->
 <div id="ts" class="content">
-
-  <!-- Live banner -->
-  <div class="live-bar" id="live-bar">
+  <div class="livebar" id="livebar">
     <div class="flex" style="gap:14px">
       <div>
         <div style="font-size:10px;font-weight:700;color:rgba(255,255,255,0.35);letter-spacing:.07em;text-transform:uppercase;margin-bottom:1px;">Presentes</div>
-        <div class="live-n" id="live-n">0</div>
+        <div class="liven" id="live-n">0</div>
       </div>
-      <div class="live-sep"></div>
+      <div class="livesep"></div>
       <div>
-        <div class="live-mat" id="live-mat">—</div>
-        <div class="live-fec" id="live-fec">—</div>
+        <div class="livemat" id="live-mat">—</div>
+        <div class="livefec" id="live-fec">—</div>
       </div>
     </div>
     <div class="flex">
-      <button class="btn btn-sm" style="color:var(--calipso-mid);border-color:rgba(194,228,228,0.3);background:rgba(54,156,155,0.12);" onclick="abrirVerificacion()">Ver lista completa</button>
+      <button class="btn bsm" style="color:var(--cal-m);border-color:rgba(194,228,228,0.3);background:rgba(54,156,155,0.12);" onclick="abrirVerif()">Ver lista completa</button>
       <div class="pr"><span class="dot on"></span><span style="font-size:10px;font-weight:600;color:rgba(255,255,255,0.3);letter-spacing:.06em;text-transform:uppercase;">En vivo</span></div>
     </div>
   </div>
 
-  <div class="grid2">
-    <!-- Config -->
+  <div class="g2">
     <div class="card">
       <div class="ch"><div class="ct">Configurar sesión</div></div>
       <div class="field">
         <label>Materia</label>
-        <div class="mat-grid" id="mat-grid"></div>
+        <div class="mg" id="mat-grid"></div>
       </div>
       <div class="field">
         <label>Fecha de clase</label>
-        <select id="sel-fecha" disabled>
-          <option value="">— elige una materia primero —</option>
-        </select>
+        <select id="sel-fecha" disabled><option value="">— elige una materia primero —</option></select>
       </div>
       <div class="field">
         <label>Validez QR (minutos)</label>
         <input id="ses-min" type="number" value="5" min="1" max="120"/>
       </div>
       <div class="flex mt">
-        <button class="btn btn-p" id="btn-act" onclick="iniciarSesion()" disabled>Activar sesión</button>
-        <button class="btn btn-r btn-sm" onclick="pedirCierre()">Finalizar sesión</button>
+        <button class="btn bp" id="btn-act" onclick="iniciarSesion()" disabled>Activar sesión</button>
+        <button class="btn br bsm" onclick="pedirCierre()">Finalizar sesión</button>
       </div>
     </div>
-
-    <!-- QR -->
     <div class="card">
       <div class="ch">
         <div class="ct">Código QR</div>
-        <button class="btn btn-sm" id="btn-regen" style="display:none" onclick="regenerarQR()">Regenerar</button>
+        <button class="btn bsm" id="btn-regen" style="display:none" onclick="regenQR()">Regenerar</button>
       </div>
-      <div id="qr-ph" class="empty" style="padding:28px 0">
-        <div style="font-size:28px;margin-bottom:8px">⬜</div>
-        Activa una sesión para generar el QR
-      </div>
+      <div id="qr-ph" class="empty" style="padding:28px 0"><div style="font-size:28px;margin-bottom:8px">⬜</div>Activa una sesión para generar el QR</div>
       <div id="qr-panel" style="display:none">
-        <div class="qr-w">
-          <div class="qr-box"><div id="qrcode"></div></div>
-          <div class="qr-info">
-            <strong id="qr-mat">—</strong>
-            <span id="qr-fec">—</span>
-          </div>
-          <div class="timer-w">
-            <div class="pr"><span class="dot on"></span><span class="timer-l" id="timer-txt">—</span></div>
-            <div class="timer-t"><div class="timer-f" id="timer-bar" style="width:100%"></div></div>
+        <div class="qrw">
+          <div class="qrbox"><div id="qrcode"></div></div>
+          <div class="qri"><strong id="qr-mat">—</strong><span id="qr-fec">—</span></div>
+          <div class="timerw">
+            <div class="pr"><span class="dot on"></span><span class="timerl" id="timer-txt">—</span></div>
+            <div class="timert"><div class="timerf" id="timer-bar" style="width:100%"></div></div>
           </div>
         </div>
       </div>
     </div>
   </div>
 
-  <!-- Tabla live -->
   <div class="card">
     <div class="ch">
       <div class="ct">Presentes en tiempo real</div>
@@ -279,112 +279,246 @@ tbody tr:hover td{background:var(--calipso-light);}
   </div>
 </div>
 
-<!-- TAB REGISTROS -->
+<!-- TAB REGISTROS (rediseñado) -->
 <div id="tr" class="content" style="display:none">
+
+  <!-- Selector área -->
   <div class="card">
-    <div class="ch">
-      <div class="ct">Filtros</div>
-      <button class="btn btn-g btn-sm" onclick="exportarCSV()">Exportar CSV</button>
-    </div>
-    <div class="grid2">
-      <div class="field"><label>Materia</label>
-        <select id="f-mat" onchange="filtrarReg()"><option value="">Todas</option></select>
-      </div>
-      <div class="field"><label>Estado</label>
-        <select id="f-est" onchange="filtrarReg()">
-          <option value="">Todos</option>
-          <option value="1">Presentes</option>
-          <option value="0">Ausentes</option>
-          <option value="J">Justificados</option>
-        </select>
-      </div>
-    </div>
-    <div class="field"><label>Buscar</label>
-      <input id="f-alu" placeholder="Nombre o RUT..." oninput="filtrarReg()"/>
+    <div class="ch"><div class="ct">Seleccionar área</div></div>
+    <div class="area-cards" id="area-cards">
+      <div class="loading"><span class="sp"></span>Cargando...</div>
     </div>
   </div>
-  <div class="grid3" id="metrics"></div>
-  <div class="card"><div class="tw"><div id="t-reg"><div class="loading"><span class="sp"></span>Cargando...</div></div></div></div>
+
+  <!-- Selector fecha sesión -->
+  <div id="reg-fechas-wrap" style="display:none">
+    <div class="card">
+      <div class="ch">
+        <div class="ct" id="reg-area-title">Clases registradas</div>
+        <button class="btn bg bsm" onclick="exportarCSVFiltrado()">Exportar CSV</button>
+      </div>
+      <p style="font-size:12px;font-weight:500;color:var(--tx2);margin-bottom:12px;">Elige una clase para ver la asistencia detallada</p>
+      <div class="sesion-pills" id="sesion-pills"></div>
+    </div>
+  </div>
+
+  <!-- Resumen de la clase seleccionada -->
+  <div id="reg-detalle" style="display:none">
+    <div class="g3" id="reg-metrics"></div>
+    <div class="card">
+      <div class="ch">
+        <div class="ct" id="reg-detalle-title">Detalle</div>
+        <input id="reg-buscar" placeholder="Buscar..." style="width:180px;padding:5px 10px;font-size:12px;" oninput="filtrarDetalle()"/>
+      </div>
+      <div class="tw" id="reg-tabla"></div>
+    </div>
+  </div>
+
+  <!-- Estado vacío -->
+  <div id="reg-empty" class="card" style="display:none">
+    <div class="empty">No hay registros para esta área aún</div>
+  </div>
 </div>
 
 <!-- TAB ALUMNOS -->
 <div id="ta" class="content" style="display:none">
   <div class="card">
-    <div class="ch">
-      <div class="ct">Importar alumnos</div>
-      <button class="btn btn-sm" onclick="document.getElementById('mod-manual').style.display='block'">+ Manual</button>
-    </div>
-    <p style="font-size:12px;font-weight:500;color:var(--texto2);margin-bottom:12px;line-height:1.6;">Pega desde Excel (Tab) o sube CSV. Columnas: <strong style="color:var(--marengo)">nombre · rut · correo</strong></p>
+    <div class="ch"><div class="ct">Importar alumnos</div><button class="btn bsm" onclick="document.getElementById('mod-man').style.display='block'">+ Manual</button></div>
+    <p style="font-size:12px;font-weight:500;color:var(--tx2);margin-bottom:12px;line-height:1.6;">Pega desde Excel (Tab) o sube CSV. Columnas: <strong style="color:var(--mar)">nombre · rut · correo</strong></p>
     <div class="field"><label>Pegar datos</label><textarea id="imp-txt" rows="4" placeholder="nombre	rut	correo"></textarea></div>
     <div class="flex">
-      <button class="btn btn-p" onclick="importarAlumnos()">Importar</button>
-      <label class="btn btn-d" style="cursor:pointer">Subir CSV<input type="file" accept=".csv" onchange="leerCSV(this)" style="display:none"/></label>
+      <button class="btn bp" onclick="importarAlumnos()">Importar</button>
+      <label class="btn bd2c" style="cursor:pointer">Subir CSV<input type="file" accept=".csv" onchange="leerCSV(this)" style="display:none"/></label>
     </div>
     <div id="imp-st" class="msg"></div>
   </div>
-  <div id="mod-manual" style="display:none" class="card">
-    <div class="ch"><div class="ct">Agregar alumno</div><button class="btn btn-sm" onclick="document.getElementById('mod-manual').style.display='none'">✕</button></div>
-    <div class="grid2" style="gap:12px">
+  <div id="mod-man" style="display:none" class="card">
+    <div class="ch"><div class="ct">Agregar alumno</div><button class="btn bsm" onclick="document.getElementById('mod-man').style.display='none'">✕</button></div>
+    <div class="g2" style="gap:12px">
       <div class="field"><label>Nombre</label><input id="m-n" placeholder="Juan Pérez"/></div>
       <div class="field"><label>RUT</label><input id="m-r" placeholder="12345678-9"/></div>
     </div>
     <div class="field"><label>Correo</label><input id="m-c" type="email" placeholder="juan@mail.com"/></div>
-    <button class="btn btn-p mt" onclick="guardarManual()">Guardar</button>
+    <button class="btn bp mt" onclick="guardarManual()">Guardar</button>
   </div>
   <div class="card">
-    <div class="ch"><div class="ct">Nómina</div><button class="btn btn-r btn-sm" onclick="limpiarAlumnos()">Limpiar todo</button></div>
+    <div class="ch"><div class="ct">Nómina</div><button class="btn br bsm" onclick="limpiarAlumnos()">Limpiar todo</button></div>
     <div id="t-alu"><div class="loading"><span class="sp"></span>Cargando...</div></div>
   </div>
 </div>
 </div>
 
-<!-- ══ PANEL VERIFICACIÓN ════════════════════════════════ -->
-<div class="verif-overlay" id="verif-overlay">
-  <div class="verif-modal">
-    <div class="verif-header">
-      <div class="verif-title" id="verif-title">Verificar asistencia</div>
-      <div class="verif-sub" id="verif-sub">Revisa y ajusta antes de finalizar</div>
+<!-- TAB GUÍA -->
+<div id="tg" class="content" style="display:none">
+
+  <div class="card">
+    <div class="ch"><div class="ct">¿Cómo funciona la plataforma?</div></div>
+    <p style="font-size:13px;font-weight:500;color:var(--tx2);line-height:1.7;">
+      Esta plataforma permite registrar la asistencia de los alumnos de PreuUDD 2026 mediante un código QR.
+      Los alumnos escanean el QR con su celular, ingresan sus datos y quedan registrados automáticamente.
+      Al finalizar la clase, el sistema marca como ausentes a quienes no escanearon.
+    </p>
+  </div>
+
+  <div class="g2">
+    <!-- Paso 1 -->
+    <div class="card" style="border-left:3px solid var(--cal);">
+      <div style="display:flex;align-items:center;gap:10px;margin-bottom:14px;">
+        <div style="width:32px;height:32px;border-radius:50%;background:var(--cal);color:#fff;font-size:15px;font-weight:800;display:flex;align-items:center;justify-content:center;flex-shrink:0;">1</div>
+        <div style="font-size:14px;font-weight:700;color:var(--mar);">Elige la materia y la fecha</div>
+      </div>
+      <p style="font-size:13px;font-weight:500;color:var(--tx2);line-height:1.7;">
+        En la pestaña <strong style="color:var(--mar)">Sesión</strong>, haz clic en la materia que vas a tomar
+        (por ejemplo, Matemáticas M1). Luego selecciona la fecha de la clase desde el menú desplegable.
+        Solo aparecen las fechas programadas del año.
+      </p>
     </div>
-    <div class="verif-search">
-      <input id="verif-buscar" placeholder="Buscar alumno..." oninput="filtrarVerif()"/>
+
+    <!-- Paso 2 -->
+    <div class="card" style="border-left:3px solid var(--cal);">
+      <div style="display:flex;align-items:center;gap:10px;margin-bottom:14px;">
+        <div style="width:32px;height:32px;border-radius:50%;background:var(--cal);color:#fff;font-size:15px;font-weight:800;display:flex;align-items:center;justify-content:center;flex-shrink:0;">2</div>
+        <div style="font-size:14px;font-weight:700;color:var(--mar);">Activa la sesión y muestra el QR</div>
+      </div>
+      <p style="font-size:13px;font-weight:500;color:var(--tx2);line-height:1.7;">
+        Haz clic en <strong style="color:var(--mar)">Activar sesión</strong>. Aparecerá un código QR
+        que puedes proyectar en pantalla o mostrar desde el celular. El QR tiene una validez de
+        <strong style="color:var(--mar)">5 minutos</strong> — si expira, usa el botón
+        <strong style="color:var(--mar)">Regenerar</strong> para crear uno nuevo.
+      </p>
     </div>
-    <div class="verif-body" id="verif-body"></div>
-    <div class="verif-footer">
-      <div class="verif-stats">
-        <span class="vs vs-p" id="vs-p">0 presentes</span>
-        <span class="vs" style="color:var(--borde2)">·</span>
-        <span class="vs vs-a" id="vs-a">0 ausentes</span>
+
+    <!-- Paso 3 -->
+    <div class="card" style="border-left:3px solid var(--cal);">
+      <div style="display:flex;align-items:center;gap:10px;margin-bottom:14px;">
+        <div style="width:32px;height:32px;border-radius:50%;background:var(--cal);color:#fff;font-size:15px;font-weight:800;display:flex;align-items:center;justify-content:center;flex-shrink:0;">3</div>
+        <div style="font-size:14px;font-weight:700;color:var(--mar);">Los alumnos escanean el QR</div>
+      </div>
+      <p style="font-size:13px;font-weight:500;color:var(--tx2);line-height:1.7;">
+        Cada alumno escanea el código con la cámara de su celular. Se abre una página donde ingresan
+        su <strong style="color:var(--mar)">nombre, RUT y correo</strong>. Al enviar, quedan registrados
+        como presentes y aparecen en la lista en tiempo real. El sistema no permite registrarse dos veces.
+      </p>
+    </div>
+
+    <!-- Paso 4 -->
+    <div class="card" style="border-left:3px solid var(--cal);">
+      <div style="display:flex;align-items:center;gap:10px;margin-bottom:14px;">
+        <div style="width:32px;height:32px;border-radius:50%;background:var(--cal);color:#fff;font-size:15px;font-weight:800;display:flex;align-items:center;justify-content:center;flex-shrink:0;">4</div>
+        <div style="font-size:14px;font-weight:700;color:var(--mar);">Finaliza y verifica la asistencia</div>
+      </div>
+      <p style="font-size:13px;font-weight:500;color:var(--tx2);line-height:1.7;">
+        Al terminar la clase, haz clic en <strong style="color:var(--mar)">Finalizar sesión</strong>.
+        Se abre un panel con la lista completa del área: los que escanearon aparecen como presentes
+        y los demás como ausentes. Puedes corregir manualmente cualquier error antes de confirmar.
+      </p>
+    </div>
+  </div>
+
+  <!-- Tips -->
+  <div class="card">
+    <div class="ch"><div class="ct">Consejos rápidos</div></div>
+    <div style="display:flex;flex-direction:column;gap:10px;">
+
+      <div style="display:flex;gap:12px;align-items:flex-start;">
+        <span style="font-size:16px;flex-shrink:0;">📶</span>
+        <div>
+          <div style="font-size:13px;font-weight:700;color:var(--mar);margin-bottom:2px;">Necesitas conexión a internet</div>
+          <div style="font-size:12px;font-weight:500;color:var(--tx2);line-height:1.6;">Tanto el voluntario como los alumnos necesitan WiFi o datos móviles para que funcione el registro.</div>
+        </div>
+      </div>
+
+      <div style="display:flex;gap:12px;align-items:flex-start;">
+        <span style="font-size:16px;flex-shrink:0;">🔄</span>
+        <div>
+          <div style="font-size:13px;font-weight:700;color:var(--mar);margin-bottom:2px;">El QR expira en 5 minutos</div>
+          <div style="font-size:12px;font-weight:500;color:var(--tx2);line-height:1.6;">Esto es para evitar que alumnos de otras clases marquen asistencia. Si ves que el tiempo se acabó, haz clic en Regenerar.</div>
+        </div>
+      </div>
+
+      <div style="display:flex;gap:12px;align-items:flex-start;">
+        <span style="font-size:16px;flex-shrink:0;">✏️</span>
+        <div>
+          <div style="font-size:13px;font-weight:700;color:var(--mar);margin-bottom:2px;">Puedes corregir antes de finalizar</div>
+          <div style="font-size:12px;font-weight:500;color:var(--tx2);line-height:1.6;">Si un alumno tuvo problemas para escanear o no tiene celular, puedes marcarlo manualmente como presente en el panel de verificación.</div>
+        </div>
+      </div>
+
+      <div style="display:flex;gap:12px;align-items:flex-start;">
+        <span style="font-size:16px;flex-shrink:0;">📊</span>
+        <div>
+          <div style="font-size:13px;font-weight:700;color:var(--mar);margin-bottom:2px;">Revisa los registros en la pestaña Registros</div>
+          <div style="font-size:12px;font-weight:500;color:var(--tx2);line-height:1.6;">Después de finalizar la sesión, puedes ver el detalle completo de presentes y ausentes por área y fecha, y exportar un CSV.</div>
+        </div>
+      </div>
+
+      <div style="display:flex;gap:12px;align-items:flex-start;">
+        <span style="font-size:16px;flex-shrink:0;">⚠️</span>
+        <div>
+          <div style="font-size:13px;font-weight:700;color:var(--mar);margin-bottom:2px;">No cierres la pestaña antes de finalizar</div>
+          <div style="font-size:12px;font-weight:500;color:var(--tx2);line-height:1.6;">Si cierras el navegador con la sesión activa, puedes volver a abrirla y la sesión seguirá activa. Pero siempre finaliza correctamente para que los ausentes queden registrados.</div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- Contacto -->
+  <div class="card" style="background:var(--mar);border-color:var(--mar);">
+    <div style="font-size:13px;font-weight:700;color:var(--cal);margin-bottom:6px;text-transform:uppercase;letter-spacing:.05em;">¿Algo no funciona?</div>
+    <p style="font-size:13px;font-weight:500;color:rgba(255,255,255,0.6);line-height:1.7;">
+      Contacta a la coordinación de PreuUDD Concepción. Esta plataforma fue desarrollada especialmente
+      para el año académico 2026 y se actualiza de forma continua.
+    </p>
+  </div>
+
+</div>
+
+<!-- VERIFICACIÓN MODAL -->
+<div class="voverlay" id="voverlay">
+  <div class="vmodal">
+    <div class="vhead">
+      <div class="vtitle" id="v-title">Verificar asistencia</div>
+      <div class="vsub" id="v-sub">Revisa y ajusta antes de finalizar</div>
+    </div>
+    <div class="vsearch"><input id="v-buscar" placeholder="Buscar alumno..." oninput="filtrarVerif()"/></div>
+    <div class="vbody" id="v-body"></div>
+    <div class="vfoot">
+      <div class="vstats">
+        <span class="vs vsp" id="vs-p">0 presentes</span>
+        <span class="vs" style="color:var(--bd2)">·</span>
+        <span class="vs vsa" id="vs-a">0 ausentes</span>
       </div>
       <div class="flex">
-        <button class="btn btn-sm" onclick="cerrarVerifSinFinalizar()">Volver</button>
-        <button class="btn btn-r" onclick="confirmarCierre()">Finalizar y registrar asistencia</button>
+        <button class="btn bsm" onclick="document.getElementById('voverlay').classList.remove('show')">Volver</button>
+        <button class="btn br" onclick="confirmarCierre()">Finalizar y registrar asistencia</button>
       </div>
     </div>
   </div>
 </div>
 
-<!-- ══ ALUMNO ════════════════════════════════════════════ -->
+<!-- ALUMNO -->
 <div id="alumno-page" class="page">
-  <div class="alu-bg">
-    <div class="alu-card">
+  <div class="abg">
+    <div class="acard">
       <div id="alu-form">
-        <div class="alu-logo">PREUDD</div>
-        <div class="alu-div"></div>
-        <div class="alu-title">Marcar asistencia</div>
-        <div class="alu-sub" id="alu-info">Verificando sesión...</div>
+        <div class="alogo">PREUDD</div>
+        <div class="adiv"></div>
+        <div class="atitle">Marcar asistencia</div>
+        <div class="asubt" id="alu-info">Verificando sesión...</div>
         <div class="field"><label>Nombre completo</label><input id="al-n" placeholder="Tu nombre"/></div>
         <div class="field"><label>RUT</label><input id="al-r" placeholder="12345678-9"/></div>
         <div class="field"><label>Correo</label><input id="al-c" type="email" placeholder="tu@correo.com"/></div>
-        <button class="btn-sub" id="al-btn" onclick="marcarAsistencia()">Marcar mi asistencia</button>
+        <button class="bsub" id="al-btn" onclick="marcarAsistencia()">Marcar mi asistencia</button>
         <div class="msg me" id="al-err"></div>
       </div>
-      <div class="ok-w" id="alu-ok" style="display:none">
-        <div class="ok-c"><svg class="ok-sv" viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg></div>
-        <div class="ok-t">¡Asistencia registrada!</div>
-        <p class="ok-s" id="ok-det"></p>
+      <div class="okw" id="alu-ok" style="display:none">
+        <div class="okc"><svg class="oksv" viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg></div>
+        <div class="okt">¡Asistencia registrada!</div>
+        <p class="oks" id="ok-det"></p>
       </div>
     </div>
-    <div class="alu-ft">Preuniversitario UDD · Concepción 2026</div>
+    <div class="aft">Preuniversitario UDD · Concepción 2026</div>
   </div>
 </div>
 
@@ -405,357 +539,373 @@ const app = initializeApp({
 });
 const db = getFirestore(app);
 
-const MATERIAS = {"M1": {"nombre": "Matemática — Bloque 1", "area": "Matemáticas", "fechas": [{"col": 3, "fecha": "2026-04-06", "label": "6 Abr (L)"}, {"col": 4, "fecha": "2026-04-07", "label": "7 Abr (M)"}, {"col": 5, "fecha": "2026-04-13", "label": "13 Abr (L)"}, {"col": 6, "fecha": "2026-04-14", "label": "14 Abr (M)"}, {"col": 7, "fecha": "2026-04-20", "label": "20 Abr (L)"}, {"col": 8, "fecha": "2026-04-21", "label": "21 Abr (M)"}, {"col": 9, "fecha": "2026-04-27", "label": "27 Abr (L)"}, {"col": 10, "fecha": "2026-04-28", "label": "28 Abr (M)"}, {"col": 11, "fecha": "2026-05-04", "label": "4 May (L)"}, {"col": 12, "fecha": "2026-05-05", "label": "5 May (M)"}, {"col": 13, "fecha": "2026-05-11", "label": "11 May (L)"}, {"col": 14, "fecha": "2026-05-12", "label": "12 May (M)"}, {"col": 15, "fecha": "2026-05-18", "label": "18 May (L)"}, {"col": 16, "fecha": "2026-05-19", "label": "19 May (M)"}, {"col": 17, "fecha": "2026-05-25", "label": "25 May (L)"}, {"col": 18, "fecha": "2026-05-26", "label": "26 May (M)"}, {"col": 19, "fecha": "2026-06-01", "label": "1 Jun (L)"}, {"col": 20, "fecha": "2026-06-02", "label": "2 Jun (M)"}, {"col": 21, "fecha": "2026-06-08", "label": "8 Jun (L)"}, {"col": 22, "fecha": "2026-06-09", "label": "9 Jun (M)"}, {"col": 23, "fecha": "2026-06-15", "label": "15 Jun (L)"}, {"col": 24, "fecha": "2026-06-16", "label": "16 Jun (M)"}, {"col": 25, "fecha": "2026-06-22", "label": "22 Jun (L)"}, {"col": 26, "fecha": "2026-06-23", "label": "23 Jun (M)"}, {"col": 27, "fecha": "2026-06-30", "label": "30 Jun (M)"}, {"col": 28, "fecha": "2026-08-03", "label": "3 Ago (L)"}, {"col": 29, "fecha": "2026-08-04", "label": "4 Ago (M)"}, {"col": 30, "fecha": "2026-08-10", "label": "10 Ago (L)"}, {"col": 31, "fecha": "2026-08-11", "label": "11 Ago (M)"}, {"col": 32, "fecha": "2026-08-17", "label": "17 Ago (L)"}, {"col": 33, "fecha": "2026-08-18", "label": "18 Ago (M)"}, {"col": 34, "fecha": "2026-08-24", "label": "24 Ago (L)"}, {"col": 35, "fecha": "2026-08-25", "label": "25 Ago (M)"}, {"col": 36, "fecha": "2026-08-31", "label": "31 Ago (L)"}, {"col": 37, "fecha": "2026-09-01", "label": "1 Sep (M)"}, {"col": 38, "fecha": "2026-09-07", "label": "7 Sep (L)"}, {"col": 39, "fecha": "2026-09-08", "label": "8 Sep (M)"}, {"col": 40, "fecha": "2026-09-14", "label": "14 Sep (L)"}, {"col": 41, "fecha": "2026-09-15", "label": "15 Sep (M)"}, {"col": 42, "fecha": "2026-09-21", "label": "21 Sep (L)"}, {"col": 43, "fecha": "2026-09-22", "label": "22 Sep (M)"}, {"col": 44, "fecha": "2026-09-28", "label": "28 Sep (L)"}, {"col": 45, "fecha": "2026-09-29", "label": "29 Sep (M)"}, {"col": 46, "fecha": "2026-10-05", "label": "5 Oct (L)"}, {"col": 47, "fecha": "2026-10-06", "label": "6 Oct (M)"}, {"col": 48, "fecha": "2026-10-13", "label": "13 Oct (M)"}, {"col": 49, "fecha": "2026-10-19", "label": "19 Oct (L)"}, {"col": 50, "fecha": "2026-10-20", "label": "20 Oct (M)"}, {"col": 51, "fecha": "2026-10-26", "label": "26 Oct (L)"}, {"col": 52, "fecha": "2026-10-27", "label": "27 Oct (M)"}, {"col": 53, "fecha": "2026-11-02", "label": "2 Nov (L)"}, {"col": 54, "fecha": "2026-11-03", "label": "3 Nov (M)"}, {"col": 55, "fecha": "2026-11-09", "label": "9 Nov (L)"}, {"col": 56, "fecha": "2026-11-10", "label": "10 Nov (M)"}, {"col": 57, "fecha": "2026-11-16", "label": "16 Nov (L)"}, {"col": 58, "fecha": "2026-11-17", "label": "17 Nov (M)"}, {"col": 59, "fecha": "2026-11-23", "label": "23 Nov (L)"}, {"col": 60, "fecha": "2026-11-24", "label": "24 Nov (M)"}, {"col": 61, "fecha": "2026-11-30", "label": "30 Nov (L)"}]}, "M2": {"nombre": "Matemática — Bloque 2", "area": "Matemáticas", "fechas": [{"col": 3, "fecha": "2026-08-05", "label": "5 Ago (X)"}, {"col": 4, "fecha": "2026-08-12", "label": "12 Ago (X)"}, {"col": 5, "fecha": "2026-08-19", "label": "19 Ago (X)"}, {"col": 6, "fecha": "2026-08-26", "label": "26 Ago (X)"}, {"col": 7, "fecha": "2026-09-02", "label": "2 Sep (X)"}, {"col": 8, "fecha": "2026-09-09", "label": "9 Sep (X)"}, {"col": 9, "fecha": "2026-09-16", "label": "16 Sep (X)"}, {"col": 10, "fecha": "2026-09-23", "label": "23 Sep (X)"}, {"col": 11, "fecha": "2026-09-30", "label": "30 Sep (X)"}, {"col": 12, "fecha": "2026-10-07", "label": "7 Oct (X)"}, {"col": 13, "fecha": "2026-10-14", "label": "14 Oct (X)"}, {"col": 14, "fecha": "2026-10-21", "label": "21 Oct (X)"}, {"col": 15, "fecha": "2026-10-28", "label": "28 Oct (X)"}, {"col": 16, "fecha": "2026-11-04", "label": "4 Nov (X)"}, {"col": 17, "fecha": "2026-11-11", "label": "11 Nov (X)"}, {"col": 18, "fecha": "2026-11-18", "label": "18 Nov (X)"}, {"col": 19, "fecha": "2026-11-25", "label": "25 Nov (X)"}]}, "Lenguaje": {"nombre": "Comprensión Lectora", "area": "Comprensión Lectora", "fechas": [{"col": 3, "fecha": "2026-04-09", "label": "9 Abr (J)"}, {"col": 4, "fecha": "2026-04-16", "label": "16 Abr (J)"}, {"col": 5, "fecha": "2026-04-23", "label": "23 Abr (J)"}, {"col": 6, "fecha": "2026-04-30", "label": "30 Abr (J)"}, {"col": 7, "fecha": "2026-05-07", "label": "7 May (J)"}, {"col": 8, "fecha": "2026-05-14", "label": "14 May (J)"}, {"col": 9, "fecha": "2026-05-28", "label": "28 May (J)"}, {"col": 10, "fecha": "2026-06-04", "label": "4 Jun (J)"}, {"col": 11, "fecha": "2026-06-11", "label": "11 Jun (J)"}, {"col": 12, "fecha": "2026-06-18", "label": "18 Jun (J)"}, {"col": 13, "fecha": "2026-06-25", "label": "25 Jun (J)"}, {"col": 14, "fecha": "2026-08-06", "label": "6 Ago (J)"}, {"col": 15, "fecha": "2026-08-13", "label": "13 Ago (J)"}, {"col": 16, "fecha": "2026-08-20", "label": "20 Ago (J)"}, {"col": 17, "fecha": "2026-08-27", "label": "27 Ago (J)"}, {"col": 18, "fecha": "2026-09-03", "label": "3 Sep (J)"}, {"col": 19, "fecha": "2026-09-10", "label": "10 Sep (J)"}, {"col": 20, "fecha": "2026-09-17", "label": "17 Sep (J)"}, {"col": 21, "fecha": "2026-09-24", "label": "24 Sep (J)"}, {"col": 22, "fecha": "2026-10-01", "label": "1 Oct (J)"}, {"col": 23, "fecha": "2026-10-08", "label": "8 Oct (J)"}, {"col": 24, "fecha": "2026-10-15", "label": "15 Oct (J)"}, {"col": 25, "fecha": "2026-10-22", "label": "22 Oct (J)"}, {"col": 26, "fecha": "2026-10-29", "label": "29 Oct (J)"}, {"col": 27, "fecha": "2026-11-05", "label": "5 Nov (J)"}, {"col": 28, "fecha": "2026-11-12", "label": "12 Nov (J)"}, {"col": 29, "fecha": "2026-11-19", "label": "19 Nov (J)"}, {"col": 30, "fecha": "2026-11-26", "label": "26 Nov (J)"}]}, "Ciencias": {"nombre": "Ciencias", "area": "Ciencias", "fechas": [{"col": 3, "fecha": "2026-04-08", "label": "8 Abr (X)"}, {"col": 4, "fecha": "2026-04-15", "label": "15 Abr (X)"}, {"col": 5, "fecha": "2026-04-22", "label": "22 Abr (X)"}, {"col": 6, "fecha": "2026-04-29", "label": "29 Abr (X)"}, {"col": 7, "fecha": "2026-05-06", "label": "6 May (X)"}, {"col": 8, "fecha": "2026-05-13", "label": "13 May (X)"}, {"col": 9, "fecha": "2026-05-20", "label": "20 May (X)"}, {"col": 10, "fecha": "2026-05-27", "label": "27 May (X)"}, {"col": 11, "fecha": "2026-06-03", "label": "3 Jun (X)"}, {"col": 12, "fecha": "2026-06-10", "label": "10 Jun (X)"}, {"col": 13, "fecha": "2026-06-17", "label": "17 Jun (X)"}, {"col": 14, "fecha": "2026-06-24", "label": "24 Jun (X)"}, {"col": 15, "fecha": "2026-08-05", "label": "5 Ago (X)"}, {"col": 16, "fecha": "2026-08-12", "label": "12 Ago (X)"}, {"col": 17, "fecha": "2026-08-19", "label": "19 Ago (X)"}, {"col": 18, "fecha": "2026-08-26", "label": "26 Ago (X)"}, {"col": 19, "fecha": "2026-09-02", "label": "2 Sep (X)"}, {"col": 20, "fecha": "2026-09-09", "label": "9 Sep (X)"}, {"col": 21, "fecha": "2026-09-16", "label": "16 Sep (X)"}, {"col": 22, "fecha": "2026-09-23", "label": "23 Sep (X)"}, {"col": 23, "fecha": "2026-09-30", "label": "30 Sep (X)"}, {"col": 24, "fecha": "2026-10-07", "label": "7 Oct (X)"}, {"col": 25, "fecha": "2026-10-14", "label": "14 Oct (X)"}, {"col": 26, "fecha": "2026-10-21", "label": "21 Oct (X)"}, {"col": 27, "fecha": "2026-10-28", "label": "28 Oct (X)"}, {"col": 28, "fecha": "2026-11-04", "label": "4 Nov (X)"}, {"col": 29, "fecha": "2026-11-11", "label": "11 Nov (X)"}, {"col": 30, "fecha": "2026-11-18", "label": "18 Nov (X)"}, {"col": 31, "fecha": "2026-11-25", "label": "25 Nov (X)"}]}, "Historia": {"nombre": "Historia", "area": "Historia", "fechas": [{"col": 3, "fecha": "2026-04-06", "label": "6 Abr (L)"}, {"col": 4, "fecha": "2026-04-13", "label": "13 Abr (L)"}, {"col": 5, "fecha": "2026-04-20", "label": "20 Abr (L)"}, {"col": 6, "fecha": "2026-04-27", "label": "27 Abr (L)"}, {"col": 7, "fecha": "2026-05-04", "label": "4 May (L)"}, {"col": 8, "fecha": "2026-05-11", "label": "11 May (L)"}, {"col": 9, "fecha": "2026-05-18", "label": "18 May (L)"}, {"col": 10, "fecha": "2026-05-25", "label": "25 May (L)"}, {"col": 11, "fecha": "2026-06-01", "label": "1 Jun (L)"}, {"col": 12, "fecha": "2026-06-08", "label": "8 Jun (L)"}, {"col": 13, "fecha": "2026-06-15", "label": "15 Jun (L)"}, {"col": 14, "fecha": "2026-06-22", "label": "22 Jun (L)"}, {"col": 15, "fecha": "2026-08-03", "label": "3 Ago (L)"}, {"col": 16, "fecha": "2026-08-10", "label": "10 Ago (L)"}, {"col": 17, "fecha": "2026-08-17", "label": "17 Ago (L)"}, {"col": 18, "fecha": "2026-08-24", "label": "24 Ago (L)"}, {"col": 19, "fecha": "2026-08-31", "label": "31 Ago (L)"}, {"col": 20, "fecha": "2026-09-07", "label": "7 Sep (L)"}, {"col": 21, "fecha": "2026-09-14", "label": "14 Sep (L)"}, {"col": 22, "fecha": "2026-09-21", "label": "21 Sep (L)"}, {"col": 23, "fecha": "2026-09-28", "label": "28 Sep (L)"}, {"col": 24, "fecha": "2026-10-05", "label": "5 Oct (L)"}, {"col": 25, "fecha": "2026-10-19", "label": "19 Oct (L)"}, {"col": 26, "fecha": "2026-10-26", "label": "26 Oct (L)"}, {"col": 27, "fecha": "2026-11-02", "label": "2 Nov (L)"}, {"col": 28, "fecha": "2026-11-09", "label": "9 Nov (L)"}, {"col": 29, "fecha": "2026-11-16", "label": "16 Nov (L)"}, {"col": 30, "fecha": "2026-11-23", "label": "23 Nov (L)"}, {"col": 31, "fecha": "2026-11-30", "label": "30 Nov (L)"}]}, "Física": {"nombre": "Física", "area": "Física", "fechas": [{"col": 3, "fecha": "2026-04-07", "label": "7 Abr (M)"}, {"col": 4, "fecha": "2026-04-14", "label": "14 Abr (M)"}, {"col": 5, "fecha": "2026-04-21", "label": "21 Abr (M)"}, {"col": 6, "fecha": "2026-04-28", "label": "28 Abr (M)"}, {"col": 7, "fecha": "2026-05-05", "label": "5 May (M)"}, {"col": 8, "fecha": "2026-05-12", "label": "12 May (M)"}, {"col": 9, "fecha": "2026-05-19", "label": "19 May (M)"}, {"col": 10, "fecha": "2026-05-26", "label": "26 May (M)"}, {"col": 11, "fecha": "2026-06-02", "label": "2 Jun (M)"}, {"col": 12, "fecha": "2026-06-09", "label": "9 Jun (M)"}, {"col": 13, "fecha": "2026-06-16", "label": "16 Jun (M)"}, {"col": 14, "fecha": "2026-06-23", "label": "23 Jun (M)"}, {"col": 15, "fecha": "2026-06-30", "label": "30 Jun (M)"}, {"col": 16, "fecha": "2026-08-04", "label": "4 Ago (M)"}, {"col": 17, "fecha": "2026-08-11", "label": "11 Ago (M)"}, {"col": 18, "fecha": "2026-08-18", "label": "18 Ago (M)"}, {"col": 19, "fecha": "2026-08-25", "label": "25 Ago (M)"}, {"col": 20, "fecha": "2026-09-01", "label": "1 Sep (M)"}, {"col": 21, "fecha": "2026-09-08", "label": "8 Sep (M)"}, {"col": 22, "fecha": "2026-09-15", "label": "15 Sep (M)"}, {"col": 23, "fecha": "2026-09-22", "label": "22 Sep (M)"}, {"col": 24, "fecha": "2026-09-29", "label": "29 Sep (M)"}, {"col": 25, "fecha": "2026-10-06", "label": "6 Oct (M)"}, {"col": 26, "fecha": "2026-10-13", "label": "13 Oct (M)"}, {"col": 27, "fecha": "2026-10-20", "label": "20 Oct (M)"}, {"col": 28, "fecha": "2026-10-27", "label": "27 Oct (M)"}, {"col": 29, "fecha": "2026-11-03", "label": "3 Nov (M)"}, {"col": 30, "fecha": "2026-11-10", "label": "10 Nov (M)"}, {"col": 31, "fecha": "2026-11-17", "label": "17 Nov (M)"}, {"col": 32, "fecha": "2026-11-24", "label": "24 Nov (M)"}]}, "Orientación": {"nombre": "Orientación", "area": null, "fechas": [{"col": 3, "fecha": "2026-04-10", "label": "10 Abr (V)"}, {"col": 4, "fecha": "2026-04-17", "label": "17 Abr (V)"}, {"col": 5, "fecha": "2026-04-24", "label": "24 Abr (V)"}, {"col": 6, "fecha": "2026-05-08", "label": "8 May (V)"}, {"col": 7, "fecha": "2026-05-15", "label": "15 May (V)"}, {"col": 8, "fecha": "2026-05-22", "label": "22 May (V)"}, {"col": 9, "fecha": "2026-05-29", "label": "29 May (V)"}, {"col": 10, "fecha": "2026-06-05", "label": "5 Jun (V)"}, {"col": 11, "fecha": "2026-06-12", "label": "12 Jun (V)"}, {"col": 12, "fecha": "2026-06-19", "label": "19 Jun (V)"}, {"col": 13, "fecha": "2026-06-26", "label": "26 Jun (V)"}, {"col": 14, "fecha": "2026-08-07", "label": "7 Ago (V)"}, {"col": 15, "fecha": "2026-08-14", "label": "14 Ago (V)"}, {"col": 16, "fecha": "2026-08-21", "label": "21 Ago (V)"}, {"col": 17, "fecha": "2026-08-28", "label": "28 Ago (V)"}, {"col": 18, "fecha": "2026-09-04", "label": "4 Sep (V)"}, {"col": 19, "fecha": "2026-09-11", "label": "11 Sep (V)"}, {"col": 20, "fecha": "2026-09-25", "label": "25 Sep (V)"}, {"col": 21, "fecha": "2026-10-02", "label": "2 Oct (V)"}, {"col": 22, "fecha": "2026-10-09", "label": "9 Oct (V)"}, {"col": 23, "fecha": "2026-10-16", "label": "16 Oct (V)"}, {"col": 24, "fecha": "2026-10-23", "label": "23 Oct (V)"}, {"col": 25, "fecha": "2026-10-30", "label": "30 Oct (V)"}, {"col": 26, "fecha": "2026-11-06", "label": "6 Nov (V)"}, {"col": 27, "fecha": "2026-11-13", "label": "13 Nov (V)"}, {"col": 28, "fecha": "2026-11-20", "label": "20 Nov (V)"}, {"col": 29, "fecha": "2026-11-27", "label": "27 Nov (V)"}]}};
+const MATERIAS = {"M1": {"nombre": "Matemáticas M1", "area": "Matemáticas", "fechas": [{"col": 3, "fecha": "2026-04-06", "label": "6 Abr (L)"}, {"col": 4, "fecha": "2026-04-07", "label": "7 Abr (M)"}, {"col": 5, "fecha": "2026-04-13", "label": "13 Abr (L)"}, {"col": 6, "fecha": "2026-04-14", "label": "14 Abr (M)"}, {"col": 7, "fecha": "2026-04-20", "label": "20 Abr (L)"}, {"col": 8, "fecha": "2026-04-21", "label": "21 Abr (M)"}, {"col": 9, "fecha": "2026-04-27", "label": "27 Abr (L)"}, {"col": 10, "fecha": "2026-04-28", "label": "28 Abr (M)"}, {"col": 11, "fecha": "2026-05-04", "label": "4 May (L)"}, {"col": 12, "fecha": "2026-05-05", "label": "5 May (M)"}, {"col": 13, "fecha": "2026-05-11", "label": "11 May (L)"}, {"col": 14, "fecha": "2026-05-12", "label": "12 May (M)"}, {"col": 15, "fecha": "2026-05-18", "label": "18 May (L)"}, {"col": 16, "fecha": "2026-05-19", "label": "19 May (M)"}, {"col": 17, "fecha": "2026-05-25", "label": "25 May (L)"}, {"col": 18, "fecha": "2026-05-26", "label": "26 May (M)"}, {"col": 19, "fecha": "2026-06-01", "label": "1 Jun (L)"}, {"col": 20, "fecha": "2026-06-02", "label": "2 Jun (M)"}, {"col": 21, "fecha": "2026-06-08", "label": "8 Jun (L)"}, {"col": 22, "fecha": "2026-06-09", "label": "9 Jun (M)"}, {"col": 23, "fecha": "2026-06-15", "label": "15 Jun (L)"}, {"col": 24, "fecha": "2026-06-16", "label": "16 Jun (M)"}, {"col": 25, "fecha": "2026-06-22", "label": "22 Jun (L)"}, {"col": 26, "fecha": "2026-06-23", "label": "23 Jun (M)"}, {"col": 27, "fecha": "2026-06-30", "label": "30 Jun (M)"}, {"col": 28, "fecha": "2026-08-03", "label": "3 Ago (L)"}, {"col": 29, "fecha": "2026-08-04", "label": "4 Ago (M)"}, {"col": 30, "fecha": "2026-08-10", "label": "10 Ago (L)"}, {"col": 31, "fecha": "2026-08-11", "label": "11 Ago (M)"}, {"col": 32, "fecha": "2026-08-17", "label": "17 Ago (L)"}, {"col": 33, "fecha": "2026-08-18", "label": "18 Ago (M)"}, {"col": 34, "fecha": "2026-08-24", "label": "24 Ago (L)"}, {"col": 35, "fecha": "2026-08-25", "label": "25 Ago (M)"}, {"col": 36, "fecha": "2026-08-31", "label": "31 Ago (L)"}, {"col": 37, "fecha": "2026-09-01", "label": "1 Sep (M)"}, {"col": 38, "fecha": "2026-09-07", "label": "7 Sep (L)"}, {"col": 39, "fecha": "2026-09-08", "label": "8 Sep (M)"}, {"col": 40, "fecha": "2026-09-14", "label": "14 Sep (L)"}, {"col": 41, "fecha": "2026-09-15", "label": "15 Sep (M)"}, {"col": 42, "fecha": "2026-09-21", "label": "21 Sep (L)"}, {"col": 43, "fecha": "2026-09-22", "label": "22 Sep (M)"}, {"col": 44, "fecha": "2026-09-28", "label": "28 Sep (L)"}, {"col": 45, "fecha": "2026-09-29", "label": "29 Sep (M)"}, {"col": 46, "fecha": "2026-10-05", "label": "5 Oct (L)"}, {"col": 47, "fecha": "2026-10-06", "label": "6 Oct (M)"}, {"col": 48, "fecha": "2026-10-13", "label": "13 Oct (M)"}, {"col": 49, "fecha": "2026-10-19", "label": "19 Oct (L)"}, {"col": 50, "fecha": "2026-10-20", "label": "20 Oct (M)"}, {"col": 51, "fecha": "2026-10-26", "label": "26 Oct (L)"}, {"col": 52, "fecha": "2026-10-27", "label": "27 Oct (M)"}, {"col": 53, "fecha": "2026-11-02", "label": "2 Nov (L)"}, {"col": 54, "fecha": "2026-11-03", "label": "3 Nov (M)"}, {"col": 55, "fecha": "2026-11-09", "label": "9 Nov (L)"}, {"col": 56, "fecha": "2026-11-10", "label": "10 Nov (M)"}, {"col": 57, "fecha": "2026-11-16", "label": "16 Nov (L)"}, {"col": 58, "fecha": "2026-11-17", "label": "17 Nov (M)"}, {"col": 59, "fecha": "2026-11-23", "label": "23 Nov (L)"}, {"col": 60, "fecha": "2026-11-24", "label": "24 Nov (M)"}, {"col": 61, "fecha": "2026-11-30", "label": "30 Nov (L)"}]}, "M2": {"nombre": "Matemáticas M2", "area": "Matemáticas", "fechas": [{"col": 3, "fecha": "2026-08-05", "label": "5 Ago (X)"}, {"col": 4, "fecha": "2026-08-12", "label": "12 Ago (X)"}, {"col": 5, "fecha": "2026-08-19", "label": "19 Ago (X)"}, {"col": 6, "fecha": "2026-08-26", "label": "26 Ago (X)"}, {"col": 7, "fecha": "2026-09-02", "label": "2 Sep (X)"}, {"col": 8, "fecha": "2026-09-09", "label": "9 Sep (X)"}, {"col": 9, "fecha": "2026-09-16", "label": "16 Sep (X)"}, {"col": 10, "fecha": "2026-09-23", "label": "23 Sep (X)"}, {"col": 11, "fecha": "2026-09-30", "label": "30 Sep (X)"}, {"col": 12, "fecha": "2026-10-07", "label": "7 Oct (X)"}, {"col": 13, "fecha": "2026-10-14", "label": "14 Oct (X)"}, {"col": 14, "fecha": "2026-10-21", "label": "21 Oct (X)"}, {"col": 15, "fecha": "2026-10-28", "label": "28 Oct (X)"}, {"col": 16, "fecha": "2026-11-04", "label": "4 Nov (X)"}, {"col": 17, "fecha": "2026-11-11", "label": "11 Nov (X)"}, {"col": 18, "fecha": "2026-11-18", "label": "18 Nov (X)"}, {"col": 19, "fecha": "2026-11-25", "label": "25 Nov (X)"}]}, "Lenguaje": {"nombre": "Comprensión Lectora", "area": "Comprensión Lectora", "fechas": [{"col": 3, "fecha": "2026-04-09", "label": "9 Abr (J)"}, {"col": 4, "fecha": "2026-04-16", "label": "16 Abr (J)"}, {"col": 5, "fecha": "2026-04-23", "label": "23 Abr (J)"}, {"col": 6, "fecha": "2026-04-30", "label": "30 Abr (J)"}, {"col": 7, "fecha": "2026-05-07", "label": "7 May (J)"}, {"col": 8, "fecha": "2026-05-14", "label": "14 May (J)"}, {"col": 9, "fecha": "2026-05-28", "label": "28 May (J)"}, {"col": 10, "fecha": "2026-06-04", "label": "4 Jun (J)"}, {"col": 11, "fecha": "2026-06-11", "label": "11 Jun (J)"}, {"col": 12, "fecha": "2026-06-18", "label": "18 Jun (J)"}, {"col": 13, "fecha": "2026-06-25", "label": "25 Jun (J)"}, {"col": 14, "fecha": "2026-08-06", "label": "6 Ago (J)"}, {"col": 15, "fecha": "2026-08-13", "label": "13 Ago (J)"}, {"col": 16, "fecha": "2026-08-20", "label": "20 Ago (J)"}, {"col": 17, "fecha": "2026-08-27", "label": "27 Ago (J)"}, {"col": 18, "fecha": "2026-09-03", "label": "3 Sep (J)"}, {"col": 19, "fecha": "2026-09-10", "label": "10 Sep (J)"}, {"col": 20, "fecha": "2026-09-17", "label": "17 Sep (J)"}, {"col": 21, "fecha": "2026-09-24", "label": "24 Sep (J)"}, {"col": 22, "fecha": "2026-10-01", "label": "1 Oct (J)"}, {"col": 23, "fecha": "2026-10-08", "label": "8 Oct (J)"}, {"col": 24, "fecha": "2026-10-15", "label": "15 Oct (J)"}, {"col": 25, "fecha": "2026-10-22", "label": "22 Oct (J)"}, {"col": 26, "fecha": "2026-10-29", "label": "29 Oct (J)"}, {"col": 27, "fecha": "2026-11-05", "label": "5 Nov (J)"}, {"col": 28, "fecha": "2026-11-12", "label": "12 Nov (J)"}, {"col": 29, "fecha": "2026-11-19", "label": "19 Nov (J)"}, {"col": 30, "fecha": "2026-11-26", "label": "26 Nov (J)"}]}, "Ciencias": {"nombre": "Ciencias", "area": "Ciencias", "fechas": [{"col": 3, "fecha": "2026-04-08", "label": "8 Abr (X)"}, {"col": 4, "fecha": "2026-04-15", "label": "15 Abr (X)"}, {"col": 5, "fecha": "2026-04-22", "label": "22 Abr (X)"}, {"col": 6, "fecha": "2026-04-29", "label": "29 Abr (X)"}, {"col": 7, "fecha": "2026-05-06", "label": "6 May (X)"}, {"col": 8, "fecha": "2026-05-13", "label": "13 May (X)"}, {"col": 9, "fecha": "2026-05-20", "label": "20 May (X)"}, {"col": 10, "fecha": "2026-05-27", "label": "27 May (X)"}, {"col": 11, "fecha": "2026-06-03", "label": "3 Jun (X)"}, {"col": 12, "fecha": "2026-06-10", "label": "10 Jun (X)"}, {"col": 13, "fecha": "2026-06-17", "label": "17 Jun (X)"}, {"col": 14, "fecha": "2026-06-24", "label": "24 Jun (X)"}, {"col": 15, "fecha": "2026-08-05", "label": "5 Ago (X)"}, {"col": 16, "fecha": "2026-08-12", "label": "12 Ago (X)"}, {"col": 17, "fecha": "2026-08-19", "label": "19 Ago (X)"}, {"col": 18, "fecha": "2026-08-26", "label": "26 Ago (X)"}, {"col": 19, "fecha": "2026-09-02", "label": "2 Sep (X)"}, {"col": 20, "fecha": "2026-09-09", "label": "9 Sep (X)"}, {"col": 21, "fecha": "2026-09-16", "label": "16 Sep (X)"}, {"col": 22, "fecha": "2026-09-23", "label": "23 Sep (X)"}, {"col": 23, "fecha": "2026-09-30", "label": "30 Sep (X)"}, {"col": 24, "fecha": "2026-10-07", "label": "7 Oct (X)"}, {"col": 25, "fecha": "2026-10-14", "label": "14 Oct (X)"}, {"col": 26, "fecha": "2026-10-21", "label": "21 Oct (X)"}, {"col": 27, "fecha": "2026-10-28", "label": "28 Oct (X)"}, {"col": 28, "fecha": "2026-11-04", "label": "4 Nov (X)"}, {"col": 29, "fecha": "2026-11-11", "label": "11 Nov (X)"}, {"col": 30, "fecha": "2026-11-18", "label": "18 Nov (X)"}, {"col": 31, "fecha": "2026-11-25", "label": "25 Nov (X)"}]}, "Historia": {"nombre": "Historia", "area": "Historia", "fechas": [{"col": 3, "fecha": "2026-04-06", "label": "6 Abr (L)"}, {"col": 4, "fecha": "2026-04-13", "label": "13 Abr (L)"}, {"col": 5, "fecha": "2026-04-20", "label": "20 Abr (L)"}, {"col": 6, "fecha": "2026-04-27", "label": "27 Abr (L)"}, {"col": 7, "fecha": "2026-05-04", "label": "4 May (L)"}, {"col": 8, "fecha": "2026-05-11", "label": "11 May (L)"}, {"col": 9, "fecha": "2026-05-18", "label": "18 May (L)"}, {"col": 10, "fecha": "2026-05-25", "label": "25 May (L)"}, {"col": 11, "fecha": "2026-06-01", "label": "1 Jun (L)"}, {"col": 12, "fecha": "2026-06-08", "label": "8 Jun (L)"}, {"col": 13, "fecha": "2026-06-15", "label": "15 Jun (L)"}, {"col": 14, "fecha": "2026-06-22", "label": "22 Jun (L)"}, {"col": 15, "fecha": "2026-08-03", "label": "3 Ago (L)"}, {"col": 16, "fecha": "2026-08-10", "label": "10 Ago (L)"}, {"col": 17, "fecha": "2026-08-17", "label": "17 Ago (L)"}, {"col": 18, "fecha": "2026-08-24", "label": "24 Ago (L)"}, {"col": 19, "fecha": "2026-08-31", "label": "31 Ago (L)"}, {"col": 20, "fecha": "2026-09-07", "label": "7 Sep (L)"}, {"col": 21, "fecha": "2026-09-14", "label": "14 Sep (L)"}, {"col": 22, "fecha": "2026-09-21", "label": "21 Sep (L)"}, {"col": 23, "fecha": "2026-09-28", "label": "28 Sep (L)"}, {"col": 24, "fecha": "2026-10-05", "label": "5 Oct (L)"}, {"col": 25, "fecha": "2026-10-19", "label": "19 Oct (L)"}, {"col": 26, "fecha": "2026-10-26", "label": "26 Oct (L)"}, {"col": 27, "fecha": "2026-11-02", "label": "2 Nov (L)"}, {"col": 28, "fecha": "2026-11-09", "label": "9 Nov (L)"}, {"col": 29, "fecha": "2026-11-16", "label": "16 Nov (L)"}, {"col": 30, "fecha": "2026-11-23", "label": "23 Nov (L)"}, {"col": 31, "fecha": "2026-11-30", "label": "30 Nov (L)"}]}, "Física": {"nombre": "Física", "area": "Física", "fechas": [{"col": 3, "fecha": "2026-04-07", "label": "7 Abr (M)"}, {"col": 4, "fecha": "2026-04-14", "label": "14 Abr (M)"}, {"col": 5, "fecha": "2026-04-21", "label": "21 Abr (M)"}, {"col": 6, "fecha": "2026-04-28", "label": "28 Abr (M)"}, {"col": 7, "fecha": "2026-05-05", "label": "5 May (M)"}, {"col": 8, "fecha": "2026-05-12", "label": "12 May (M)"}, {"col": 9, "fecha": "2026-05-19", "label": "19 May (M)"}, {"col": 10, "fecha": "2026-05-26", "label": "26 May (M)"}, {"col": 11, "fecha": "2026-06-02", "label": "2 Jun (M)"}, {"col": 12, "fecha": "2026-06-09", "label": "9 Jun (M)"}, {"col": 13, "fecha": "2026-06-16", "label": "16 Jun (M)"}, {"col": 14, "fecha": "2026-06-23", "label": "23 Jun (M)"}, {"col": 15, "fecha": "2026-06-30", "label": "30 Jun (M)"}, {"col": 16, "fecha": "2026-08-04", "label": "4 Ago (M)"}, {"col": 17, "fecha": "2026-08-11", "label": "11 Ago (M)"}, {"col": 18, "fecha": "2026-08-18", "label": "18 Ago (M)"}, {"col": 19, "fecha": "2026-08-25", "label": "25 Ago (M)"}, {"col": 20, "fecha": "2026-09-01", "label": "1 Sep (M)"}, {"col": 21, "fecha": "2026-09-08", "label": "8 Sep (M)"}, {"col": 22, "fecha": "2026-09-15", "label": "15 Sep (M)"}, {"col": 23, "fecha": "2026-09-22", "label": "22 Sep (M)"}, {"col": 24, "fecha": "2026-09-29", "label": "29 Sep (M)"}, {"col": 25, "fecha": "2026-10-06", "label": "6 Oct (M)"}, {"col": 26, "fecha": "2026-10-13", "label": "13 Oct (M)"}, {"col": 27, "fecha": "2026-10-20", "label": "20 Oct (M)"}, {"col": 28, "fecha": "2026-10-27", "label": "27 Oct (M)"}, {"col": 29, "fecha": "2026-11-03", "label": "3 Nov (M)"}, {"col": 30, "fecha": "2026-11-10", "label": "10 Nov (M)"}, {"col": 31, "fecha": "2026-11-17", "label": "17 Nov (M)"}, {"col": 32, "fecha": "2026-11-24", "label": "24 Nov (M)"}]}, "Orientación": {"nombre": "Orientación", "area": null, "fechas": [{"col": 3, "fecha": "2026-04-10", "label": "10 Abr (V)"}, {"col": 4, "fecha": "2026-04-17", "label": "17 Abr (V)"}, {"col": 5, "fecha": "2026-04-24", "label": "24 Abr (V)"}, {"col": 6, "fecha": "2026-05-08", "label": "8 May (V)"}, {"col": 7, "fecha": "2026-05-15", "label": "15 May (V)"}, {"col": 8, "fecha": "2026-05-22", "label": "22 May (V)"}, {"col": 9, "fecha": "2026-05-29", "label": "29 May (V)"}, {"col": 10, "fecha": "2026-06-05", "label": "5 Jun (V)"}, {"col": 11, "fecha": "2026-06-12", "label": "12 Jun (V)"}, {"col": 12, "fecha": "2026-06-19", "label": "19 Jun (V)"}, {"col": 13, "fecha": "2026-06-26", "label": "26 Jun (V)"}, {"col": 14, "fecha": "2026-08-07", "label": "7 Ago (V)"}, {"col": 15, "fecha": "2026-08-14", "label": "14 Ago (V)"}, {"col": 16, "fecha": "2026-08-21", "label": "21 Ago (V)"}, {"col": 17, "fecha": "2026-08-28", "label": "28 Ago (V)"}, {"col": 18, "fecha": "2026-09-04", "label": "4 Sep (V)"}, {"col": 19, "fecha": "2026-09-11", "label": "11 Sep (V)"}, {"col": 20, "fecha": "2026-09-25", "label": "25 Sep (V)"}, {"col": 21, "fecha": "2026-10-02", "label": "2 Oct (V)"}, {"col": 22, "fecha": "2026-10-09", "label": "9 Oct (V)"}, {"col": 23, "fecha": "2026-10-16", "label": "16 Oct (V)"}, {"col": 24, "fecha": "2026-10-23", "label": "23 Oct (V)"}, {"col": 25, "fecha": "2026-10-30", "label": "30 Oct (V)"}, {"col": 26, "fecha": "2026-11-06", "label": "6 Nov (V)"}, {"col": 27, "fecha": "2026-11-13", "label": "13 Nov (V)"}, {"col": 28, "fecha": "2026-11-20", "label": "20 Nov (V)"}, {"col": 29, "fecha": "2026-11-27", "label": "27 Nov (V)"}]}};
 const ALUMNOS  = {"M1": [{"correo": "malarconveloso@gmail.com", "nombre": "Matilda Antonia Alarcon Veloso", "rut": "22849985-4"}, {"correo": "valeriapaolaalvarezfernandez@gmail.com", "nombre": "Valeria Paola Alvarez Fernández", "rut": "27358799-3"}, {"correo": "astualonso123@gmail.com", "nombre": "Alonso Agustin Astudillo Fernandez", "rut": "23002266-6"}, {"correo": "gacituamimi99@gmail.com", "nombre": "Evolet Naybth Isidora Benitez Gacitua", "rut": "23239474-9"}, {"correo": "florencia.caceres.donoso24@gmail.com", "nombre": "Florencia Paloma Cáceres Donoso", "rut": "23006455-5"}, {"correo": "mcaceresv2020@ihcass.cl", "nombre": "Martina Caceres Vergara", "rut": "23241569-k"}, {"correo": "javieracatalan2022@gmail.com", "nombre": "Javiera Yubitza Catalan Mendoza", "rut": "22887105-2"}, {"correo": "aconstanzochamorro@gmail.com", "nombre": "Amanda Alejandra Chamorro Constanzo", "rut": "23205129-9"}, {"correo": "valesca.anahis28@gmail.com", "nombre": "Valesca Anahis Cid Muñoz", "rut": "23038236-0"}, {"correo": "elvzabetthsalamanca@gmail.com", "nombre": "Elizabeth Dayana Cuevas Salamanca", "rut": "23239814-0"}, {"correo": "pipedlc18@gmail.com", "nombre": "Felipe Alonso Diaz Torres", "rut": "22975434-3"}, {"correo": "sara_fuentes_82@yahoo.cl", "nombre": "Alonso Durán Fuentes", "rut": "23337342-7"}, {"correo": "sescalonasaavedra@gmail.com", "nombre": "Stephanie Andrea Escalona Saavedra", "rut": "23345673-k"}, {"correo": "polethferrari@gmail.com", "nombre": "Poleth Mikaela Ferrari Fuetes", "rut": "22.693.316-6"}, {"correo": "figueroamartinezchelsea@gmail.com", "nombre": "Chelsea Mabel Figueroa Martínez", "rut": "22271501-6"}, {"correo": "angelineb.colegioedwardccp@gmail.com", "nombre": "Javier Alonso Gajardo Basualto", "rut": "22974574-3"}, {"correo": "pamerodriguezf@gmail.com", "nombre": "Carol Esperanza García Rodríguez", "rut": "23004821-5"}, {"correo": "benjamingonzalezchamorro2006@gmail.com", "nombre": "Benjamin Gonzalez Chamorro", "rut": "22265232-4"}, {"correo": "fernandagonzalez020908@gmail.com", "nombre": "Fernanda Ignacia González Flores", "rut": "22809749-7"}, {"correo": "benjaguerrero581@gmail.com", "nombre": "Benjamín Ignacio Guerrero Quiroga", "rut": "22696731-1"}, {"correo": "francisca.igd.12@gmail.com", "nombre": "Francisca Guzmán Díaz", "rut": "23351472-1"}, {"correo": "chormaz.dickinson@gmail.com", "nombre": "Christian Hormazabal Dickinson", "rut": "22423736-7"}, {"correo": "angelinneinzunzap09@gmail.com", "nombre": "Angelinne Millaray Inzunza Peña", "rut": "22764459-1"}, {"correo": "bbarbarajerez.tapia@gmail.com", "nombre": "Barbara Jerez", "rut": "22765962-8"}, {"correo": "samartinh@almondale.cl", "nombre": "Sofía Antonia Martin Hurst", "rut": "22971901-7"}, {"correo": "camilabelen2277@gmail.com", "nombre": "Camila Belén Matus Creixell", "rut": "22425298-6"}, {"correo": "mellab.valentina@gmail.com", "nombre": "Valentina Paz Mella Bobadilla", "rut": "22535139-2"}, {"correo": "elisamillar7@gmail.com", "nombre": "Elisa Millar Faúndez", "rut": "22856241-6"}, {"correo": "fernamorag22@gmail.com", "nombre": "Fernanda Alejandra Mora González", "rut": "23011609-1"}, {"correo": "maurolavet@gmail.com", "nombre": "Mauro Nicolás Olave Torres", "rut": "23276213-6"}, {"correo": "antonella25.olivares.02@gmail.com", "nombre": "Antonella Paz Olivares Vera", "rut": "22652824-5"}, {"correo": "parrasofia1148@gmail.com", "nombre": "Sofía Antonia Parra Barrientos", "rut": "22877452-9"}, {"correo": "penadiannelys01@gmail.com", "nombre": "Diannelys Sofía Peña Rossodivita", "rut": "26287360-9"}, {"correo": "cota.ramirez.coddou@gmail.com", "nombre": "Constanza Beatriz Ramírez Coddou", "rut": "23112415-2"}, {"correo": "agu.escobar1908@gmail.com", "nombre": "Agustina Del Pilar Riquelme Escobar", "rut": "22777429-0"}, {"correo": "seba26andres@gmail.com", "nombre": "Sebastián Andrés Riquelme Oñate", "rut": "22730058-2"}, {"correo": "keilayazminrobles@gmail.com", "nombre": "Keila Yazmin Robles Espinoza", "rut": "22608509-2"}, {"correo": "luciorodriguez10000@gmail.com", "nombre": "Lucio Alejandro Rodriguez Aguilera", "rut": "22782577-4"}, {"correo": "fersaez1002@gmail.com", "nombre": "Fernanda Dannae Sáez Rodriguez", "rut": "23247015-1"}, {"correo": "elena.san1608@gmail.com", "nombre": "Elena Victoria San Martín Olate", "rut": "22795719-0"}, {"correo": "cristobal.silva.medina.30@gmail.com", "nombre": "Cristóbal Ignacio Silva Medina", "rut": "22967956-2"}, {"correo": "amandat.onate@gmail.com", "nombre": "Amanda Isabel Tapia Oñate", "rut": "22819295-3"}, {"correo": "ampyvallejosv@gmail.com", "nombre": "Amparo Isabella Vallejos Valenzuela", "rut": "22784926-6"}, {"correo": "victoriawega17@gmail.com", "nombre": "Victoria Monserrat Vega Lucero", "rut": "22617442-7"}, {"correo": "lvega@santasabina.cl", "nombre": "Luis Felipe Vega Salazar", "rut": "22916054-0"}, {"correo": "valppetitbrenilh@gmail.com", "nombre": "Mateo Alonso Sebastián Zúñiga Petit-Brenilh", "rut": "22741483-9"}, {"correo": "alexlabra66@gmail.com", "nombre": "Alex Antonio Labra Villegas", "rut": "22377947-6"}, {"correo": "patriciiovasros@gmail.com", "nombre": "Patricio Vásquez Rosales", "rut": "22863079-9"}, {"correo": "valentinaabelenp@gmail.com", "nombre": "Valentina Portiño Cabezas", "rut": "22820638-5"}, {"correo": "sofiaparis0808@gmail.com", "nombre": "Sofia Catalina Paris Lazcano", "rut": "22790587-5"}, {"correo": "anais2009.av@gmail.com", "nombre": "Anais Patricia Villegas Aarcón", "rut": "23011347-5"}, {"correo": "fernandabelensalgadoflores758@gmail.com", "nombre": "Fernanda Salgado Flores", "rut": "22732244-6"}, {"correo": "stefania.zorritolover@gmail.com", "nombre": "Estefania Muñoz Villanueva", "rut": "22763181-3"}, {"correo": "carmengloria3105@gmail.com", "nombre": "Carmen Gloria Silva Bravo", "rut": "23034663-1"}, {"correo": "catalinapedrero73@gmail.com", "nombre": "Catalina Pedreros Aguayo", "rut": "22495082-9"}, {"correo": "mm4293676@gmail.com", "nombre": "Matías Alonso Muñoz Soto", "rut": "22489792-8"}], "M2": [{"correo": "malarconveloso@gmail.com", "nombre": "Matilda Antonia Alarcon Veloso", "rut": "22849985-4"}, {"correo": "valeriapaolaalvarezfernandez@gmail.com", "nombre": "Valeria Paola Alvarez Fernández", "rut": "27358799-3"}, {"correo": "astualonso123@gmail.com", "nombre": "Alonso Agustin Astudillo Fernandez", "rut": "23002266-6"}, {"correo": "gacituamimi99@gmail.com", "nombre": "Evolet Naybth Isidora Benitez Gacitua", "rut": "23239474-9"}, {"correo": "florencia.caceres.donoso24@gmail.com", "nombre": "Florencia Paloma Cáceres Donoso", "rut": "23006455-5"}, {"correo": "mcaceresv2020@ihcass.cl", "nombre": "Martina Caceres Vergara", "rut": "23241569-k"}, {"correo": "javieracatalan2022@gmail.com", "nombre": "Javiera Yubitza Catalan Mendoza", "rut": "22887105-2"}, {"correo": "aconstanzochamorro@gmail.com", "nombre": "Amanda Alejandra Chamorro Constanzo", "rut": "23205129-9"}, {"correo": "valesca.anahis28@gmail.com", "nombre": "Valesca Anahis Cid Muñoz", "rut": "23038236-0"}, {"correo": "elvzabetthsalamanca@gmail.com", "nombre": "Elizabeth Dayana Cuevas Salamanca", "rut": "23239814-0"}, {"correo": "pipedlc18@gmail.com", "nombre": "Felipe Alonso Diaz Torres", "rut": "22975434-3"}, {"correo": "sara_fuentes_82@yahoo.cl", "nombre": "Alonso Durán Fuentes", "rut": "23337342-7"}, {"correo": "sescalonasaavedra@gmail.com", "nombre": "Stephanie Andrea Escalona Saavedra", "rut": "23345673-k"}, {"correo": "polethferrari@gmail.com", "nombre": "Poleth Mikaela Ferrari Fuetes", "rut": "22.693.316-6"}, {"correo": "figueroamartinezchelsea@gmail.com", "nombre": "Chelsea Mabel Figueroa Martínez", "rut": "22271501-6"}, {"correo": "angelineb.colegioedwardccp@gmail.com", "nombre": "Javier Alonso Gajardo Basualto", "rut": "22974574-3"}, {"correo": "pamerodriguezf@gmail.com", "nombre": "Carol Esperanza García Rodríguez", "rut": "23004821-5"}, {"correo": "benjamingonzalezchamorro2006@gmail.com", "nombre": "Benjamin Gonzalez Chamorro", "rut": "22265232-4"}, {"correo": "fernandagonzalez020908@gmail.com", "nombre": "Fernanda Ignacia González Flores", "rut": "22809749-7"}, {"correo": "benjaguerrero581@gmail.com", "nombre": "Benjamín Ignacio Guerrero Quiroga", "rut": "22696731-1"}, {"correo": "francisca.igd.12@gmail.com", "nombre": "Francisca Guzmán Díaz", "rut": "23351472-1"}, {"correo": "chormaz.dickinson@gmail.com", "nombre": "Christian Hormazabal Dickinson", "rut": "22423736-7"}, {"correo": "angelinneinzunzap09@gmail.com", "nombre": "Angelinne Millaray Inzunza Peña", "rut": "22764459-1"}, {"correo": "bbarbarajerez.tapia@gmail.com", "nombre": "Barbara Jerez", "rut": "22765962-8"}, {"correo": "samartinh@almondale.cl", "nombre": "Sofía Antonia Martin Hurst", "rut": "22971901-7"}, {"correo": "camilabelen2277@gmail.com", "nombre": "Camila Belén Matus Creixell", "rut": "22425298-6"}, {"correo": "mellab.valentina@gmail.com", "nombre": "Valentina Paz Mella Bobadilla", "rut": "22535139-2"}, {"correo": "elisamillar7@gmail.com", "nombre": "Elisa Millar Faúndez", "rut": "22856241-6"}, {"correo": "fernamorag22@gmail.com", "nombre": "Fernanda Alejandra Mora González", "rut": "23011609-1"}, {"correo": "maurolavet@gmail.com", "nombre": "Mauro Nicolás Olave Torres", "rut": "23276213-6"}, {"correo": "antonella25.olivares.02@gmail.com", "nombre": "Antonella Paz Olivares Vera", "rut": "22652824-5"}, {"correo": "parrasofia1148@gmail.com", "nombre": "Sofía Antonia Parra Barrientos", "rut": "22877452-9"}, {"correo": "penadiannelys01@gmail.com", "nombre": "Diannelys Sofía Peña Rossodivita", "rut": "26287360-9"}, {"correo": "cota.ramirez.coddou@gmail.com", "nombre": "Constanza Beatriz Ramírez Coddou", "rut": "23112415-2"}, {"correo": "agu.escobar1908@gmail.com", "nombre": "Agustina Del Pilar Riquelme Escobar", "rut": "22777429-0"}, {"correo": "seba26andres@gmail.com", "nombre": "Sebastián Andrés Riquelme Oñate", "rut": "22730058-2"}, {"correo": "keilayazminrobles@gmail.com", "nombre": "Keila Yazmin Robles Espinoza", "rut": "22608509-2"}, {"correo": "luciorodriguez10000@gmail.com", "nombre": "Lucio Alejandro Rodriguez Aguilera", "rut": "22782577-4"}, {"correo": "fersaez1002@gmail.com", "nombre": "Fernanda Dannae Sáez Rodriguez", "rut": "23247015-1"}, {"correo": "elena.san1608@gmail.com", "nombre": "Elena Victoria San Martín Olate", "rut": "22795719-0"}, {"correo": "cristobal.silva.medina.30@gmail.com", "nombre": "Cristóbal Ignacio Silva Medina", "rut": "22967956-2"}, {"correo": "amandat.onate@gmail.com", "nombre": "Amanda Isabel Tapia Oñate", "rut": "22819295-3"}, {"correo": "ampyvallejosv@gmail.com", "nombre": "Amparo Isabella Vallejos Valenzuela", "rut": "22784926-6"}, {"correo": "victoriawega17@gmail.com", "nombre": "Victoria Monserrat Vega Lucero", "rut": "22617442-7"}, {"correo": "lvega@santasabina.cl", "nombre": "Luis Felipe Vega Salazar", "rut": "22916054-0"}, {"correo": "valppetitbrenilh@gmail.com", "nombre": "Mateo Alonso Sebastián Zúñiga Petit-Brenilh", "rut": "22741483-9"}, {"correo": "alexlabra66@gmail.com", "nombre": "Alex Antonio Labra Villegas", "rut": "22377947-6"}, {"correo": "patriciiovasros@gmail.com", "nombre": "Patricio Vásquez Rosales", "rut": "22863079-9"}, {"correo": "valentinaabelenp@gmail.com", "nombre": "Valentina Portiño Cabezas", "rut": "22820638-5"}, {"correo": "sofiaparis0808@gmail.com", "nombre": "Sofia Catalina Paris Lazcano", "rut": "22790587-5"}, {"correo": "anais2009.av@gmail.com", "nombre": "Anais Patricia Villegas Aarcón", "rut": "23011347-5"}, {"correo": "fernandabelensalgadoflores758@gmail.com", "nombre": "Fernanda Salgado Flores", "rut": "22732244-6"}, {"correo": "stefania.zorritolover@gmail.com", "nombre": "Estefania Muñoz Villanueva", "rut": "22763181-3"}, {"correo": "carmengloria3105@gmail.com", "nombre": "Carmen Gloria Silva Bravo", "rut": "23034663-1"}, {"correo": "catalinapedrero73@gmail.com", "nombre": "Catalina Pedreros Aguayo", "rut": "22495082-9"}, {"correo": "mm4293676@gmail.com", "nombre": "Matías Alonso Muñoz Soto", "rut": "22489792-8"}], "Lenguaje": [{"correo": "malarconveloso@gmail.com", "nombre": "Matilda Antonia Alarcon Veloso", "rut": "22849985-4"}, {"correo": "valeriapaolaalvarezfernandez@gmail.com", "nombre": "Valeria Paola Alvarez Fernández", "rut": "27358799-3"}, {"correo": "florencia.caceres.donoso24@gmail.com", "nombre": "Florencia Paloma Cáceres Donoso", "rut": "23006455-5"}, {"correo": "mcaceresv2020@ihcass.cl", "nombre": "Martina Caceres Vergara", "rut": "23241569-k"}, {"correo": "javieracatalan2022@gmail.com", "nombre": "Javiera Yubitza Catalan Mendoza", "rut": "22887105-2"}, {"correo": "aconstanzochamorro@gmail.com", "nombre": "Amanda Alejandra Chamorro Constanzo", "rut": "23205129-9"}, {"correo": "valesca.anahis28@gmail.com", "nombre": "Valesca Anahis Cid Muñoz", "rut": "23038236-0"}, {"correo": "elvzabetthsalamanca@gmail.com", "nombre": "Elizabeth Dayana Cuevas Salamanca", "rut": "23239814-0"}, {"correo": "pipedlc18@gmail.com", "nombre": "Felipe Alonso Diaz Torres", "rut": "22975434-3"}, {"correo": "sara_fuentes_82@yahoo.cl", "nombre": "Alonso Durán Fuentes", "rut": "23337342-7"}, {"correo": "sescalonasaavedra@gmail.com", "nombre": "Stephanie Andrea Escalona Saavedra", "rut": "23345673-k"}, {"correo": "angelineb.colegioedwardccp@gmail.com", "nombre": "Javier Alonso Gajardo Basualto", "rut": "22974574-3"}, {"correo": "pamerodriguezf@gmail.com", "nombre": "Carol Esperanza García Rodríguez", "rut": "23004821-5"}, {"correo": "benjamingatica.bgz@gmail.com", "nombre": "Benjamin Vicente Gatica Zapata", "rut": "22788738-9"}, {"correo": "benjamingonzalezchamorro2006@gmail.com", "nombre": "Benjamin Gonzalez Chamorro", "rut": "22265232-4"}, {"correo": "fernandagonzalez020908@gmail.com", "nombre": "Fernanda Ignacia González Flores", "rut": "22809749-7"}, {"correo": "benjaguerrero581@gmail.com", "nombre": "Benjamín Ignacio Guerrero Quiroga", "rut": "22696731-1"}, {"correo": "francisca.igd.12@gmail.com", "nombre": "Francisca Guzmán Díaz", "rut": "23351472-1"}, {"correo": "chormaz.dickinson@gmail.com", "nombre": "Christian Hormazabal Dickinson", "rut": "22423736-7"}, {"correo": "bbarbarajerez.tapia@gmail.com", "nombre": "Barbara Jerez", "rut": "22765962-8"}, {"correo": "samartinh@almondale.cl", "nombre": "Sofía Antonia Martin Hurst", "rut": "22971901-7"}, {"correo": "camilabelen2277@gmail.com", "nombre": "Camila Belén Matus Creixell", "rut": "22425298-6"}, {"correo": "mellab.valentina@gmail.com", "nombre": "Valentina Paz Mella Bobadilla", "rut": "22535139-2"}, {"correo": "elisamillar7@gmail.com", "nombre": "Elisa Millar Faúndez", "rut": "22856241-6"}, {"correo": "maurolavet@gmail.com", "nombre": "Mauro Nicolás Olave Torres", "rut": "23276213-6"}, {"correo": "antonella25.olivares.02@gmail.com", "nombre": "Antonella Paz Olivares Vera", "rut": "22652824-5"}, {"correo": "penadiannelys01@gmail.com", "nombre": "Diannelys Sofía Peña Rossodivita", "rut": "26287360-9"}, {"correo": "trinidadreyesrecabal@icloud.com", "nombre": "Florencia Reyes", "rut": "23057548-7"}, {"correo": "agu.escobar1908@gmail.com", "nombre": "Agustina Del Pilar Riquelme Escobar", "rut": "22777429-0"}, {"correo": "seba26andres@gmail.com", "nombre": "Sebastián Andrés Riquelme Oñate", "rut": "22730058-2"}, {"correo": "keilayazminrobles@gmail.com", "nombre": "Keila Yazmin Robles Espinoza", "rut": "22608509-2"}, {"correo": "luciorodriguez10000@gmail.com", "nombre": "Lucio Alejandro Rodriguez Aguilera", "rut": "22782577-4"}, {"correo": "fersaez1002@gmail.com", "nombre": "Fernanda Dannae Sáez Rodriguez", "rut": "23247015-1"}, {"correo": "elena.san1608@gmail.com", "nombre": "Elena Victoria San Martín Olate", "rut": "22795719-0"}, {"correo": "cristobal.silva.medina.30@gmail.com", "nombre": "Cristóbal Ignacio Silva Medina", "rut": "22967956-2"}, {"correo": "amandat.onate@gmail.com", "nombre": "Amanda Isabel Tapia Oñate", "rut": "22819295-3"}, {"correo": "ampyvallejosv@gmail.com", "nombre": "Amparo Isabella Vallejos Valenzuela", "rut": "22784926-6"}, {"correo": "victoriawega17@gmail.com", "nombre": "Victoria Monserrat Vega Lucero", "rut": "22617442-7"}, {"correo": "lvega@santasabina.cl", "nombre": "Luis Felipe Vega Salazar", "rut": "22916054-0"}, {"correo": "valppetitbrenilh@gmail.com", "nombre": "Mateo Alonso Sebastián Zúñiga Petit-Brenilh", "rut": "22741483-9"}, {"correo": "alexlabra66@gmail.com", "nombre": "Alex Antonio Labra Villegas", "rut": "22377947-6"}, {"correo": "patriciiovasros@gmail.com", "nombre": "Patricio Vásquez Rosales", "rut": "22863079-9"}, {"correo": "valentinaabelenp@gmail.com", "nombre": "Valentina Portiño Cabezas", "rut": "22820638-5"}, {"correo": "sofiaparis0808@gmail.com", "nombre": "Sofia Catalina Paris Lazcano", "rut": "22790587-5"}, {"correo": "anais2009.av@gmail.com", "nombre": "Anais Patricia Villegas Aarcón", "rut": "23011347-5"}, {"correo": "fernandabelensalgadoflores758@gmail.com", "nombre": "Fernanda Salgado Flores", "rut": "22732244-6"}, {"correo": "stefania.zorritolover@gmail.com", "nombre": "Estefania Muñoz Villanueva", "rut": "22763181-3"}, {"correo": "carmengloria3105@gmail.com", "nombre": "Carmen Gloria Silva Bravo", "rut": "23034663-1"}, {"correo": "catalinapedrero73@gmail.com", "nombre": "Catalina Pedreros Aguayo", "rut": "22495082-9"}, {"correo": "mm4293676@gmail.com", "nombre": "Matías Alonso Muñoz Soto", "rut": "22489792-8"}], "Ciencias": [{"correo": "malarconveloso@gmail.com", "nombre": "Matilda Antonia Alarcon Veloso", "rut": "22849985-4"}, {"correo": "gacituamimi99@gmail.com", "nombre": "Evolet Naybth Isidora Benitez Gacitua", "rut": "23239474-9"}, {"correo": "reyescanoagustin@gmail.com", "nombre": "Jorge Agustin Cano Reyes", "rut": "22452097-2"}, {"correo": "echeverriacris2009@gmail.com", "nombre": "Cristóbal Vicente Echeverría Oliva", "rut": "23159815-4"}, {"correo": "polethferrari@gmail.com", "nombre": "Poleth Mikaela Ferrari Fuetes", "rut": "22.693.316-6"}, {"correo": "benjaguerrero581@gmail.com", "nombre": "Benjamín Ignacio Guerrero Quiroga", "rut": "22696731-1"}, {"correo": "francisca.igd.12@gmail.com", "nombre": "Francisca Guzmán Díaz", "rut": "23351472-1"}, {"correo": "angelinneinzunzap09@gmail.com", "nombre": "Angelinne Millaray Inzunza Peña", "rut": "22764459-1"}, {"correo": "bbarbarajerez.tapia@gmail.com", "nombre": "Barbara Jerez", "rut": "22765962-8"}, {"correo": "elisamillar7@gmail.com", "nombre": "Elisa Millar Faúndez", "rut": "22856241-6"}, {"correo": "antonella25.olivares.02@gmail.com", "nombre": "Antonella Paz Olivares Vera", "rut": "22652824-5"}, {"correo": "trinidadreyesrecabal@icloud.com", "nombre": "Florencia Reyes", "rut": "23057548-7"}, {"correo": "agu.escobar1908@gmail.com", "nombre": "Agustina Del Pilar Riquelme Escobar", "rut": "22777429-0"}, {"correo": "seba26andres@gmail.com", "nombre": "Sebastián Andrés Riquelme Oñate", "rut": "22730058-2"}, {"correo": "keilayazminrobles@gmail.com", "nombre": "Keila Yazmin Robles Espinoza", "rut": "22608509-2"}, {"correo": "fersaez1002@gmail.com", "nombre": "Fernanda Dannae Sáez Rodriguez", "rut": "23247015-1"}, {"correo": "cristobal.silva.medina.30@gmail.com", "nombre": "Cristóbal Ignacio Silva Medina", "rut": "22967956-2"}, {"correo": "victoriawega17@gmail.com", "nombre": "Victoria Monserrat Vega Lucero", "rut": "22617442-7"}, {"correo": "valppetitbrenilh@gmail.com", "nombre": "Mateo Alonso Sebastián Zúñiga Petit-Brenilh", "rut": "22741483-9"}, {"correo": "elvzabetthsalamanca@gmail.com", "nombre": "Elizabeth Dayana Cuevas Salamanca", "rut": "23239814-0"}, {"correo": "sescalonasaavedra@gmail.com", "nombre": "Stephanie Andrea Escalona Saavedra", "rut": "23345673-k"}, {"correo": "fernandagonzalez020908@gmail.com", "nombre": "Fernanda Ignacia González Flores", "rut": "22809749-7"}, {"correo": "chormaz.dickinson@gmail.com", "nombre": "Christian Hormazabal Dickinson", "rut": "22423736-7"}, {"correo": "parrasofia1148@gmail.com", "nombre": "Sofía Antonia Parra Barrientos", "rut": "22877452-9"}, {"correo": "penadiannelys01@gmail.com", "nombre": "Diannelys Sofía Peña Rossodivita", "rut": "26287360-9"}, {"correo": "luciorodriguez10000@gmail.com", "nombre": "Lucio Alejandro Rodriguez Aguilera", "rut": "22782577-4"}, {"correo": "elena.san1608@gmail.com", "nombre": "Elena Victoria San Martín Olate", "rut": "22795719-0"}, {"correo": "amandat.onate@gmail.com", "nombre": "Amanda Isabel Tapia Oñate", "rut": "22819295-3"}, {"correo": "lvega@santasabina.cl", "nombre": "Luis Felipe Vega Salazar", "rut": "22916054-0"}, {"correo": "figueroamartinezchelsea@gmail.com", "nombre": "Chelsea Mabel Figueroa Martínez", "rut": "22271501-6"}, {"correo": "benjamingonzalezchamorro2006@gmail.com", "nombre": "Benjamin Gonzalez Chamorro", "rut": "22265232-4"}, {"correo": "mellab.valentina@gmail.com", "nombre": "Valentina Paz Mella Bobadilla", "rut": "22535139-2"}, {"correo": "fernamorag22@gmail.com", "nombre": "Fernanda Alejandra Mora González", "rut": "23011609-1"}, {"correo": "maurolavet@gmail.com", "nombre": "Mauro Nicolás Olave Torres", "rut": "23276213-6"}], "Historia": [{"correo": "valeriapaolaalvarezfernandez@gmail.com", "nombre": "Valeria Paola Alvarez Fernández", "rut": "27358799-3"}, {"correo": "florencia.caceres.donoso24@gmail.com", "nombre": "Florencia Paloma Cáceres Donoso", "rut": "23006455-5"}, {"correo": "mcaceresv2020@ihcass.cl", "nombre": "Martina Caceres Vergara", "rut": "23241569-k"}, {"correo": "valesca.anahis28@gmail.com", "nombre": "Valesca Anahis Cid Muñoz", "rut": "23038236-0"}, {"correo": "sara_fuentes_82@yahoo.cl", "nombre": "Alonso Durán Fuentes", "rut": "23337342-7"}, {"correo": "sescalonasaavedra@gmail.com", "nombre": "Stephanie Andrea Escalona Saavedra", "rut": "23345673-k"}, {"correo": "angelineb.colegioedwardccp@gmail.com", "nombre": "Javier Alonso Gajardo Basualto", "rut": "22974574-3"}, {"correo": "pamerodriguezf@gmail.com", "nombre": "Carol Esperanza García Rodríguez", "rut": "23004821-5"}, {"correo": "benjamingatica.bgz@gmail.com", "nombre": "Benjamin Vicente Gatica Zapata", "rut": "22788738-9"}, {"correo": "benjaguerrero581@gmail.com", "nombre": "Benjamín Ignacio Guerrero Quiroga", "rut": "22696731-1"}, {"correo": "samartinh@almondale.cl", "nombre": "Sofía Antonia Martin Hurst", "rut": "22971901-7"}, {"correo": "camilabelen2277@gmail.com", "nombre": "Camila Belén Matus Creixell", "rut": "22425298-6"}, {"correo": "elisamillar7@gmail.com", "nombre": "Elisa Millar Faúndez", "rut": "22856241-6"}, {"correo": "elena.san1608@gmail.com", "nombre": "Elena Victoria San Martín Olate", "rut": "22795719-0"}, {"correo": "victoriawega17@gmail.com", "nombre": "Victoria Monserrat Vega Lucero", "rut": "22617442-7"}, {"correo": "sofiaparis0808@gmail.com", "nombre": "Sofia Catalina Paris Lazcano", "rut": "22790587-5"}, {"correo": "fernandabelensalgadoflores758@gmail.com", "nombre": "Fernanda Salgado Flores", "rut": "22732244-6"}, {"correo": "mm4293676@gmail.com", "nombre": "Matías Alonso Muñoz Soto", "rut": "22489792-8"}], "Física": [{"correo": "figueroamartinezchelsea@gmail.com", "nombre": "Chelsea Mabel Figueroa Martínez", "rut": "22271501-6"}, {"correo": "benjamingonzalezchamorro2006@gmail.com", "nombre": "Benjamin Gonzalez Chamorro", "rut": "22265232-4"}, {"correo": "mellab.valentina@gmail.com", "nombre": "Valentina Paz Mella Bobadilla", "rut": "22535139-2"}, {"correo": "fernamorag22@gmail.com", "nombre": "Fernanda Alejandra Mora González", "rut": "23011609-1"}, {"correo": "maurolavet@gmail.com", "nombre": "Mauro Nicolás Olave Torres", "rut": "23276213-6"}], "Orientación": [{"correo": "malarconveloso@gmail.com", "nombre": "Matilda Antonia Alarcon Veloso", "rut": "22849985-4"}, {"correo": "valeriapaolaalvarezfernandez@gmail.com", "nombre": "Valeria Paola Alvarez Fernández", "rut": "27358799-3"}, {"correo": "astualonso123@gmail.com", "nombre": "Alonso Agustin Astudillo Fernandez", "rut": "23002266-6"}, {"correo": "gacituamimi99@gmail.com", "nombre": "Evolet Naybth Isidora Benitez Gacitua", "rut": "23239474-9"}, {"correo": "florencia.caceres.donoso24@gmail.com", "nombre": "Florencia Paloma Cáceres Donoso", "rut": "23006455-5"}, {"correo": "mcaceresv2020@ihcass.cl", "nombre": "Martina Caceres Vergara", "rut": "23241569-k"}, {"correo": "javieracatalan2022@gmail.com", "nombre": "Javiera Yubitza Catalan Mendoza", "rut": "22887105-2"}, {"correo": "aconstanzochamorro@gmail.com", "nombre": "Amanda Alejandra Chamorro Constanzo", "rut": "23205129-9"}, {"correo": "valesca.anahis28@gmail.com", "nombre": "Valesca Anahis Cid Muñoz", "rut": "23038236-0"}, {"correo": "elvzabetthsalamanca@gmail.com", "nombre": "Elizabeth Dayana Cuevas Salamanca", "rut": "23239814-0"}, {"correo": "pipedlc18@gmail.com", "nombre": "Felipe Alonso Diaz Torres", "rut": "22975434-3"}, {"correo": "sara_fuentes_82@yahoo.cl", "nombre": "Alonso Durán Fuentes", "rut": "23337342-7"}, {"correo": "sescalonasaavedra@gmail.com", "nombre": "Stephanie Andrea Escalona Saavedra", "rut": "23345673-k"}, {"correo": "polethferrari@gmail.com", "nombre": "Poleth Mikaela Ferrari Fuetes", "rut": "22.693.316-6"}, {"correo": "figueroamartinezchelsea@gmail.com", "nombre": "Chelsea Mabel Figueroa Martínez", "rut": "22271501-6"}, {"correo": "angelineb.colegioedwardccp@gmail.com", "nombre": "Javier Alonso Gajardo Basualto", "rut": "22974574-3"}, {"correo": "pamerodriguezf@gmail.com", "nombre": "Carol Esperanza García Rodríguez", "rut": "23004821-5"}, {"correo": "benjamingonzalezchamorro2006@gmail.com", "nombre": "Benjamin Gonzalez Chamorro", "rut": "22265232-4"}, {"correo": "fernandagonzalez020908@gmail.com", "nombre": "Fernanda Ignacia González Flores", "rut": "22809749-7"}, {"correo": "benjaguerrero581@gmail.com", "nombre": "Benjamín Ignacio Guerrero Quiroga", "rut": "22696731-1"}, {"correo": "francisca.igd.12@gmail.com", "nombre": "Francisca Guzmán Díaz", "rut": "23351472-1"}, {"correo": "chormaz.dickinson@gmail.com", "nombre": "Christian Hormazabal Dickinson", "rut": "22423736-7"}, {"correo": "angelinneinzunzap09@gmail.com", "nombre": "Angelinne Millaray Inzunza Peña", "rut": "22764459-1"}, {"correo": "bbarbarajerez.tapia@gmail.com", "nombre": "Barbara Jerez", "rut": "22765962-8"}, {"correo": "samartinh@almondale.cl", "nombre": "Sofía Antonia Martin Hurst", "rut": "22971901-7"}, {"correo": "camilabelen2277@gmail.com", "nombre": "Camila Belén Matus Creixell", "rut": "22425298-6"}, {"correo": "mellab.valentina@gmail.com", "nombre": "Valentina Paz Mella Bobadilla", "rut": "22535139-2"}, {"correo": "elisamillar7@gmail.com", "nombre": "Elisa Millar Faúndez", "rut": "22856241-6"}, {"correo": "fernamorag22@gmail.com", "nombre": "Fernanda Alejandra Mora González", "rut": "23011609-1"}, {"correo": "maurolavet@gmail.com", "nombre": "Mauro Nicolás Olave Torres", "rut": "23276213-6"}, {"correo": "antonella25.olivares.02@gmail.com", "nombre": "Antonella Paz Olivares Vera", "rut": "22652824-5"}, {"correo": "parrasofia1148@gmail.com", "nombre": "Sofía Antonia Parra Barrientos", "rut": "22877452-9"}, {"correo": "penadiannelys01@gmail.com", "nombre": "Diannelys Sofía Peña Rossodivita", "rut": "26287360-9"}, {"correo": "cota.ramirez.coddou@gmail.com", "nombre": "Constanza Beatriz Ramírez Coddou", "rut": "23112415-2"}, {"correo": "agu.escobar1908@gmail.com", "nombre": "Agustina Del Pilar Riquelme Escobar", "rut": "22777429-0"}, {"correo": "seba26andres@gmail.com", "nombre": "Sebastián Andrés Riquelme Oñate", "rut": "22730058-2"}, {"correo": "keilayazminrobles@gmail.com", "nombre": "Keila Yazmin Robles Espinoza", "rut": "22608509-2"}, {"correo": "luciorodriguez10000@gmail.com", "nombre": "Lucio Alejandro Rodriguez Aguilera", "rut": "22782577-4"}, {"correo": "fersaez1002@gmail.com", "nombre": "Fernanda Dannae Sáez Rodriguez", "rut": "23247015-1"}, {"correo": "elena.san1608@gmail.com", "nombre": "Elena Victoria San Martín Olate", "rut": "22795719-0"}, {"correo": "cristobal.silva.medina.30@gmail.com", "nombre": "Cristóbal Ignacio Silva Medina", "rut": "22967956-2"}, {"correo": "amandat.onate@gmail.com", "nombre": "Amanda Isabel Tapia Oñate", "rut": "22819295-3"}, {"correo": "ampyvallejosv@gmail.com", "nombre": "Amparo Isabella Vallejos Valenzuela", "rut": "22784926-6"}, {"correo": "victoriawega17@gmail.com", "nombre": "Victoria Monserrat Vega Lucero", "rut": "22617442-7"}, {"correo": "lvega@santasabina.cl", "nombre": "Luis Felipe Vega Salazar", "rut": "22916054-0"}, {"correo": "valppetitbrenilh@gmail.com", "nombre": "Mateo Alonso Sebastián Zúñiga Petit-Brenilh", "rut": "22741483-9"}, {"correo": "alexlabra66@gmail.com", "nombre": "Alex Antonio Labra Villegas", "rut": "22377947-6"}, {"correo": "patriciiovasros@gmail.com", "nombre": "Patricio Vásquez Rosales", "rut": "22863079-9"}, {"correo": "valentinaabelenp@gmail.com", "nombre": "Valentina Portiño Cabezas", "rut": "22820638-5"}, {"correo": "sofiaparis0808@gmail.com", "nombre": "Sofia Catalina Paris Lazcano", "rut": "22790587-5"}, {"correo": "anais2009.av@gmail.com", "nombre": "Anais Patricia Villegas Aarcón", "rut": "23011347-5"}, {"correo": "fernandabelensalgadoflores758@gmail.com", "nombre": "Fernanda Salgado Flores", "rut": "22732244-6"}, {"correo": "stefania.zorritolover@gmail.com", "nombre": "Estefania Muñoz Villanueva", "rut": "22763181-3"}, {"correo": "carmengloria3105@gmail.com", "nombre": "Carmen Gloria Silva Bravo", "rut": "23034663-1"}, {"correo": "catalinapedrero73@gmail.com", "nombre": "Catalina Pedreros Aguayo", "rut": "22495082-9"}, {"correo": "mm4293676@gmail.com", "nombre": "Matías Alonso Muñoz Soto", "rut": "22489792-8"}, {"correo": "benjamingatica.bgz@gmail.com", "nombre": "Benjamin Vicente Gatica Zapata", "rut": "22788738-9"}, {"correo": "trinidadreyesrecabal@icloud.com", "nombre": "Florencia Reyes", "rut": "23057548-7"}, {"correo": "reyescanoagustin@gmail.com", "nombre": "Jorge Agustin Cano Reyes", "rut": "22452097-2"}, {"correo": "echeverriacris2009@gmail.com", "nombre": "Cristóbal Vicente Echeverría Oliva", "rut": "23159815-4"}]};
 
-let sesion = null;
-let timerIv = null;
-let timerTotal = 0;
-let liveUnsub = null;
-let allRegs = [];
-let matSel = null;
-
-// Estado verificación: rut -> true(presente)/false(ausente)
-let estadoVerif = {};
+let sesion=null, timerIv=null, timerTotal=0, liveUnsub=null;
+let matSel=null, estadoVerif={};
+// Registros estado global para la sección registros
+let regAreaSel=null, regSesionSel=null, regTodos=[], regDetalleCache=[];
 
 // ── ROUTER ──────────────────────────────────────────────────
-const p = new URLSearchParams(location.search);
-if (p.get('sid')) {
+const p=new URLSearchParams(location.search);
+if(p.get('sid')){
   document.getElementById('profe-page').classList.remove('active');
   document.getElementById('alumno-page').classList.add('active');
-  cargarAlumno(p.get('sid'), p.get('tok'));
-} else {
-  initProfe();
-}
+  cargarAlumno(p.get('sid'),p.get('tok'));
+}else{ initProfe(); }
 
 // ── TABS ────────────────────────────────────────────────────
-window.showTab = id => {
-  ['ts','tr','ta'].forEach(t =>
-    document.getElementById(t).style.display = t===id?'block':'none');
-  document.querySelectorAll('.tab').forEach((b,i) =>
-    b.classList.toggle('active',['ts','tr','ta'][i]===id));
-  if (id==='tr') cargarRegs();
-  if (id==='ta') cargarAlumnos();
-};
+function showTab(id){
+  ['ts','tr','ta','tg'].forEach(t=>document.getElementById(t).style.display=t===id?'block':'none');
+  document.querySelectorAll('.tab').forEach(b=>b.classList.toggle('active',b.dataset.tab===id));
+  if(id==='tr') initRegistros();
+  if(id==='ta') cargarAlumnos();
+}
+window.showTab=showTab;
+document.querySelectorAll('.tab[data-tab]').forEach(b=>
+  b.addEventListener('click',()=>showTab(b.dataset.tab))
+);
 
 // ── MATERIAS ────────────────────────────────────────────────
 function renderMaterias(){
-  document.getElementById('mat-grid').innerHTML =
+  document.getElementById('mat-grid').innerHTML=
     Object.entries(MATERIAS).map(([k,m])=>
-      `<button class="mat-btn" data-k="${k}" onclick="selMat('${k}')">${m.nombre}</button>`
+      `<button class="mb2" data-k="${k}" onclick="selMat('${k}')">${m.nombre}</button>`
     ).join('');
 }
-
-window.selMat = k => {
-  matSel = k;
-  document.querySelectorAll('.mat-btn').forEach(b=>b.classList.toggle('sel',b.dataset.k===k));
-  const sel = document.getElementById('sel-fecha');
-  sel.disabled = false;
-  sel.innerHTML = '<option value="">— elige una fecha —</option>' +
+window.selMat=k=>{
+  matSel=k;
+  document.querySelectorAll('.mb2').forEach(b=>b.classList.toggle('sel',b.dataset.k===k));
+  const sel=document.getElementById('sel-fecha');
+  sel.disabled=false;
+  sel.innerHTML='<option value="">— elige una fecha —</option>'+
     MATERIAS[k].fechas.map(f=>`<option value="${f.fecha}" data-col="${f.col}">${f.label}</option>`).join('');
-  document.getElementById('btn-act').disabled = true;
-  sel.onchange = () => document.getElementById('btn-act').disabled = !sel.value;
+  document.getElementById('btn-act').disabled=true;
+  sel.onchange=()=>document.getElementById('btn-act').disabled=!sel.value;
 };
 
 // ── SESIÓN ──────────────────────────────────────────────────
-window.iniciarSesion = async () => {
-  const sel = document.getElementById('sel-fecha');
-  const fecha = sel.value;
-  const col = parseInt(sel.selectedOptions[0]?.dataset.col);
-  const label = sel.selectedOptions[0]?.text;
-  const min = parseInt(document.getElementById('ses-min').value)||15;
-  if (!matSel||!fecha){alert('Elige materia y fecha.');return;}
-  const m = MATERIAS[matSel];
-  const id = Date.now().toString(36)+Math.random().toString(36).slice(2,5);
-  const tok = Math.random().toString(36).slice(2)+Date.now().toString(36);
-  sesion = {id,tok,min,inicio:Date.now(),matKey:matSel,matNom:m.nombre,matArea:m.area,fecha,fechaLabel:label,colIdx:col,activa:true};
-  await setDoc(doc(db,'sesiones',id), sesion);
+window.iniciarSesion=async()=>{
+  const sel=document.getElementById('sel-fecha');
+  const fecha=sel.value, col=parseInt(sel.selectedOptions[0]?.dataset.col), label=sel.selectedOptions[0]?.text;
+  const min=parseInt(document.getElementById('ses-min').value)||5;
+  if(!matSel||!fecha){alert('Elige materia y fecha.');return;}
+  const m=MATERIAS[matSel];
+  const id=Date.now().toString(36)+Math.random().toString(36).slice(2,5);
+  const tok=Math.random().toString(36).slice(2)+Date.now().toString(36);
+  sesion={id,tok,token:tok,min,inicio:Date.now(),matKey:matSel,matNom:m.nombre,matArea:m.area,fecha,fechaLabel:label,colIdx:col,activa:true};
+  await setDoc(doc(db,'sesiones',id),sesion);
   localStorage.setItem('preu_sid',id);
-  mostrarQR();
-  suscribirLive(id);
-  setHeader(m.nombre, label);
-  document.getElementById('live-bar').classList.add('on');
-  document.getElementById('live-mat').textContent = m.nombre;
-  document.getElementById('live-fec').textContent = label;
+  mostrarQR(); suscribirLive(id); setHeader(m.nombre,label);
+  document.getElementById('livebar').classList.add('on');
+  document.getElementById('live-mat').textContent=m.nombre;
+  document.getElementById('live-fec').textContent=label;
   document.getElementById('btn-regen').style.display='';
 };
 
-window.pedirCierre = () => {
-  if (!sesion){alert('No hay sesión activa.');return;}
-  abrirVerificacion();
-};
+window.pedirCierre=()=>{ if(!sesion){alert('No hay sesión activa.');return;} abrirVerif(); };
 
-window.regenerarQR = async () => {
-  if (!sesion) return;
-  sesion.tok = Math.random().toString(36).slice(2)+Date.now().toString(36);
-  sesion.inicio = Date.now();
-  await setDoc(doc(db,'sesiones',sesion.id),{tok:sesion.tok,inicio:sesion.inicio},{merge:true});
-  // Actualizar campo "token" también (usado por la vista alumno)
-  await setDoc(doc(db,'sesiones',sesion.id),{token:sesion.tok},{merge:true});
+window.regenQR=async()=>{
+  if(!sesion)return;
+  sesion.tok=sesion.token=Math.random().toString(36).slice(2)+Date.now().toString(36);
+  sesion.inicio=Date.now();
+  await setDoc(doc(db,'sesiones',sesion.id),{tok:sesion.tok,token:sesion.tok,inicio:sesion.inicio},{merge:true});
   mostrarQR();
 };
 
 function mostrarQR(){
-  if (!sesion) return;
+  if(!sesion)return;
   document.getElementById('qr-ph').style.display='none';
   document.getElementById('qr-panel').style.display='';
-  document.getElementById('qr-mat').textContent = sesion.matNom;
-  document.getElementById('qr-fec').textContent = sesion.fechaLabel;
-  const url = location.origin+location.pathname+'?sid='+sesion.id+'&tok='+sesion.tok;
+  document.getElementById('qr-mat').textContent=sesion.matNom;
+  document.getElementById('qr-fec').textContent=sesion.fechaLabel;
+  const url=location.origin+location.pathname+'?sid='+sesion.id+'&tok='+sesion.tok;
   document.getElementById('qrcode').innerHTML='';
   new QRCode(document.getElementById('qrcode'),{text:url,width:185,height:185,colorDark:'#2D3748',colorLight:'#ffffff'});
-  timerTotal = sesion.min*60;
-  if(timerIv) clearInterval(timerIv);
-  timerIv = setInterval(tickTimer,1000);
-  tickTimer();
+  timerTotal=sesion.min*60;
+  if(timerIv)clearInterval(timerIv);
+  timerIv=setInterval(tickTimer,1000); tickTimer();
 }
 
 function tickTimer(){
-  if(!sesion) return;
-  const rest = Math.max(0, timerTotal-Math.floor((Date.now()-sesion.inicio)/1000));
-  const m=Math.floor(rest/60), s=rest%60;
-  document.getElementById('timer-txt').textContent = rest>0
-    ? `Válido por ${m}:${String(s).padStart(2,'0')} min`
-    : 'QR expirado — regenera para continuar';
+  if(!sesion)return;
+  const rest=Math.max(0,timerTotal-Math.floor((Date.now()-sesion.inicio)/1000));
+  const m=Math.floor(rest/60),s=rest%60;
+  document.getElementById('timer-txt').textContent=rest>0?`Válido por ${m}:${String(s).padStart(2,'0')} min`:'QR expirado — regenera';
   document.getElementById('timer-bar').style.width=(rest/timerTotal*100)+'%';
-  document.getElementById('timer-bar').style.background=rest===0?'var(--rojo)':'var(--calipso)';
+  document.getElementById('timer-bar').style.background=rest===0?'var(--rj)':'var(--cal)';
 }
 
-// ── LIVE (tiempo real) ───────────────────────────────────────
 function suscribirLive(sid){
-  if(liveUnsub) liveUnsub();
-  // Escuchar TODOS los registros de la sesión en tiempo real
-  liveUnsub = onSnapshot(
-    query(collection(db,'registros'), where('sesion_id','==',sid)),
-    snap => {
-      // Solo mostrar presentes (estado '1' o sin estado aún = recién marcaron)
-      const regs = snap.docs.map(d=>d.data())
-        .filter(r => r.estado==='1' || !r.estado)
-        .sort((a,b)=>a.timestamp-b.timestamp);
-
-      document.getElementById('conteo-tag').textContent = regs.length+' presentes';
-      document.getElementById('live-n').textContent = regs.length;
-
-      const wrap = document.getElementById('live-table');
-      if(!regs.length){wrap.innerHTML='<div class="empty">Esperando que los alumnos escaneen el QR...</div>';return;}
-      wrap.innerHTML=`<div class="tw"><table>
+  if(liveUnsub)liveUnsub();
+  liveUnsub=onSnapshot(
+    query(collection(db,'registros'),where('sesion_id','==',sid)),
+    snap=>{
+      const regs=snap.docs.map(d=>d.data()).filter(r=>r.estado==='1'||!r.estado).sort((a,b)=>a.timestamp-b.timestamp);
+      document.getElementById('conteo-tag').textContent=regs.length+' presentes';
+      document.getElementById('live-n').textContent=regs.length;
+      const w=document.getElementById('live-table');
+      if(!regs.length){w.innerHTML='<div class="empty">Esperando que los alumnos escaneen el QR...</div>';return;}
+      w.innerHTML=`<div class="tw"><table>
         <thead><tr><th>Nombre</th><th>RUT</th><th>Correo</th><th>Hora</th></tr></thead>
         <tbody>${regs.map(r=>`<tr>
-          <td><strong>${r.nombre}</strong></td>
-          <td>${r.rut}</td>
-          <td style="color:var(--texto2)">${r.correo}</td>
-          <td><span class="chip-v">${new Date(r.timestamp).toLocaleTimeString('es-CL',{hour:'2-digit',minute:'2-digit'})}</span></td>
+          <td><strong>${r.nombre}</strong></td><td>${r.rut}</td>
+          <td style="color:var(--tx2)">${r.correo}</td>
+          <td><span class="chipv">${new Date(r.timestamp).toLocaleTimeString('es-CL',{hour:'2-digit',minute:'2-digit'})}</span></td>
         </tr>`).join('')}</tbody>
       </table></div>`;
     }
   );
 }
 
-function setHeader(mat, fec){
+function setHeader(mat,fec){
   document.getElementById('h-dot').classList.toggle('on',!!mat);
-  document.getElementById('h-sesion').textContent = mat ? mat+(fec?' · '+fec:'') : 'Sin sesión activa';
+  document.getElementById('h-ses').textContent=mat?(mat+(fec?' · '+fec:'')):'Sin sesión activa';
 }
 
 // ── VERIFICACIÓN ─────────────────────────────────────────────
-window.abrirVerificacion = async () => {
-  if(!sesion) return;
-  // Obtener alumnos del área
-  const lista = ALUMNOS[sesion.matKey] || [];
-
-  // Obtener presentes actuales desde Firebase
-  const snap = await getDocs(query(collection(db,'registros'),where('sesion_id','==',sesion.id)));
-  const presentesRut = new Set(
-    snap.docs.map(d=>d.data()).filter(r=>r.estado==='1'||!r.estado).map(r=>r.rut)
-  );
-  const presentesCorriendo = new Map(
-    snap.docs.map(d=>d.data()).filter(r=>r.estado==='1'||!r.estado).map(r=>[r.rut, r])
-  );
-
-  // Inicializar estado: presente si escaneó, ausente si no
-  estadoVerif = {};
-  lista.forEach(a => {
-    estadoVerif[a.rut] = presentesRut.has(a.rut);
-  });
-
-  window._verifLista = lista;
-  window._verifPresMap = presentesCorriendo;
-
-  document.getElementById('verif-title').textContent = sesion.matNom;
-  document.getElementById('verif-sub').textContent = sesion.fechaLabel+' · '+lista.length+' alumnos en el área';
-  document.getElementById('verif-buscar').value = '';
-  renderVerif('');
-  actualizarStats();
-  document.getElementById('verif-overlay').classList.add('show');
+window.abrirVerif=async()=>{
+  if(!sesion)return;
+  const lista=ALUMNOS[sesion.matKey]||[];
+  const snap=await getDocs(query(collection(db,'registros'),where('sesion_id','==',sesion.id)));
+  const presRut=new Set(snap.docs.map(d=>d.data()).filter(r=>r.estado==='1'||!r.estado).map(r=>r.rut));
+  const presMap=new Map(snap.docs.map(d=>d.data()).filter(r=>r.estado==='1'||!r.estado).map(r=>[r.rut,r]));
+  estadoVerif={};
+  lista.forEach(a=>estadoVerif[a.rut]=presRut.has(a.rut));
+  window._vlist=lista; window._vpmap=presMap;
+  document.getElementById('v-title').textContent=sesion.matNom;
+  document.getElementById('v-sub').textContent=sesion.fechaLabel+' · '+lista.length+' alumnos en el área';
+  document.getElementById('v-buscar').value='';
+  renderVerif(''); actualizarStats();
+  document.getElementById('voverlay').classList.add('show');
 };
 
 function renderVerif(busq){
-  const lista = window._verifLista || [];
-  const filtrada = busq
-    ? lista.filter(a=>a.nombre.toLowerCase().includes(busq.toLowerCase())||a.rut.includes(busq))
-    : lista;
-
-  document.getElementById('verif-body').innerHTML = filtrada.map(a => {
-    const pres = estadoVerif[a.rut];
-    const badge = pres
-      ? '<span class="badge bg">✓ Presente</span>'
-      : '<span class="badge br">✗ Ausente</span>';
-    return `<div class="alu-row">
-      <input type="checkbox" class="alu-check" data-rut="${a.rut}"
-        ${pres?'checked':''} onchange="toggleVerif('${a.rut}',this.checked)"/>
-      <div class="alu-info">
-        <div class="alu-name">${a.nombre}</div>
-        <div class="alu-rut">${a.rut}</div>
-      </div>
-      <div class="alu-estado">${badge}</div>
+  const lista=window._vlist||[];
+  const fil=busq?lista.filter(a=>a.nombre.toLowerCase().includes(busq.toLowerCase())||a.rut.includes(busq)):lista;
+  document.getElementById('v-body').innerHTML=fil.map(a=>{
+    const pr=estadoVerif[a.rut];
+    const badge=pr?'<span class="badge bgn">✓ Presente</span>':'<span class="badge brd">✗ Ausente</span>';
+    return `<div class="arow">
+      <input type="checkbox" class="achk" data-rut="${a.rut}" ${pr?'checked':''} onchange="toggleVerif('${a.rut}',this.checked)"/>
+      <div class="ainf"><div class="aname">${a.nombre}</div><div class="arut">${a.rut}</div></div>
+      <div>${badge}</div>
     </div>`;
-  }).join('') || '<div class="empty">Sin resultados</div>';
+  }).join('')||'<div class="empty">Sin resultados</div>';
 }
 
-window.toggleVerif = (rut, checked) => {
-  estadoVerif[rut] = checked;
-  // Actualizar badge en la misma fila
-  const row = document.querySelector(`.alu-check[data-rut="${rut}"]`)?.closest('.alu-row');
-  if(row){
-    row.querySelector('.alu-estado').innerHTML = checked
-      ? '<span class="badge bg">✓ Presente</span>'
-      : '<span class="badge br">✗ Ausente</span>';
-  }
+window.toggleVerif=(rut,checked)=>{
+  estadoVerif[rut]=checked;
+  const row=document.querySelector(`.achk[data-rut="${rut}"]`)?.closest('.arow');
+  if(row) row.querySelector('div:last-child').innerHTML=checked
+    ?'<span class="badge bgn">✓ Presente</span>'
+    :'<span class="badge brd">✗ Ausente</span>';
   actualizarStats();
 };
 
 function actualizarStats(){
-  const vals = Object.values(estadoVerif);
-  const p = vals.filter(Boolean).length;
-  const a = vals.filter(v=>!v).length;
-  document.getElementById('vs-p').textContent = p+' presentes';
-  document.getElementById('vs-a').textContent = a+' ausentes';
+  const vals=Object.values(estadoVerif);
+  document.getElementById('vs-p').textContent=vals.filter(Boolean).length+' presentes';
+  document.getElementById('vs-a').textContent=vals.filter(v=>!v).length+' ausentes';
 }
 
-window.filtrarVerif = () => {
-  renderVerif(document.getElementById('verif-buscar').value);
-};
+window.filtrarVerif=()=>renderVerif(document.getElementById('v-buscar').value);
 
-window.cerrarVerifSinFinalizar = () => {
-  document.getElementById('verif-overlay').classList.remove('show');
-};
-
-window.confirmarCierre = async () => {
-  if(!sesion) return;
-  const lista = window._verifLista || [];
-  const presMap = window._verifPresMap || new Map();
-
-  const batch = writeBatch(db);
-
+window.confirmarCierre=async()=>{
+  if(!sesion)return;
+  const lista=window._vlist||[];
+  const presMap=window._vpmap||new Map();
+  const batch=writeBatch(db);
   for(const a of lista){
-    const presente = estadoVerif[a.rut];
-    const regId = sesion.id+'_'+a.rut.replace(/[^0-9kK]/g,'');
-
+    const presente=estadoVerif[a.rut];
+    const regId=sesion.id+'_'+a.rut.replace(/[^0-9kK]/g,'');
     if(presente){
-      // Si ya existe (escaneó QR), asegurarse de tener estado '1'
       if(presMap.has(a.rut)){
         batch.update(doc(db,'registros',regId),{estado:'1'});
-      } else {
-        // Marcado manualmente como presente por el profesor
+      }else{
         batch.set(doc(db,'registros',regId),{
-          id:regId, sesion_id:sesion.id,
-          sesion_nombre:sesion.matNom, sesion_fecha:sesion.fecha,
-          sesion_materia_key:sesion.matKey,
-          nombre:a.nombre, rut:a.rut, correo:a.correo||'',
-          estado:'1', marcado_manual:true, timestamp:Date.now()
+          id:regId,sesion_id:sesion.id,sesion_nombre:sesion.matNom,sesion_fecha:sesion.fecha,
+          sesion_materia_key:sesion.matKey,nombre:a.nombre,rut:a.rut,correo:a.correo||'',
+          estado:'1',marcado_manual:true,timestamp:Date.now()
         });
       }
-    } else {
-      // Ausente
+    }else{
       batch.set(doc(db,'registros',regId),{
-        id:regId, sesion_id:sesion.id,
-        sesion_nombre:sesion.matNom, sesion_fecha:sesion.fecha,
-        sesion_materia_key:sesion.matKey,
-        nombre:a.nombre, rut:a.rut, correo:a.correo||'',
-        estado:'0', timestamp:Date.now()
+        id:regId,sesion_id:sesion.id,sesion_nombre:sesion.matNom,sesion_fecha:sesion.fecha,
+        sesion_materia_key:sesion.matKey,nombre:a.nombre,rut:a.rut,correo:a.correo||'',
+        estado:'0',timestamp:Date.now()
       },{merge:true});
     }
   }
-
   await batch.commit();
   await setDoc(doc(db,'sesiones',sesion.id),{activa:false},{merge:true});
-
-  // Reset UI
-  sesion = null;
-  localStorage.removeItem('preu_sid');
-  if(timerIv) clearInterval(timerIv);
-  if(liveUnsub) liveUnsub();
+  sesion=null; localStorage.removeItem('preu_sid');
+  if(timerIv)clearInterval(timerIv); if(liveUnsub)liveUnsub();
   document.getElementById('qr-panel').style.display='none';
   document.getElementById('qr-ph').style.display='';
   document.getElementById('btn-regen').style.display='none';
-  document.getElementById('live-bar').classList.remove('on');
-  document.getElementById('live-table').innerHTML='<div class="empty">Sesión finalizada — revisa los registros en la pestaña Registros</div>';
+  document.getElementById('livebar').classList.remove('on');
+  document.getElementById('live-table').innerHTML='<div class="empty">Sesión finalizada — revisa los registros</div>';
   document.getElementById('conteo-tag').textContent='0 presentes';
   setHeader(null);
-  document.getElementById('verif-overlay').classList.remove('show');
+  document.getElementById('voverlay').classList.remove('show');
 };
 
-// ── REGISTROS ────────────────────────────────────────────────
-async function cargarRegs(){
-  document.getElementById('t-reg').innerHTML='<div class="loading"><span class="sp"></span>Cargando...</div>';
-  const snap = await getDocs(collection(db,'registros'));
-  allRegs = snap.docs.map(d=>d.data());
-  const mats = [...new Set(allRegs.map(r=>r.sesion_nombre))];
-  document.getElementById('f-mat').innerHTML='<option value="">Todas</option>'+mats.map(m=>`<option>${m}</option>`).join('');
-  filtrarReg();
+// ── REGISTROS (nueva lógica) ─────────────────────────────────
+async function initRegistros(){
+  document.getElementById('area-cards').innerHTML='<div class="loading"><span class="sp"></span>Cargando...</div>';
+  document.getElementById('reg-fechas-wrap').style.display='none';
+  document.getElementById('reg-detalle').style.display='none';
+  document.getElementById('reg-empty').style.display='none';
+  regAreaSel=null; regSesionSel=null;
+
+  // Traer todos los registros
+  const snap=await getDocs(collection(db,'registros'));
+  regTodos=snap.docs.map(d=>d.data());
+
+  // Calcular resumen por área
+  const areas=Object.entries(MATERIAS).map(([k,m])=>{
+    const regs=regTodos.filter(r=>r.sesion_materia_key===k);
+    const sesiones=[...new Set(regs.map(r=>r.sesion_id))];
+    // Contar solo de la sesión más reciente para el resumen
+    const ultSes=sesiones[sesiones.length-1];
+    const ultRegs=regs.filter(r=>r.sesion_id===ultSes);
+    const pres=ultRegs.filter(r=>r.estado==='1').length;
+    const total=ultRegs.length;
+    return {k,nombre:m.nombre,sesiones:sesiones.length,pres,total,hayDatos:regs.length>0};
+  });
+
+  document.getElementById('area-cards').innerHTML=areas.map(a=>`
+    <div class="area-card" id="ac-${a.k}" onclick="selArea('${a.k}')">
+      <div class="ac-nombre">${a.nombre}</div>
+      ${a.hayDatos?`
+        <div class="ac-stats">
+          <span class="ac-pres">✓ ${a.pres}</span>
+          <span class="ac-dot">·</span>
+          <span class="ac-aus">✗ ${a.total-a.pres}</span>
+          <span class="ac-dot">·</span>
+          <span style="font-size:11px;color:var(--tx2);font-weight:600">${a.sesiones} clase${a.sesiones!==1?'s':''}</span>
+        </div>
+        <div class="prog-bar-wrap">
+          <div class="prog-bar-bg"><div class="prog-bar-fill" style="width:${a.total?Math.round(a.pres/a.total*100):0}%"></div></div>
+          <div class="prog-pct">${a.total?Math.round(a.pres/a.total*100):0}% asistencia última clase</div>
+        </div>`
+      :'<div style="font-size:11px;color:var(--tx2);font-weight:500;margin-top:4px;">Sin registros aún</div>'}
+    </div>
+  `).join('');
 }
 
-window.filtrarReg = () => {
-  const fm=document.getElementById('f-mat').value;
-  const fe=document.getElementById('f-est').value;
-  const fa=document.getElementById('f-alu').value.toLowerCase();
-  let regs=allRegs;
-  if(fm) regs=regs.filter(r=>r.sesion_nombre===fm);
-  if(fe) regs=regs.filter(r=>r.estado===fe);
-  if(fa) regs=regs.filter(r=>r.nombre?.toLowerCase().includes(fa)||r.rut?.includes(fa));
-  regs=regs.sort((a,b)=>a.timestamp-b.timestamp);
-  const p=regs.filter(r=>r.estado==='1').length;
-  const a=regs.filter(r=>r.estado==='0').length;
-  const ses=new Set(regs.map(r=>r.sesion_id)).size;
-  document.getElementById('metrics').innerHTML=`
-    <div class="metric"><div class="mv">${regs.length}</div><div class="ml">Registros</div></div>
-    <div class="metric" style="border-left-color:var(--verde)"><div class="mv" style="color:var(--verde)">${p}</div><div class="ml">Presentes</div></div>
-    <div class="metric" style="border-left-color:var(--rojo)"><div class="mv" style="color:var(--rojo)">${a}</div><div class="ml">Ausentes</div></div>`;
-  const wrap=document.getElementById('t-reg');
-  if(!regs.length){wrap.innerHTML='<div class="empty">Sin registros para este filtro</div>';return;}
-  wrap.innerHTML=`<table>
-    <thead><tr><th>Nombre</th><th>RUT</th><th>Materia</th><th>Fecha</th><th>Estado</th></tr></thead>
-    <tbody>${regs.map(r=>{
-      const e=r.estado==='1'?'<span class="badge bg">✓ Presente</span>'
-        :r.estado==='0'?'<span class="badge br">✗ Ausente</span>'
-        :'<span class="badge ba">J Justificado</span>';
-      return `<tr><td><strong>${r.nombre}</strong></td><td>${r.rut}</td><td>${r.sesion_nombre}</td><td>${r.sesion_fecha}</td><td>${e}</td></tr>`;
-    }).join('')}</tbody>
-  </table>`;
+window.selArea=k=>{
+  regAreaSel=k; regSesionSel=null;
+  document.querySelectorAll('.area-card').forEach(c=>c.classList.remove('active'));
+  document.getElementById('ac-'+k)?.classList.add('active');
+
+  const regsArea=regTodos.filter(r=>r.sesion_materia_key===k);
+  if(!regsArea.length){
+    document.getElementById('reg-fechas-wrap').style.display='none';
+    document.getElementById('reg-detalle').style.display='none';
+    document.getElementById('reg-empty').style.display='block';
+    return;
+  }
+  document.getElementById('reg-empty').style.display='none';
+
+  // Agrupar por sesión
+  const sesMap=new Map();
+  for(const r of regsArea){
+    if(!sesMap.has(r.sesion_id)) sesMap.set(r.sesion_id,{id:r.sesion_id,fecha:r.sesion_fecha,nombre:r.sesion_nombre,regs:[]});
+    sesMap.get(r.sesion_id).regs.push(r);
+  }
+  const sesiones=[...sesMap.values()].sort((a,b)=>a.fecha.localeCompare(b.fecha));
+  window._regSesiones=sesiones;
+
+  document.getElementById('reg-area-title').textContent=MATERIAS[k].nombre;
+  document.getElementById('sesion-pills').innerHTML=sesiones.map(s=>{
+    const pres=s.regs.filter(r=>r.estado==='1').length;
+    const tot=s.regs.length;
+    return `<button class="spill" data-sid="${s.id}" onclick="selSesionReg('${s.id}')">${s.fecha} <span style="opacity:.6">(${pres}/${tot})</span></button>`;
+  }).join('');
+
+  document.getElementById('reg-fechas-wrap').style.display='block';
+  document.getElementById('reg-detalle').style.display='none';
+
+  // Auto-seleccionar la más reciente
+  if(sesiones.length) selSesionReg(sesiones[sesiones.length-1].id);
 };
 
-window.exportarCSV = () => {
-  const fm=document.getElementById('f-mat').value;
-  const fe=document.getElementById('f-est').value;
-  let regs=allRegs;
-  if(fm) regs=regs.filter(r=>r.sesion_nombre===fm);
-  if(fe) regs=regs.filter(r=>r.estado===fe);
+window.selSesionReg=sid=>{
+  regSesionSel=sid;
+  document.querySelectorAll('.spill').forEach(b=>b.classList.toggle('active',b.dataset.sid===sid));
+  const ses=window._regSesiones?.find(s=>s.id===sid);
+  if(!ses)return;
+  regDetalleCache=ses.regs;
+  renderDetalle(ses, '');
+  document.getElementById('reg-detalle').style.display='block';
+};
+
+function renderDetalle(ses, busq){
+  const regs=busq?ses.regs.filter(r=>r.nombre?.toLowerCase().includes(busq.toLowerCase())||r.rut?.includes(busq)):ses.regs;
+  const pres=regs.filter(r=>r.estado==='1').length;
+  const aus=regs.filter(r=>r.estado==='0').length;
+  const just=regs.filter(r=>r.estado==='J').length;
+  const pct=regs.length?Math.round(pres/regs.length*100):0;
+
+  document.getElementById('reg-metrics').innerHTML=`
+    <div class="metric">
+      <div class="mv">${pres}</div><div class="ml">Presentes</div>
+      <div class="prog-bar-wrap" style="margin-top:8px;">
+        <div class="prog-bar-bg"><div class="prog-bar-fill" style="width:${pct}%"></div></div>
+        <div class="prog-pct">${pct}% asistencia</div>
+      </div>
+    </div>
+    <div class="metric" style="border-left-color:var(--rj)"><div class="mv" style="color:var(--rj)">${aus}</div><div class="ml">Ausentes</div></div>
+    <div class="metric" style="border-left-color:var(--am)"><div class="mv" style="color:var(--am)">${just||0}</div><div class="ml">Justificados</div></div>`;
+
+  document.getElementById('reg-detalle-title').textContent=ses.fecha+' — '+ses.nombre;
+
+  const sorted=regs.sort((a,b)=>{
+    if(a.estado==='1'&&b.estado!=='1') return -1;
+    if(a.estado!=='1'&&b.estado==='1') return 1;
+    return a.nombre?.localeCompare(b.nombre)||0;
+  });
+
+  document.getElementById('reg-tabla').innerHTML=sorted.length?`<table>
+    <thead><tr><th>Nombre</th><th>RUT</th><th>Estado</th><th>Hora</th></tr></thead>
+    <tbody>${sorted.map(r=>{
+      const e=r.estado==='1'?'<span class="badge bgn">✓ Presente</span>'
+        :r.estado==='0'?'<span class="badge brd">✗ Ausente</span>'
+        :'<span class="badge bam">J Justificado</span>';
+      const hora=r.estado==='1'&&r.timestamp
+        ?`<span class="chipv">${new Date(r.timestamp).toLocaleTimeString('es-CL',{hour:'2-digit',minute:'2-digit'})}</span>`:'—';
+      return `<tr><td><strong>${r.nombre}</strong></td><td>${r.rut}</td><td>${e}</td><td>${hora}</td></tr>`;
+    }).join('')}</tbody>
+  </table>`:'<div class="empty">Sin resultados</div>';
+}
+
+window.filtrarDetalle=()=>{
+  const ses=window._regSesiones?.find(s=>s.id===regSesionSel);
+  if(ses) renderDetalle(ses, document.getElementById('reg-buscar').value);
+};
+
+window.exportarCSVFiltrado=()=>{
+  const ses=window._regSesiones?.find(s=>s.id===regSesionSel);
+  const regs=ses?ses.regs:regTodos.filter(r=>r.sesion_materia_key===regAreaSel);
+  if(!regs.length){alert('Selecciona una clase primero.');return;}
   const rows=regs.map(r=>[r.nombre,r.rut,r.correo||'',r.sesion_nombre,r.sesion_fecha,r.estado||'1'].map(v=>`"${v}"`).join(','));
   const csv=['nombre,rut,correo,materia,fecha,estado',...rows].join('\n');
   const blob=new Blob(['\uFEFF'+csv],{type:'text/csv;charset=utf-8;'});
   const a=document.createElement('a');a.href=URL.createObjectURL(blob);
-  a.download='asistencia_preudd_'+new Date().toISOString().slice(0,10)+'.csv';a.click();
+  a.download='asistencia_preudd_'+(regSesionSel||'export')+'_'+new Date().toISOString().slice(0,10)+'.csv';a.click();
 };
 
 // ── ALUMNOS ──────────────────────────────────────────────────
-window.importarAlumnos = async () => {
+window.importarAlumnos=async()=>{
   const raw=document.getElementById('imp-txt').value.trim();if(!raw)return;
-  const lineas=raw.split('\n').map(l=>l.trim()).filter(Boolean);
-  let n=0;
+  const lineas=raw.split('\n').map(l=>l.trim()).filter(Boolean);let n=0;
   for(const l of lineas){
     const c=l.split(/\t|,/).map(x=>x.trim().replace(/^"|"$/g,''));
-    if(c.length<2||c[0].toLowerCase()==='nombre') continue;
-    const [nombre,rut,correo='']=c;
-    const id='rut_'+rut.replace(/[^0-9kK]/g,'');
+    if(c.length<2||c[0].toLowerCase()==='nombre')continue;
+    const[nombre,rut,correo='']=c;const id='rut_'+rut.replace(/[^0-9kK]/g,'');
     const ex=await getDoc(doc(db,'alumnos',id));
     if(!ex.exists()){await setDoc(doc(db,'alumnos',id),{id,nombre,rut,correo});n++;}
   }
@@ -763,8 +913,7 @@ window.importarAlumnos = async () => {
   st.className='msg ms';st.style.display='block';
   st.textContent=`${n} alumno${n!==1?'s':''} importados.`;
   document.getElementById('imp-txt').value='';
-  setTimeout(()=>st.style.display='none',4000);
-  cargarAlumnos();
+  setTimeout(()=>st.style.display='none',4000);cargarAlumnos();
 };
 window.leerCSV=input=>{const f=input.files[0];if(!f)return;const r=new FileReader();r.onload=e=>{document.getElementById('imp-txt').value=e.target.result;window.importarAlumnos();};r.readAsText(f,'UTF-8');};
 window.guardarManual=async()=>{
@@ -772,26 +921,24 @@ window.guardarManual=async()=>{
   if(!n||!r){alert('Nombre y RUT requeridos.');return;}
   const id='rut_'+r.replace(/[^0-9kK]/g,'');
   await setDoc(doc(db,'alumnos',id),{id,nombre:n,rut:r,correo:c});
-  document.getElementById('mod-manual').style.display='none';
-  ['m-n','m-r','m-c'].forEach(x=>document.getElementById(x).value='');
-  cargarAlumnos();
+  document.getElementById('mod-man').style.display='none';
+  ['m-n','m-r','m-c'].forEach(x=>document.getElementById(x).value='');cargarAlumnos();
 };
 window.eliminarAlumno=async id=>{if(!confirm('¿Eliminar?'))return;await deleteDoc(doc(db,'alumnos',id));cargarAlumnos();};
 window.limpiarAlumnos=async()=>{if(!confirm('¿Eliminar TODOS?'))return;const s=await getDocs(collection(db,'alumnos'));for(const d of s.docs)await deleteDoc(d.ref);cargarAlumnos();};
 async function cargarAlumnos(){
   document.getElementById('t-alu').innerHTML='<div class="loading"><span class="sp"></span>Cargando...</div>';
   const snap=await getDocs(collection(db,'alumnos'));
-  const al=snap.docs.map(d=>d.data());
-  const w=document.getElementById('t-alu');
+  const al=snap.docs.map(d=>d.data());const w=document.getElementById('t-alu');
   if(!al.length){w.innerHTML='<div class="empty">Sin alumnos</div>';return;}
   w.innerHTML=`<div class="tw"><table>
     <thead><tr><th>#</th><th>Nombre</th><th>RUT</th><th>Correo</th><th>Área</th><th></th></tr></thead>
     <tbody>${al.map((a,i)=>`<tr>
-      <td style="color:var(--texto2);font-size:11px;font-weight:700">${String(i+1).padStart(2,'0')}</td>
+      <td style="color:var(--tx2);font-size:11px;font-weight:700">${String(i+1).padStart(2,'0')}</td>
       <td><strong>${a.nombre}</strong></td><td>${a.rut}</td>
-      <td style="color:var(--texto2)">${a.correo||'—'}</td>
-      <td>${a.area?`<span class="badge bc">${a.area}</span>`:'—'}</td>
-      <td><button class="btn btn-r btn-xs" onclick="eliminarAlumno('${a.id}')">✕</button></td>
+      <td style="color:var(--tx2)">${a.correo||'—'}</td>
+      <td>${a.area?`<span class="badge bcal">${a.area}</span>`:'—'}</td>
+      <td><button class="btn br bxs" onclick="eliminarAlumno('${a.id}')">✕</button></td>
     </tr>`).join('')}</tbody>
   </table></div>`;
 }
@@ -799,13 +946,12 @@ async function cargarAlumnos(){
 // ── VISTA ALUMNO ─────────────────────────────────────────────
 async function cargarAlumno(sid,tok){
   const snap=await getDoc(doc(db,'sesiones',sid));
-  const info=document.getElementById('alu-info');
-  const btn=document.getElementById('al-btn');
+  const info=document.getElementById('alu-info'),btn=document.getElementById('al-btn');
   if(!snap.exists()){info.textContent='⚠ Sesión no encontrada.';btn.disabled=true;return;}
   const s=snap.data();
-  const tokenCorrecto = s.tok || s.token;
+  const tkOk=s.tok||s.token;
   if(!s.activa){info.textContent='⚠ Esta sesión ya fue cerrada.';btn.disabled=true;return;}
-  if(tokenCorrecto!==tok){info.textContent='⚠ QR inválido. Solicita uno nuevo al profesor.';btn.disabled=true;return;}
+  if(tkOk!==tok){info.textContent='⚠ QR inválido. Solicita uno nuevo.';btn.disabled=true;return;}
   if((Date.now()-s.inicio)/60000>s.min){info.textContent='⚠ QR expirado. Solicita uno nuevo.';btn.disabled=true;return;}
   info.textContent=(s.matNom||s.materiaNombre)+' · '+(s.fechaLabel||s.fecha);
   window._ses=s;
@@ -813,9 +959,7 @@ async function cargarAlumno(sid,tok){
 
 window.marcarAsistencia=async()=>{
   const s=window._ses;
-  const n=document.getElementById('al-n').value.trim();
-  const r=document.getElementById('al-r').value.trim();
-  const c=document.getElementById('al-c').value.trim();
+  const n=document.getElementById('al-n').value.trim(),r=document.getElementById('al-r').value.trim(),c=document.getElementById('al-c').value.trim();
   const err=document.getElementById('al-err');
   if(!n||!r||!c){err.style.display='block';err.textContent='Completa todos los campos.';return;}
   if(!s){err.style.display='block';err.textContent='Sesión no válida.';return;}
@@ -823,14 +967,10 @@ window.marcarAsistencia=async()=>{
   const regId=s.id+'_'+r.replace(/[^0-9kK]/g,'');
   const ex=await getDoc(doc(db,'registros',regId));
   if(ex.exists()&&ex.data().estado==='1'){err.style.display='block';err.textContent='Ya registraste asistencia.';return;}
-  const btn=document.getElementById('al-btn');
-  btn.disabled=true;btn.textContent='Registrando...';
+  const btn=document.getElementById('al-btn');btn.disabled=true;btn.textContent='Registrando...';
   await setDoc(doc(db,'registros',regId),{
-    id:regId,sesion_id:s.id,
-    sesion_nombre:s.matNom||s.materiaNombre,
-    sesion_fecha:s.fecha,
-    sesion_materia_key:s.matKey||s.materiaKey,
-    nombre:n,rut:r,correo:c,estado:'1',timestamp:Date.now()
+    id:regId,sesion_id:s.id,sesion_nombre:s.matNom||s.materiaNombre,sesion_fecha:s.fecha,
+    sesion_materia_key:s.matKey||s.materiaKey,nombre:n,rut:r,correo:c,estado:'1',timestamp:Date.now()
   });
   document.getElementById('alu-form').style.display='none';
   document.getElementById('alu-ok').style.display='block';
@@ -844,13 +984,10 @@ async function initProfe(){
   if(lastId){
     const snap=await getDoc(doc(db,'sesiones',lastId));
     if(snap.exists()&&snap.data().activa){
-      sesion=snap.data();
-      matSel=sesion.matKey||sesion.materiaKey;
-      document.querySelectorAll('.mat-btn').forEach(b=>b.classList.toggle('sel',b.dataset.k===matSel));
-      mostrarQR();
-      suscribirLive(lastId);
-      setHeader(sesion.matNom||sesion.materiaNombre, sesion.fechaLabel);
-      document.getElementById('live-bar').classList.add('on');
+      sesion=snap.data();matSel=sesion.matKey||sesion.materiaKey;
+      document.querySelectorAll('.mb2').forEach(b=>b.classList.toggle('sel',b.dataset.k===matSel));
+      mostrarQR();suscribirLive(lastId);setHeader(sesion.matNom||sesion.materiaNombre,sesion.fechaLabel);
+      document.getElementById('livebar').classList.add('on');
       document.getElementById('live-mat').textContent=sesion.matNom||sesion.materiaNombre;
       document.getElementById('live-fec').textContent=sesion.fechaLabel||sesion.fecha;
       document.getElementById('btn-regen').style.display='';
