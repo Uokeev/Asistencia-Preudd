@@ -187,6 +187,25 @@ tbody tr:hover td{background:var(--cal-l);}
 .okt{font-size:19px;font-weight:800;color:var(--mar);margin-bottom:5px;}
 .oks{font-size:12px;font-weight:500;color:var(--tx2);line-height:1.6;}
 .aft{margin-top:18px;text-align:center;font-size:10px;font-weight:600;color:rgba(255,255,255,0.22);letter-spacing:.08em;text-transform:uppercase;}
+
+/* AREA CHIPS en modal edición */
+.area-chip-opt{
+  display:inline-flex;align-items:center;gap:6px;
+  padding:6px 12px;border-radius:999px;
+  border:1.5px solid var(--bd);background:var(--fondo);
+  font-size:12px;font-weight:600;color:var(--tx2);
+  cursor:pointer;transition:all .15s;font-family:'Poppins',sans-serif;
+  user-select:none;
+}
+.area-chip-opt:hover{border-color:var(--cal);color:var(--cal);}
+.area-chip-opt.on{background:var(--cal);border-color:var(--cal);color:#fff;}
+.area-chip-opt .chip-dot{width:7px;height:7px;border-radius:50%;background:currentColor;opacity:.6;}
+
+/* Tabla alumnos mejorada */
+.alu-row-edit{cursor:pointer;}
+.alu-row-edit:hover td{background:var(--cal-l);}
+.areas-inline{display:flex;flex-wrap:wrap;gap:4px;}
+.area-pill{display:inline-block;background:var(--cal-l);color:var(--cal-d);border:1px solid var(--cal-m);font-size:10px;font-weight:700;padding:1px 7px;border-radius:999px;}
 </style>
 </head>
 <body>
@@ -308,7 +327,10 @@ tbody tr:hover td{background:var(--cal-l);}
     <div class="card">
       <div class="ch">
         <div class="ct" id="reg-detalle-title">Detalle</div>
-        <input id="reg-buscar" placeholder="Buscar..." style="width:180px;padding:5px 10px;font-size:12px;" oninput="filtrarDetalle()"/>
+        <div class="flex" style="gap:6px;">
+          <input id="reg-buscar" placeholder="Buscar..." style="width:150px;padding:5px 10px;font-size:12px;" oninput="filtrarDetalle()"/>
+          <button class="btn br bsm" onclick="eliminarSesionCompleta()" title="Eliminar todos los registros de esta clase">Eliminar clase</button>
+        </div>
       </div>
       <div class="tw" id="reg-tabla"></div>
     </div>
@@ -323,7 +345,10 @@ tbody tr:hover td{background:var(--cal-l);}
 <!-- TAB ALUMNOS -->
 <div id="ta" class="content" style="display:none">
   <div class="card">
-    <div class="ch"><div class="ct">Importar alumnos</div><button class="btn bsm" onclick="document.getElementById('mod-man').style.display='block'">+ Manual</button></div>
+    <div class="ch">
+      <div class="ct">Importar alumnos</div>
+      <button class="btn bp bsm" onclick="abrirModalNuevo()">+ Agregar alumno</button>
+    </div>
     <p style="font-size:12px;font-weight:500;color:var(--tx2);margin-bottom:12px;line-height:1.6;">Pega desde Excel (Tab) o sube CSV. Columnas: <strong style="color:var(--mar)">nombre · rut · correo</strong></p>
     <div class="field"><label>Pegar datos</label><textarea id="imp-txt" rows="4" placeholder="nombre	rut	correo"></textarea></div>
     <div class="flex">
@@ -332,17 +357,41 @@ tbody tr:hover td{background:var(--cal-l);}
     </div>
     <div id="imp-st" class="msg"></div>
   </div>
+
+  <!-- Modal agregar/editar alumno -->
   <div id="mod-man" style="display:none" class="card">
-    <div class="ch"><div class="ct">Agregar alumno</div><button class="btn bsm" onclick="document.getElementById('mod-man').style.display='none'">✕</button></div>
+    <div class="ch">
+      <div class="ct" id="mod-man-title">Agregar alumno</div>
+      <button class="btn bsm" onclick="cerrarModalAlumno()">✕</button>
+    </div>
     <div class="g2" style="gap:12px">
-      <div class="field"><label>Nombre</label><input id="m-n" placeholder="Juan Pérez"/></div>
+      <div class="field"><label>Nombre completo</label><input id="m-n" placeholder="Juan Pérez"/></div>
       <div class="field"><label>RUT</label><input id="m-r" placeholder="12345678-9"/></div>
     </div>
     <div class="field"><label>Correo</label><input id="m-c" type="email" placeholder="juan@mail.com"/></div>
-    <button class="btn bp mt" onclick="guardarManual()">Guardar</button>
+    <div class="field">
+      <label>Áreas inscritas</label>
+      <div id="areas-checkboxes" style="display:flex;flex-wrap:wrap;gap:8px;margin-top:4px;"></div>
+    </div>
+    <input type="hidden" id="m-id"/>
+    <div class="flex mt">
+      <button class="btn bp" onclick="guardarAlumno()">Guardar cambios</button>
+      <button class="btn br bsm" id="btn-eliminar-modal" style="display:none" onclick="eliminarDesdeModal()">Eliminar alumno</button>
+    </div>
   </div>
+
+  <!-- Buscador + tabla -->
   <div class="card">
-    <div class="ch"><div class="ct">Nómina</div><button class="btn br bsm" onclick="limpiarAlumnos()">Limpiar todo</button></div>
+    <div class="ch">
+      <div class="ct">Nómina (<span id="alu-count">0</span> alumnos)</div>
+      <div class="flex" style="gap:8px;">
+        <input id="alu-buscar" placeholder="Buscar..." style="width:180px;padding:5px 10px;font-size:12px;" oninput="filtrarAlumnos()"/>
+        <select id="alu-filtro-area" style="width:160px;padding:5px 10px;font-size:12px;" onchange="filtrarAlumnos()">
+          <option value="">Todas las áreas</option>
+        </select>
+        <button class="btn br bsm" onclick="limpiarAlumnos()">Limpiar todo</button>
+      </div>
+    </div>
     <div id="t-alu"><div class="loading"><span class="sp"></span>Cargando...</div></div>
   </div>
 </div>
@@ -667,7 +716,22 @@ function setHeader(mat,fec){
 // ── VERIFICACIÓN ─────────────────────────────────────────────
 window.abrirVerif=async()=>{
   if(!sesion)return;
-  const lista=ALUMNOS[sesion.matKey]||[];
+
+  // Leer alumnos del área desde Firebase (campo areas array)
+  const area=sesion.matArea;
+  let snapAlu;
+  if(area){
+    snapAlu=await getDocs(query(collection(db,'alumnos'),where('areas','array-contains',area)));
+  } else {
+    snapAlu=await getDocs(collection(db,'alumnos'));
+  }
+  // También incluir alumnos con formato viejo (campo area string)
+  const aluFirebase=snapAlu.docs.map(d=>d.data());
+  // Fallback: si no hay nadie con el nuevo formato, usar los del array estático
+  const lista=aluFirebase.length>0
+    ? aluFirebase.sort((a,b)=>a.nombre?.localeCompare(b.nombre)||0)
+    : (ALUMNOS[sesion.matKey]||[]);
+
   const snap=await getDocs(query(collection(db,'registros'),where('sesion_id','==',sesion.id)));
   const presRut=new Set(snap.docs.map(d=>d.data()).filter(r=>r.estado==='1'||!r.estado).map(r=>r.rut));
   const presMap=new Map(snap.docs.map(d=>d.data()).filter(r=>r.estado==='1'||!r.estado).map(r=>[r.rut,r]));
@@ -870,14 +934,26 @@ function renderDetalle(ses, busq){
   });
 
   document.getElementById('reg-tabla').innerHTML=sorted.length?`<table>
-    <thead><tr><th>Nombre</th><th>RUT</th><th>Estado</th><th>Hora</th></tr></thead>
+    <thead><tr><th>Nombre</th><th>RUT</th><th>Estado</th><th>Hora</th><th style="width:90px"></th></tr></thead>
     <tbody>${sorted.map(r=>{
       const e=r.estado==='1'?'<span class="badge bgn">✓ Presente</span>'
         :r.estado==='0'?'<span class="badge brd">✗ Ausente</span>'
         :'<span class="badge bam">J Justificado</span>';
       const hora=r.estado==='1'&&r.timestamp
         ?`<span class="chipv">${new Date(r.timestamp).toLocaleTimeString('es-CL',{hour:'2-digit',minute:'2-digit'})}</span>`:'—';
-      return `<tr><td><strong>${r.nombre}</strong></td><td>${r.rut}</td><td>${e}</td><td>${hora}</td></tr>`;
+      const rid=encodeURIComponent(r.id);
+      return `<tr>
+        <td><strong>${r.nombre}</strong></td>
+        <td>${r.rut}</td>
+        <td>${e}</td>
+        <td>${hora}</td>
+        <td>
+          <div class="flex" style="gap:4px;justify-content:flex-end;">
+            <button class="btn bsm" style="padding:3px 8px;font-size:10px;" onclick="cambiarEstadoReg('${rid}')" title="Cambiar estado">✎</button>
+            <button class="btn br bxs" onclick="eliminarRegistro('${rid}')" title="Eliminar registro">✕</button>
+          </div>
+        </td>
+      </tr>`;
     }).join('')}</tbody>
   </table>`:'<div class="empty">Sin resultados</div>';
 }
@@ -898,49 +974,216 @@ window.exportarCSVFiltrado=()=>{
   a.download='asistencia_preudd_'+(regSesionSel||'export')+'_'+new Date().toISOString().slice(0,10)+'.csv';a.click();
 };
 
+// ── ELIMINAR / EDITAR REGISTROS ──────────────────────────────
+window.eliminarRegistro=async rid=>{
+  const id=decodeURIComponent(rid);
+  if(!confirm('¿Eliminar este registro? No se puede deshacer.'))return;
+  await deleteDoc(doc(db,'registros',id));
+  // Actualizar cache local
+  const ses=window._regSesiones?.find(s=>s.id===regSesionSel);
+  if(ses){
+    ses.regs=ses.regs.filter(r=>r.id!==id);
+    regTodos=regTodos.filter(r=>r.id!==id);
+    renderDetalle(ses, document.getElementById('reg-buscar').value);
+    // Actualizar pill
+    const pres=ses.regs.filter(r=>r.estado==='1').length;
+    const pill=document.querySelector(`.spill[data-sid="${regSesionSel}"]`);
+    if(pill) pill.innerHTML=`${ses.fecha} <span style="opacity:.6">(${pres}/${ses.regs.length})</span>`;
+  }
+};
+
+window.eliminarSesionCompleta=async()=>{
+  const ses=window._regSesiones?.find(s=>s.id===regSesionSel);
+  if(!ses)return;
+  const n=ses.regs.length;
+  if(!confirm(`¿Eliminar los ${n} registros de la clase del ${ses.fecha}? Esto borrará toda la asistencia de esa clase.`))return;
+  const batch=writeBatch(db);
+  ses.regs.forEach(r=>batch.delete(doc(db,'registros',r.id)));
+  await batch.commit();
+  // Actualizar cache y UI
+  regTodos=regTodos.filter(r=>r.sesion_id!==regSesionSel);
+  // Recargar vista del área
+  selArea(regAreaSel);
+};
+
+window.cambiarEstadoReg=async rid=>{
+  const id=decodeURIComponent(rid);
+  const ses=window._regSesiones?.find(s=>s.id===regSesionSel);
+  if(!ses)return;
+  const reg=ses.regs.find(r=>r.id===id);
+  if(!reg)return;
+  // Ciclo de estados: 1 -> 0 -> J -> 1
+  const ciclo={'1':'0','0':'J','J':'1'};
+  const nuevoEstado=ciclo[reg.estado]||'1';
+  await setDoc(doc(db,'registros',id),{estado:nuevoEstado},{merge:true});
+  reg.estado=nuevoEstado;
+  // Actualizar en regTodos también
+  const idx=regTodos.findIndex(r=>r.id===id);
+  if(idx>=0) regTodos[idx].estado=nuevoEstado;
+  renderDetalle(ses, document.getElementById('reg-buscar').value);
+  // Actualizar pill
+  const pres=ses.regs.filter(r=>r.estado==='1').length;
+  const pill=document.querySelector(`.spill[data-sid="${regSesionSel}"]`);
+  if(pill) pill.innerHTML=`${ses.fecha} <span style="opacity:.6">(${pres}/${ses.regs.length})</span>`;
+};
+
 // ── ALUMNOS ──────────────────────────────────────────────────
+const AREAS_DISPONIBLES = ['Matemáticas','Comprensión Lectora','Ciencias','Historia','Física','Orientación'];
+let todosAlumnos = [];
+
+// Normalizar alumno: convertir campo area (string) a areas (array) si viene del formato viejo
+function normalizarAreas(a){
+  if(Array.isArray(a.areas)) return a.areas;
+  if(a.area) return [a.area];
+  return [];
+}
+
 window.importarAlumnos=async()=>{
   const raw=document.getElementById('imp-txt').value.trim();if(!raw)return;
   const lineas=raw.split('\n').map(l=>l.trim()).filter(Boolean);let n=0;
   for(const l of lineas){
-    const c=l.split(/\t|,/).map(x=>x.trim().replace(/^"|"$/g,''));
-    if(c.length<2||c[0].toLowerCase()==='nombre')continue;
-    const[nombre,rut,correo='']=c;const id='rut_'+rut.replace(/[^0-9kK]/g,'');
+    const cols=l.split(/\t|,/).map(x=>x.trim().replace(/^"|"$/g,''));
+    if(cols.length<2||cols[0].toLowerCase()==='nombre')continue;
+    const[nombre,rut,correo='']=cols;
+    const id='rut_'+rut.replace(/[^0-9kK]/g,'');
     const ex=await getDoc(doc(db,'alumnos',id));
-    if(!ex.exists()){await setDoc(doc(db,'alumnos',id),{id,nombre,rut,correo});n++;}
+    if(!ex.exists()){await setDoc(doc(db,'alumnos',id),{id,nombre,rut,correo,areas:[]});n++;}
   }
   const st=document.getElementById('imp-st');
   st.className='msg ms';st.style.display='block';
   st.textContent=`${n} alumno${n!==1?'s':''} importados.`;
   document.getElementById('imp-txt').value='';
-  setTimeout(()=>st.style.display='none',4000);cargarAlumnos();
+  setTimeout(()=>st.style.display='none',4000);
+  cargarAlumnos();
 };
-window.leerCSV=input=>{const f=input.files[0];if(!f)return;const r=new FileReader();r.onload=e=>{document.getElementById('imp-txt').value=e.target.result;window.importarAlumnos();};r.readAsText(f,'UTF-8');};
-window.guardarManual=async()=>{
-  const n=document.getElementById('m-n').value.trim(),r=document.getElementById('m-r').value.trim(),c=document.getElementById('m-c').value.trim();
-  if(!n||!r){alert('Nombre y RUT requeridos.');return;}
-  const id='rut_'+r.replace(/[^0-9kK]/g,'');
-  await setDoc(doc(db,'alumnos',id),{id,nombre:n,rut:r,correo:c});
+
+window.leerCSV=input=>{
+  const f=input.files[0];if(!f)return;
+  const r=new FileReader();
+  r.onload=e=>{document.getElementById('imp-txt').value=e.target.result;window.importarAlumnos();};
+  r.readAsText(f,'UTF-8');
+};
+
+// ── MODAL ALUMNO (agregar y editar) ──
+function renderAreasCheckboxes(areasActivas=[]){
+  document.getElementById('areas-checkboxes').innerHTML=AREAS_DISPONIBLES.map(a=>`
+    <button type="button" class="area-chip-opt ${areasActivas.includes(a)?'on':''}"
+      data-area="${a}" onclick="toggleAreaChip(this)">
+      <span class="chip-dot"></span>${a}
+    </button>`).join('');
+}
+
+window.toggleAreaChip=btn=>{
+  btn.classList.toggle('on');
+};
+
+function getAreasSeleccionadas(){
+  return [...document.querySelectorAll('.area-chip-opt.on')].map(b=>b.dataset.area);
+}
+
+window.cerrarModalAlumno=()=>{
   document.getElementById('mod-man').style.display='none';
-  ['m-n','m-r','m-c'].forEach(x=>document.getElementById(x).value='');cargarAlumnos();
+  document.getElementById('m-id').value='';
+  ['m-n','m-r','m-c'].forEach(x=>document.getElementById(x).value='');
 };
-window.eliminarAlumno=async id=>{if(!confirm('¿Eliminar?'))return;await deleteDoc(doc(db,'alumnos',id));cargarAlumnos();};
-window.limpiarAlumnos=async()=>{if(!confirm('¿Eliminar TODOS?'))return;const s=await getDocs(collection(db,'alumnos'));for(const d of s.docs)await deleteDoc(d.ref);cargarAlumnos();};
+
+// Abrir modal para NUEVO alumno
+window.abrirModalNuevo=()=>{
+  document.getElementById('mod-man-title').textContent='Agregar alumno';
+  document.getElementById('m-id').value='';
+  ['m-n','m-r','m-c'].forEach(x=>document.getElementById(x).value='');
+  document.getElementById('btn-eliminar-modal').style.display='none';
+  document.getElementById('m-r').disabled=false;
+  renderAreasCheckboxes([]);
+  document.getElementById('mod-man').style.display='block';
+  document.getElementById('mod-man').scrollIntoView({behavior:'smooth',block:'nearest'});
+};
+
+// Abrir modal para EDITAR alumno existente
+window.editarAlumno=id=>{
+  const a=todosAlumnos.find(x=>x.id===id);if(!a)return;
+  document.getElementById('mod-man-title').textContent='Editar alumno';
+  document.getElementById('m-id').value=a.id;
+  document.getElementById('m-n').value=a.nombre||'';
+  document.getElementById('m-r').value=a.rut||'';
+  document.getElementById('m-r').disabled=true; // no cambiar RUT (es el ID)
+  document.getElementById('m-c').value=a.correo||'';
+  document.getElementById('btn-eliminar-modal').style.display='';
+  renderAreasCheckboxes(normalizarAreas(a));
+  document.getElementById('mod-man').style.display='block';
+  document.getElementById('mod-man').scrollIntoView({behavior:'smooth',block:'nearest'});
+};
+
+// Guardar (nuevo o edición)
+window.guardarAlumno=async()=>{
+  const nombre=document.getElementById('m-n').value.trim();
+  const rut=document.getElementById('m-r').value.trim();
+  const correo=document.getElementById('m-c').value.trim();
+  const idExistente=document.getElementById('m-id').value;
+  const areas=getAreasSeleccionadas();
+  if(!nombre||!rut){alert('Nombre y RUT son obligatorios.');return;}
+  const id=idExistente||('rut_'+rut.replace(/[^0-9kK]/g,''));
+  await setDoc(doc(db,'alumnos',id),{id,nombre,rut,correo,areas},{merge:true});
+  cerrarModalAlumno();
+  cargarAlumnos();
+};
+
+window.eliminarDesdeModal=async()=>{
+  const id=document.getElementById('m-id').value;
+  if(!id||!confirm('¿Eliminar este alumno? Esta acción no se puede deshacer.'))return;
+  await deleteDoc(doc(db,'alumnos',id));
+  cerrarModalAlumno();
+  cargarAlumnos();
+};
+
+window.limpiarAlumnos=async()=>{
+  if(!confirm('¿Eliminar TODOS los alumnos?'))return;
+  const s=await getDocs(collection(db,'alumnos'));
+  for(const d of s.docs) await deleteDoc(d.ref);
+  cargarAlumnos();
+};
+
+// Filtrar tabla
+window.filtrarAlumnos=()=>{
+  const busq=document.getElementById('alu-buscar').value.toLowerCase();
+  const areaFil=document.getElementById('alu-filtro-area').value;
+  let lista=todosAlumnos;
+  if(busq) lista=lista.filter(a=>a.nombre?.toLowerCase().includes(busq)||a.rut?.includes(busq)||a.correo?.toLowerCase().includes(busq));
+  if(areaFil) lista=lista.filter(a=>normalizarAreas(a).includes(areaFil));
+  renderTablaAlumnos(lista);
+};
+
+function renderTablaAlumnos(lista){
+  const w=document.getElementById('t-alu');
+  if(!lista.length){w.innerHTML='<div class="empty">Sin resultados</div>';return;}
+  w.innerHTML=`<div class="tw"><table>
+    <thead><tr><th>#</th><th>Nombre</th><th>RUT</th><th>Correo</th><th>Áreas inscritas</th></tr></thead>
+    <tbody>${lista.map((a,i)=>{
+      const areas=normalizarAreas(a);
+      const pillsHTML=areas.length
+        ?areas.map(x=>`<span class="area-pill">${x}</span>`).join('')
+        :'<span style="color:var(--tx2);font-size:11px">Sin área</span>';
+      return `<tr class="alu-row-edit" onclick="editarAlumno('${a.id}')">
+        <td style="color:var(--tx2);font-size:11px;font-weight:700">${String(i+1).padStart(2,'0')}</td>
+        <td><strong>${a.nombre}</strong></td>
+        <td>${a.rut}</td>
+        <td style="color:var(--tx2)">${a.correo||'—'}</td>
+        <td><div class="areas-inline">${pillsHTML}</div></td>
+      </tr>`;
+    }).join('')}</tbody>
+  </table></div>`;
+}
+
 async function cargarAlumnos(){
   document.getElementById('t-alu').innerHTML='<div class="loading"><span class="sp"></span>Cargando...</div>';
   const snap=await getDocs(collection(db,'alumnos'));
-  const al=snap.docs.map(d=>d.data());const w=document.getElementById('t-alu');
-  if(!al.length){w.innerHTML='<div class="empty">Sin alumnos</div>';return;}
-  w.innerHTML=`<div class="tw"><table>
-    <thead><tr><th>#</th><th>Nombre</th><th>RUT</th><th>Correo</th><th>Área</th><th></th></tr></thead>
-    <tbody>${al.map((a,i)=>`<tr>
-      <td style="color:var(--tx2);font-size:11px;font-weight:700">${String(i+1).padStart(2,'0')}</td>
-      <td><strong>${a.nombre}</strong></td><td>${a.rut}</td>
-      <td style="color:var(--tx2)">${a.correo||'—'}</td>
-      <td>${a.area?`<span class="badge bcal">${a.area}</span>`:'—'}</td>
-      <td><button class="btn br bxs" onclick="eliminarAlumno('${a.id}')">✕</button></td>
-    </tr>`).join('')}</tbody>
-  </table></div>`;
+  todosAlumnos=snap.docs.map(d=>d.data()).sort((a,b)=>a.nombre?.localeCompare(b.nombre)||0);
+  document.getElementById('alu-count').textContent=todosAlumnos.length;
+  // Llenar filtro de áreas
+  const selArea=document.getElementById('alu-filtro-area');
+  selArea.innerHTML='<option value="">Todas las áreas</option>'+
+    AREAS_DISPONIBLES.map(a=>`<option value="${a}">${a}</option>`).join('');
+  filtrarAlumnos();
 }
 
 // ── VISTA ALUMNO ─────────────────────────────────────────────
