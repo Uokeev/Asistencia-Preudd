@@ -484,7 +484,7 @@ Juan Pérez	12345678-9	juan@mail.com"></textarea></div>
   <div id="mod-man" style="display:none" class="card">
     <div class="ch">
       <div class="ct">Agregar alumno</div>
-      <button class="btn bsm" onclick="cerrarModalAlumno()">✕</button>
+      <button class="btn bsm" id="btn-cerrar-modal">✕</button>
     </div>
     <div class="g2" style="gap:12px">
       <div class="field"><label>Nombre completo</label><input id="m-n" placeholder="Juan Pérez"/></div>
@@ -497,8 +497,8 @@ Juan Pérez	12345678-9	juan@mail.com"></textarea></div>
     </div>
     <input type="hidden" id="m-id"/>
     <div class="flex mt">
-      <button class="btn bp" onclick="guardarAlumno()">Guardar</button>
-      <button class="btn br bsm" id="btn-eliminar-modal" style="display:none" onclick="eliminarDesdeModal()">Eliminar</button>
+      <button class="btn bp" id="btn-guardar-modal">Guardar</button>
+      <button class="btn br bsm" id="btn-eliminar-modal" style="display:none">Eliminar</button>
     </div>
   </div>
 
@@ -674,10 +674,20 @@ Juan Pérez	12345678-9	juan@mail.com"></textarea></div>
       </div>
     </div>
     <div class="tend-grid" id="p-tend"></div>
-    <div class="perfil-areas-wrap">
+    <!-- Áreas: modo lectura -->
+    <div class="perfil-areas-wrap" id="p-areas-view">
       <span class="perfil-areas-label">Áreas:</span>
-      <div id="p-areas-chips" style="display:flex;flex-wrap:wrap;gap:6px;"></div>
-      <button class="btn bsm" id="p-areas-save" style="display:none;">Guardar áreas</button>
+      <div id="p-areas-pills" style="display:flex;flex-wrap:wrap;gap:6px;flex:1;"></div>
+      <button class="btn bsm" id="btn-editar-areas" style="flex-shrink:0;">✎ Editar áreas</button>
+    </div>
+    <!-- Áreas: modo edición -->
+    <div id="p-areas-edit" style="display:none;padding:14px 20px;background:var(--bl);border-bottom:1px solid var(--bd);">
+      <div style="font-size:11px;font-weight:700;color:var(--tx2);letter-spacing:.05em;text-transform:uppercase;margin-bottom:10px;">Selecciona las áreas del alumno</div>
+      <div id="p-areas-chips" style="display:flex;flex-wrap:wrap;gap:8px;margin-bottom:14px;"></div>
+      <div style="display:flex;gap:8px;">
+        <button class="btn bp bsm" id="p-areas-save">Guardar cambios</button>
+        <button class="btn bsm" id="p-areas-cancel">Cancelar</button>
+      </div>
     </div>
     <div class="perfil-tabs" id="p-tabs"></div>
     <div id="p-area-content" class="perfil-area-content"></div>
@@ -1528,37 +1538,51 @@ window.cambiarEstadoReg=async rid=>{
 // Dropdowns y event listeners (todos via JS para evitar problema de módulo)
 let _alumnosListenersInit = false;
 function initAlumnosListeners(){
-  // Delegación de eventos en document — sobrevive cualquier re-render
-  if(!window._aluDelegated){
-    window._aluDelegated = true;
-    document.addEventListener('click', e=>{
-      // Click en fila de tabla → abrir perfil
-      const tr = e.target.closest('tr.alu-row-edit');
-      if(tr && tr.dataset.id){ window.abrirPerfil(tr.dataset.id); return; }
-      // Click en botón agregar alumno
-      if(e.target.closest('#btn-nuevo-alu')){ window.abrirModalNuevo(); return; }
-    });
-  }
+  if(window._aluDelegated) return;
+  window._aluDelegated = true;
 
-  if(_alumnosListenersInit) return; // los botones fijos solo se adjuntan una vez
-  _alumnosListenersInit = true;
+  // Un solo listener en document para TODO — sin stopPropagation que bloquee
+  document.addEventListener('click', e=>{
+    const t = e.target;
 
-  // Dropdown importar
-  const btnImp = document.getElementById('btn-importar-menu');
-  const ddImp  = document.getElementById('importar-dropdown');
-  btnImp?.addEventListener('click', e=>{ e.stopPropagation(); ddImp.style.display=ddImp.style.display==='none'?'block':'none'; document.getElementById('exportar-dropdown').style.display='none'; });
-  document.getElementById('drop-pegar')?.addEventListener('click', ()=>{ ddImp.style.display='none'; togglePegar(true); });
+    // ── Fila tabla → perfil ──
+    const tr = t.closest('tr.alu-row-edit');
+    if(tr && tr.dataset.id){ window.abrirPerfil(tr.dataset.id); return; }
 
-  // Dropdown exportar
-  const btnExp = document.getElementById('btn-exportar-menu');
-  const ddExp  = document.getElementById('exportar-dropdown');
-  btnExp?.addEventListener('click', e=>{ e.stopPropagation(); ddExp.style.display=ddExp.style.display==='none'?'block':'none'; ddImp.style.display='none'; });
+    // ── Botones modal nuevo alumno ──
+    if(t.closest('#btn-nuevo-alu'))     { window.abrirModalNuevo(); return; }
+    if(t.closest('#btn-cerrar-modal'))  { window.cerrarModalAlumno(); return; }
+    if(t.closest('#btn-guardar-modal')) { window.guardarAlumno(); return; }
+    if(t.closest('#btn-eliminar-modal')){ window.eliminarDesdeModal(); return; }
 
-  // Cerrar dropdowns al hacer click fuera
-  document.addEventListener('click', ()=>{ if(ddImp) ddImp.style.display='none'; if(ddExp) ddExp.style.display='none'; });
+    // ── Dropdowns ──
+    const ddImp = document.getElementById('importar-dropdown');
+    const ddExp = document.getElementById('exportar-dropdown');
+    if(t.closest('#btn-importar-menu')){
+      const show = ddImp.style.display === 'none';
+      ddImp.style.display = show ? 'block' : 'none';
+      if(ddExp) ddExp.style.display = 'none';
+      return;
+    }
+    if(t.closest('#btn-exportar-menu')){
+      const show = ddExp.style.display === 'none';
+      ddExp.style.display = show ? 'block' : 'none';
+      if(ddImp) ddImp.style.display = 'none';
+      return;
+    }
+    if(t.closest('#drop-pegar')){
+      if(ddImp) ddImp.style.display = 'none';
+      togglePegar(true);
+      return;
+    }
+    if(t.closest('#btn-cerrar-pegar')){ togglePegar(false); return; }
 
-  // Panel pegar
-  document.getElementById('btn-cerrar-pegar')?.addEventListener('click', ()=>togglePegar(false));
+    // ── Cerrar dropdowns al click fuera ──
+    if(!t.closest('#importar-dropdown') && !t.closest('#btn-importar-menu'))
+      if(ddImp) ddImp.style.display = 'none';
+    if(!t.closest('#exportar-dropdown') && !t.closest('#btn-exportar-menu'))
+      if(ddExp) ddExp.style.display = 'none';
+  });
 }
 
 function togglePegar(show){
@@ -1803,27 +1827,26 @@ window.abrirPerfil = async id => {
 };
 
 function initPerfilListeners(){
-  // Solo adjuntar una vez por apertura usando un flag en el elemento
+  // Usar delegación pura en el overlay — sin flags, siempre funciona
   const overlay = document.getElementById('perfil-overlay');
-  if(overlay._listenersOk) return;
-  overlay._listenersOk = true;
+  if(!overlay) return;
+  if(overlay._delegated) return;
+  overlay._delegated = true;
 
-  document.getElementById('btn-cerrar-perfil')
-    ?.addEventListener('click', ()=>window.cerrarPerfil());
-  document.getElementById('p-areas-save')
-    ?.addEventListener('click', ()=>window.guardarAreasDesdefPerfil());
-  document.getElementById('btn-toggle-edit')
-    ?.addEventListener('click', ()=>window.toggleEditPerfil());
-  document.getElementById('btn-guardar-datos')
-    ?.addEventListener('click', ()=>window.guardarDatosPerfil());
-  document.getElementById('btn-eliminar-perfil')
-    ?.addEventListener('click', ()=>window.eliminarDesdefPerfil());
-  // Delegación para tabs y chips de área dentro del perfil
   overlay.addEventListener('click', e=>{
-    const ptab = e.target.closest('.ptab');
-    if(ptab) window.switchPerfilTab(ptab, ptab.dataset.area);
-    const chip = e.target.closest('.area-chip-opt[data-area]');
-    if(chip && overlay.contains(chip)) window.toggleAreaPerfil(chip);
+    const t = e.target;
+    if(t.closest('#btn-cerrar-perfil'))   { window.cerrarPerfil(); return; }
+    if(t.closest('#btn-editar-areas'))    { window.abrirEditarAreas(); return; }
+    if(t.closest('#p-areas-save'))        { window.guardarAreasDesdefPerfil(); return; }
+    if(t.closest('#p-areas-cancel'))      { window.cancelarEditarAreas(); return; }
+    if(t.closest('#btn-toggle-edit'))     { window.toggleEditPerfil(); return; }
+    if(t.closest('#btn-guardar-datos'))   { window.guardarDatosPerfil(); return; }
+    if(t.closest('#btn-eliminar-perfil')) { window.eliminarDesdefPerfil(); return; }
+    const ptab = t.closest('.ptab');
+    if(ptab) { window.switchPerfilTab(ptab, ptab.dataset.area); return; }
+    // Chips solo en modo edición
+    const chip = t.closest('#p-areas-edit .area-chip-opt');
+    if(chip) { window.toggleAreaPerfil(chip); return; }
   });
 }
 
@@ -1873,13 +1896,15 @@ function renderPerfilTendencia(a){
 
 function renderPerfilAreas(a){
   const areas = normalizarAreas(a);
-  // Chips de área editables
-  document.getElementById('p-areas-chips').innerHTML = AREAS_DISPONIBLES.map(ar=>`
-    <button type="button" class="area-chip-opt ${areas.includes(ar)?'on':''}"
-      data-area="${ar}" onclick="toggleAreaPerfil(this)">
-      <span class="chip-dot"></span>${ar}
-    </button>`).join('');
-  document.getElementById('p-areas-save').style.display='none';
+
+  // Modo lectura: pills simples
+  document.getElementById('p-areas-pills').innerHTML = areas.length
+    ? areas.map(ar=>`<span class="area-pill-count">${ar}</span>`).join('')
+    : '<span style="font-size:12px;color:var(--tx2)">Sin áreas</span>';
+
+  // Modo edición: oculto por defecto
+  document.getElementById('p-areas-view').style.display = 'flex';
+  document.getElementById('p-areas-edit').style.display = 'none';
 
   // Tabs
   if(!areas.length){
@@ -1888,14 +1913,30 @@ function renderPerfilAreas(a){
     return;
   }
   document.getElementById('p-tabs').innerHTML = areas.map((ar,i)=>
-    `<button class="ptab ${i===0?'active':''}" data-area="${ar}" onclick="switchPerfilTab(this,'${ar}')">${ar}</button>`
+    `<button class="ptab ${i===0?'active':''}" data-area="${ar}">${ar}</button>`
   ).join('');
   perfilAreaActual = areas[0];
 }
 
 window.toggleAreaPerfil = btn => {
   btn.classList.toggle('on');
-  document.getElementById('p-areas-save').style.display='';
+};
+
+window.abrirEditarAreas = () => {
+  if(!perfilActual) return;
+  const areas = normalizarAreas(perfilActual);
+  // Renderizar chips en modo edición
+  document.getElementById('p-areas-chips').innerHTML = AREAS_DISPONIBLES.map(ar=>`
+    <button type="button" class="area-chip-opt ${areas.includes(ar)?'on':''}" data-area="${ar}">
+      <span class="chip-dot"></span>${ar}
+    </button>`).join('');
+  document.getElementById('p-areas-view').style.display = 'none';
+  document.getElementById('p-areas-edit').style.display = 'block';
+};
+
+window.cancelarEditarAreas = () => {
+  document.getElementById('p-areas-view').style.display = 'flex';
+  document.getElementById('p-areas-edit').style.display = 'none';
 };
 
 window.guardarAreasDesdefPerfil = async () => {
@@ -1903,11 +1944,11 @@ window.guardarAreasDesdefPerfil = async () => {
   const nuevasAreas = [...document.querySelectorAll('#p-areas-chips .area-chip-opt.on')].map(b=>b.dataset.area);
   await setDoc(doc(db,'alumnos',perfilActual.id),{areas:nuevasAreas},{merge:true});
   perfilActual.areas = nuevasAreas;
-  document.getElementById('p-areas-save').style.display='none';
-  // Refrescar tabs
+  // Volver a modo lectura
+  cancelarEditarAreas();
   renderPerfilAreas(perfilActual);
   if(nuevasAreas.length) renderPerfilAreaTab(nuevasAreas[0]);
-  // Refrescar tabla principal en background
+  // Actualizar tabla
   const idx = todosAlumnos.findIndex(x=>x.id===perfilActual.id);
   if(idx>=0) todosAlumnos[idx].areas = nuevasAreas;
   filtrarAlumnos();
