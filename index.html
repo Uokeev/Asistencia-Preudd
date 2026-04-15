@@ -187,6 +187,81 @@ tbody tr:hover td{background:var(--cal-l);}
 .okt{font-size:19px;font-weight:800;color:var(--mar);margin-bottom:5px;}
 .oks{font-size:12px;font-weight:500;color:var(--tx2);line-height:1.6;}
 .aft{margin-top:18px;text-align:center;font-size:10px;font-weight:600;color:rgba(255,255,255,0.22);letter-spacing:.08em;text-transform:uppercase;}
+/* ── DROPDOWNS ── */
+.dropdown-item{display:block;width:100%;padding:9px 14px;text-align:left;background:transparent;border:none;font-family:'Poppins',sans-serif;font-size:13px;font-weight:500;color:var(--tx);cursor:pointer;transition:background .1s;}
+.dropdown-item:hover{background:var(--cal-l);color:var(--cal-d);}
+.dropdown-sep{height:1px;background:var(--bd);margin:4px 0;}
+
+/* Tabla sin padding exterior */
+#t-alu table{width:100%;}
+#t-alu .tw{padding:0;}
+#t-alu thead tr{background:var(--fondo);}
+#t-alu th:first-child,#t-alu td:first-child{padding-left:20px;}
+#t-alu th:last-child,#t-alu td:last-child{padding-right:20px;}
+
+/* Contador area pill */
+.area-pill-count{display:inline-flex;align-items:center;gap:3px;background:var(--cal-l);color:var(--cal-d);border:1px solid var(--cal-m);font-size:10px;font-weight:700;padding:1px 7px;border-radius:999px;}
+
+/* ── PERFIL ALUMNO OVERLAY ── */
+.perfil-overlay{display:none;position:fixed;inset:0;background:rgba(45,55,72,0.65);z-index:200;align-items:flex-start;justify-content:center;padding:20px;overflow-y:auto;}
+.perfil-overlay.show{display:flex;}
+.perfil-modal{background:var(--fondo);border-radius:var(--rl);width:100%;max-width:760px;margin:auto;overflow:hidden;}
+
+/* Header perfil */
+.perfil-head{background:var(--mar);padding:20px 24px 16px;}
+.perfil-avatar{width:44px;height:44px;border-radius:50%;background:var(--cal);display:flex;align-items:center;justify-content:center;font-size:17px;font-weight:800;color:#fff;flex-shrink:0;}
+.perfil-nombre{font-size:17px;font-weight:800;color:#fff;line-height:1.2;}
+.perfil-rut{font-size:12px;color:rgba(255,255,255,0.45);font-weight:500;margin-top:1px;}
+.perfil-correo{font-size:12px;color:var(--cal);font-weight:500;margin-top:2px;}
+
+/* Tendencia cards */
+.tend-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:10px;padding:16px 20px;background:var(--bl);border-bottom:1px solid var(--bd);}
+@media(max-width:500px){.tend-grid{grid-template-columns:1fr 1fr;}}
+.tend-card{text-align:center;padding:10px 6px;}
+.tend-val{font-size:22px;font-weight:800;line-height:1;margin-bottom:3px;}
+.tend-label{font-size:10px;font-weight:700;color:var(--tx2);letter-spacing:.05em;text-transform:uppercase;}
+
+/* Racha */
+.racha-pos{color:var(--vd);}
+.racha-neg{color:var(--rj);}
+.racha-neu{color:var(--tx2);}
+
+/* Body perfil */
+.perfil-body{padding:0 20px 20px;}
+
+/* Áreas edición inline */
+.perfil-areas-wrap{padding:14px 20px;background:var(--bl);border-bottom:1px solid var(--bd);display:flex;align-items:center;gap:10px;flex-wrap:wrap;}
+.perfil-areas-label{font-size:11px;font-weight:700;color:var(--tx2);letter-spacing:.05em;text-transform:uppercase;white-space:nowrap;}
+
+/* Tabs área en perfil */
+.perfil-tabs{display:flex;gap:4px;padding:14px 20px 0;background:var(--bl);border-bottom:1px solid var(--bd);overflow-x:auto;}
+.ptab{padding:6px 14px;border-radius:var(--r) var(--r) 0 0;border:1px solid transparent;background:transparent;font-size:12px;font-weight:700;color:var(--tx2);cursor:pointer;font-family:'Poppins',sans-serif;transition:all .15s;white-space:nowrap;}
+.ptab:hover{color:var(--mar);}
+.ptab.active{background:var(--fondo);border-color:var(--bd);border-bottom-color:var(--fondo);color:var(--cal);}
+
+/* Contenido área */
+.perfil-area-content{padding:16px 20px;}
+.area-prog-wrap{margin-bottom:16px;}
+.area-prog-label{display:flex;justify-content:space-between;align-items:center;margin-bottom:6px;}
+.area-prog-name{font-size:13px;font-weight:700;color:var(--mar);}
+.area-prog-pct{font-size:13px;font-weight:800;}
+.area-prog-bg{height:8px;background:var(--rj-l);border-radius:4px;overflow:hidden;}
+.area-prog-fill{height:100%;border-radius:4px;transition:width .4s;}
+
+/* Historial */
+.hist-item{display:flex;align-items:center;justify-content:space-between;padding:8px 0;border-bottom:1px solid var(--bd);}
+.hist-item:last-child{border-bottom:none;}
+.hist-fecha{font-size:13px;font-weight:600;color:var(--mar);}
+.hist-dot{width:8px;height:8px;border-radius:50%;flex-shrink:0;}
+.hist-dot.p{background:var(--vd);}
+.hist-dot.a{background:var(--rj);}
+.hist-dot.j{background:var(--am);}
+
+/* Edición datos inline en perfil */
+.perfil-edit-section{padding:14px 20px;background:var(--bl);border-top:1px solid var(--bd);}
+.perfil-edit-toggle{font-size:12px;font-weight:700;color:var(--cal);cursor:pointer;background:none;border:none;font-family:'Poppins',sans-serif;padding:0;}
+.perfil-edit-form{display:none;margin-top:14px;}
+.perfil-edit-form.show{display:block;}
 
 /* AREA CHIPS en modal edición */
 .area-chip-opt{
@@ -344,24 +419,64 @@ tbody tr:hover td{background:var(--cal-l);}
 
 <!-- TAB ALUMNOS -->
 <div id="ta" class="content" style="display:none">
+
+  <!-- Barra de acciones -->
   <div class="card">
     <div class="ch">
-      <div class="ct">Importar alumnos</div>
-      <button class="btn bp bsm" onclick="abrirModalNuevo()">+ Agregar alumno</button>
+      <div class="ct">Nómina (<span id="alu-count">0</span> alumnos)</div>
+      <div class="flex" style="gap:6px;">
+        <!-- Botón agregar -->
+        <button class="btn bp bsm" id="btn-nuevo-alu">+ Agregar alumno</button>
+        <!-- Menú importar desplegable -->
+        <div style="position:relative;">
+          <button class="btn bd2c bsm" id="btn-importar-menu">⬇ Importar ▾</button>
+          <div id="importar-dropdown" style="display:none;position:absolute;right:0;top:calc(100% + 4px);background:var(--bl);border:1px solid var(--bd);border-radius:var(--r);min-width:180px;z-index:50;box-shadow:0 4px 16px rgba(0,0,0,0.12);">
+            <button class="dropdown-item" id="drop-pegar">📋 Pegar desde Excel</button>
+            <label class="dropdown-item" style="cursor:pointer">📂 Subir CSV<input type="file" accept=".csv" id="csv-input" onchange="leerCSV(this)" style="display:none"/></label>
+          </div>
+        </div>
+        <!-- Exportar -->
+        <div style="position:relative;">
+          <button class="btn bsm" id="btn-exportar-menu">⬆ Exportar ▾</button>
+          <div id="exportar-dropdown" style="display:none;position:absolute;right:0;top:calc(100% + 4px);background:var(--bl);border:1px solid var(--bd);border-radius:var(--r);min-width:180px;z-index:50;box-shadow:0 4px 16px rgba(0,0,0,0.12);">
+            <button class="dropdown-item" onclick="exportarAlumnosExcel()">📊 Excel (.xlsx)</button>
+            <button class="dropdown-item" onclick="exportarAlumnosPDF()">📄 PDF</button>
+            <button class="dropdown-item" onclick="exportarAlumnosCSV()">📋 CSV</button>
+          </div>
+        </div>
+        <button class="btn br bsm" onclick="limpiarAlumnos()">Limpiar todo</button>
+      </div>
     </div>
-    <p style="font-size:12px;font-weight:500;color:var(--tx2);margin-bottom:12px;line-height:1.6;">Pega desde Excel (Tab) o sube CSV. Columnas: <strong style="color:var(--mar)">nombre · rut · correo</strong></p>
-    <div class="field"><label>Pegar datos</label><textarea id="imp-txt" rows="4" placeholder="nombre	rut	correo"></textarea></div>
+    <!-- Filtros -->
+    <div class="flex" style="gap:8px;">
+      <input id="alu-buscar" placeholder="Buscar por nombre, RUT o correo..." style="flex:1;padding:7px 12px;font-size:13px;" oninput="filtrarAlumnos()"/>
+      <select id="alu-filtro-area" style="width:170px;padding:7px 10px;font-size:13px;" onchange="filtrarAlumnos()">
+        <option value="">Todas las áreas</option>
+      </select>
+    </div>
+  </div>
+
+  <!-- Panel pegar datos (desplegable) -->
+  <div id="panel-pegar" style="display:none" class="card">
+    <div class="ch">
+      <div class="ct">Pegar datos desde Excel</div>
+      <button class="btn bsm" id="btn-cerrar-pegar">✕</button>
+    </div>
+    <p style="font-size:12px;font-weight:500;color:var(--tx2);margin-bottom:10px;line-height:1.6;">
+      Copia y pega directamente desde Excel. Columnas esperadas: <strong style="color:var(--mar)">nombre · rut · correo</strong>
+    </p>
+    <div class="field"><textarea id="imp-txt" rows="5" placeholder="nombre	rut	correo
+Juan Pérez	12345678-9	juan@mail.com"></textarea></div>
     <div class="flex">
       <button class="btn bp" onclick="importarAlumnos()">Importar</button>
-      <label class="btn bd2c" style="cursor:pointer">Subir CSV<input type="file" accept=".csv" onchange="leerCSV(this)" style="display:none"/></label>
     </div>
     <div id="imp-st" class="msg"></div>
   </div>
 
-  <!-- Modal agregar/editar alumno -->
+  <!-- Modal agregar nuevo alumno -->
   <div id="mod-man" style="display:none" class="card">
     <div class="ch">
-      <div class="ct" id="mod-man-title">Agregar alumno</div>
+      <div class="ct">Agregar alumno</div>
       <button class="btn bsm" onclick="cerrarModalAlumno()">✕</button>
     </div>
     <div class="g2" style="gap:12px">
@@ -375,24 +490,14 @@ tbody tr:hover td{background:var(--cal-l);}
     </div>
     <input type="hidden" id="m-id"/>
     <div class="flex mt">
-      <button class="btn bp" onclick="guardarAlumno()">Guardar cambios</button>
-      <button class="btn br bsm" id="btn-eliminar-modal" style="display:none" onclick="eliminarDesdeModal()">Eliminar alumno</button>
+      <button class="btn bp" onclick="guardarAlumno()">Guardar</button>
+      <button class="btn br bsm" id="btn-eliminar-modal" style="display:none" onclick="eliminarDesdeModal()">Eliminar</button>
     </div>
   </div>
 
-  <!-- Buscador + tabla -->
-  <div class="card">
-    <div class="ch">
-      <div class="ct">Nómina (<span id="alu-count">0</span> alumnos)</div>
-      <div class="flex" style="gap:8px;">
-        <input id="alu-buscar" placeholder="Buscar..." style="width:180px;padding:5px 10px;font-size:12px;" oninput="filtrarAlumnos()"/>
-        <select id="alu-filtro-area" style="width:160px;padding:5px 10px;font-size:12px;" onchange="filtrarAlumnos()">
-          <option value="">Todas las áreas</option>
-        </select>
-        <button class="btn br bsm" onclick="limpiarAlumnos()">Limpiar todo</button>
-      </div>
-    </div>
-    <div id="t-alu"><div class="loading"><span class="sp"></span>Cargando...</div></div>
+  <!-- Tabla -->
+  <div class="card" style="padding:0;">
+    <div id="t-alu"><div class="loading" style="padding:28px;"><span class="sp"></span>Cargando...</div></div>
   </div>
 </div>
 </div>
@@ -644,6 +749,8 @@ window.iniciarSesion=async()=>{
   const id=Date.now().toString(36)+Math.random().toString(36).slice(2,5);
   const tok=Math.random().toString(36).slice(2)+Date.now().toString(36);
   sesion={id,tok,token:tok,min,inicio:Date.now(),matKey:matSel,matNom:m.nombre,matArea:m.area,fecha,fechaLabel:label,colIdx:col,activa:true};
+  // Resetear estado de verificación para la nueva sesión
+  estadoVerif={}; window._vlist=null; window._vpmap=null;
   await setDoc(doc(db,'sesiones',id),sesion);
   localStorage.setItem('preu_sid',id);
   mostrarQR(); suscribirLive(id); setHeader(m.nombre,label);
@@ -717,29 +824,45 @@ function setHeader(mat,fec){
 window.abrirVerif=async()=>{
   if(!sesion)return;
 
-  // Leer alumnos del área desde Firebase (campo areas array)
-  const area=sesion.matArea;
-  let snapAlu;
-  if(area){
-    snapAlu=await getDocs(query(collection(db,'alumnos'),where('areas','array-contains',area)));
-  } else {
-    snapAlu=await getDocs(collection(db,'alumnos'));
+  // Si no tenemos la lista cargada aún, cargarla desde Firebase
+  if(!window._vlist){
+    const area=sesion.matArea;
+    let snapAlu;
+    if(area){
+      snapAlu=await getDocs(query(collection(db,'alumnos'),where('areas','array-contains',area)));
+    } else {
+      snapAlu=await getDocs(collection(db,'alumnos'));
+    }
+    const aluFirebase=snapAlu.docs.map(d=>d.data());
+    window._vlist=aluFirebase.length>0
+      ? aluFirebase.sort((a,b)=>a.nombre?.localeCompare(b.nombre)||0)
+      : (ALUMNOS[sesion.matKey]||[]);
   }
-  // También incluir alumnos con formato viejo (campo area string)
-  const aluFirebase=snapAlu.docs.map(d=>d.data());
-  // Fallback: si no hay nadie con el nuevo formato, usar los del array estático
-  const lista=aluFirebase.length>0
-    ? aluFirebase.sort((a,b)=>a.nombre?.localeCompare(b.nombre)||0)
-    : (ALUMNOS[sesion.matKey]||[]);
 
+  // Siempre leer estado actual desde Firebase (incluye marcas manuales y QR)
   const snap=await getDocs(query(collection(db,'registros'),where('sesion_id','==',sesion.id)));
-  const presRut=new Set(snap.docs.map(d=>d.data()).filter(r=>r.estado==='1'||!r.estado).map(r=>r.rut));
-  const presMap=new Map(snap.docs.map(d=>d.data()).filter(r=>r.estado==='1'||!r.estado).map(r=>[r.rut,r]));
-  estadoVerif={};
-  lista.forEach(a=>estadoVerif[a.rut]=presRut.has(a.rut));
-  window._vlist=lista; window._vpmap=presMap;
+  const regsActuales=snap.docs.map(d=>d.data());
+  window._vpmap=new Map(regsActuales.filter(r=>r.estado==='1'||!r.estado).map(r=>[r.rut,r]));
+
+  // Reconstruir estadoVerif respetando cambios manuales previos
+  // Si ya existe estadoVerif, solo actualizar los que llegaron por QR (no pisar los manuales)
+  if(Object.keys(estadoVerif).length===0){
+    // Primera apertura: inicializar desde Firebase
+    window._vlist.forEach(a=>{
+      const reg=regsActuales.find(r=>r.rut===a.rut);
+      estadoVerif[a.rut]=reg ? reg.estado==='1' : false;
+    });
+  } else {
+    // Reapertura: incorporar nuevos QR sin pisar cambios manuales
+    regsActuales.forEach(r=>{
+      if(r.estado==='1' && !r.marcado_manual){
+        estadoVerif[r.rut]=true; // llegó por QR, marcarlo presente
+      }
+    });
+  }
+
   document.getElementById('v-title').textContent=sesion.matNom;
-  document.getElementById('v-sub').textContent=sesion.fechaLabel+' · '+lista.length+' alumnos en el área';
+  document.getElementById('v-sub').textContent=sesion.fechaLabel+' · '+window._vlist.length+' alumnos en el área';
   document.getElementById('v-buscar').value='';
   renderVerif(''); actualizarStats();
   document.getElementById('voverlay').classList.add('show');
@@ -759,13 +882,38 @@ function renderVerif(busq){
   }).join('')||'<div class="empty">Sin resultados</div>';
 }
 
-window.toggleVerif=(rut,checked)=>{
+window.toggleVerif=async(rut,checked)=>{
   estadoVerif[rut]=checked;
+  // Actualizar badge en UI inmediatamente
   const row=document.querySelector(`.achk[data-rut="${rut}"]`)?.closest('.arow');
   if(row) row.querySelector('div:last-child').innerHTML=checked
     ?'<span class="badge bgn">✓ Presente</span>'
     :'<span class="badge brd">✗ Ausente</span>';
   actualizarStats();
+  // Guardar inmediatamente en Firebase
+  if(!sesion) return;
+  const regId=sesion.id+'_'+rut.replace(/[^0-9kK]/g,'');
+  const alumno=window._vlist?.find(a=>a.rut===rut);
+  if(!alumno) return;
+  if(checked){
+    // Marcar presente (manual)
+    await setDoc(doc(db,'registros',regId),{
+      id:regId, sesion_id:sesion.id,
+      sesion_nombre:sesion.matNom, sesion_fecha:sesion.fecha,
+      sesion_materia_key:sesion.matKey,
+      nombre:alumno.nombre, rut:alumno.rut, correo:alumno.correo||'',
+      estado:'1', marcado_manual:true, timestamp:Date.now()
+    },{merge:true});
+  } else {
+    // Marcar ausente (borrar si existe o dejar como 0)
+    await setDoc(doc(db,'registros',regId),{
+      id:regId, sesion_id:sesion.id,
+      sesion_nombre:sesion.matNom, sesion_fecha:sesion.fecha,
+      sesion_materia_key:sesion.matKey,
+      nombre:alumno.nombre, rut:alumno.rut, correo:alumno.correo||'',
+      estado:'0', marcado_manual:true, timestamp:Date.now()
+    },{merge:true});
+  }
 };
 
 function actualizarStats(){
@@ -779,32 +927,28 @@ window.filtrarVerif=()=>renderVerif(document.getElementById('v-buscar').value);
 window.confirmarCierre=async()=>{
   if(!sesion)return;
   const lista=window._vlist||[];
-  const presMap=window._vpmap||new Map();
+  // toggleVerif ya guardó los cambios manuales en Firebase en tiempo real.
+  // Solo necesitamos escribir los alumnos que NO tienen ningún registro aún (ausentes no visitados)
+  const snapRegs=await getDocs(query(collection(db,'registros'),where('sesion_id','==',sesion.id)));
+  const rutConReg=new Set(snapRegs.docs.map(d=>d.data().rut));
   const batch=writeBatch(db);
   for(const a of lista){
-    const presente=estadoVerif[a.rut];
     const regId=sesion.id+'_'+a.rut.replace(/[^0-9kK]/g,'');
-    if(presente){
-      if(presMap.has(a.rut)){
-        batch.update(doc(db,'registros',regId),{estado:'1'});
-      }else{
-        batch.set(doc(db,'registros',regId),{
-          id:regId,sesion_id:sesion.id,sesion_nombre:sesion.matNom,sesion_fecha:sesion.fecha,
-          sesion_materia_key:sesion.matKey,nombre:a.nombre,rut:a.rut,correo:a.correo||'',
-          estado:'1',marcado_manual:true,timestamp:Date.now()
-        });
-      }
-    }else{
+    if(!rutConReg.has(a.rut)){
+      // Sin ningún registro aún: marcar ausente
       batch.set(doc(db,'registros',regId),{
-        id:regId,sesion_id:sesion.id,sesion_nombre:sesion.matNom,sesion_fecha:sesion.fecha,
-        sesion_materia_key:sesion.matKey,nombre:a.nombre,rut:a.rut,correo:a.correo||'',
-        estado:'0',timestamp:Date.now()
-      },{merge:true});
+        id:regId, sesion_id:sesion.id,
+        sesion_nombre:sesion.matNom, sesion_fecha:sesion.fecha,
+        sesion_materia_key:sesion.matKey,
+        nombre:a.nombre, rut:a.rut, correo:a.correo||'',
+        estado:'0', timestamp:Date.now()
+      });
     }
   }
   await batch.commit();
   await setDoc(doc(db,'sesiones',sesion.id),{activa:false},{merge:true});
-  sesion=null; localStorage.removeItem('preu_sid');
+  sesion=null; estadoVerif={}; window._vlist=null; window._vpmap=null;
+  localStorage.removeItem('preu_sid');
   if(timerIv)clearInterval(timerIv); if(liveUnsub)liveUnsub();
   document.getElementById('qr-panel').style.display='none';
   document.getElementById('qr-ph').style.display='';
@@ -1028,6 +1172,140 @@ window.cambiarEstadoReg=async rid=>{
 };
 
 // ── ALUMNOS ──────────────────────────────────────────────────
+
+// Dropdowns y event listeners (todos via JS para evitar problema de módulo)
+function initAlumnosListeners(){
+  // Botón nuevo alumno
+  document.getElementById('btn-nuevo-alu')?.addEventListener('click', ()=>window.abrirModalNuevo());
+
+  // Dropdown importar
+  const btnImp = document.getElementById('btn-importar-menu');
+  const ddImp  = document.getElementById('importar-dropdown');
+  btnImp?.addEventListener('click', e=>{ e.stopPropagation(); ddImp.style.display=ddImp.style.display==='none'?'block':'none'; document.getElementById('exportar-dropdown').style.display='none'; });
+  document.getElementById('drop-pegar')?.addEventListener('click', ()=>{ ddImp.style.display='none'; togglePegar(true); });
+
+  // Dropdown exportar
+  const btnExp = document.getElementById('btn-exportar-menu');
+  const ddExp  = document.getElementById('exportar-dropdown');
+  btnExp?.addEventListener('click', e=>{ e.stopPropagation(); ddExp.style.display=ddExp.style.display==='none'?'block':'none'; ddImp.style.display='none'; });
+
+  // Cerrar dropdowns al hacer click fuera
+  document.addEventListener('click', ()=>{ if(ddImp) ddImp.style.display='none'; if(ddExp) ddExp.style.display='none'; });
+
+  // Panel pegar
+  document.getElementById('btn-cerrar-pegar')?.addEventListener('click', ()=>togglePegar(false));
+}
+
+function togglePegar(show){
+  document.getElementById('panel-pegar').style.display = show ? 'block' : 'none';
+}
+
+// ── EXPORTAR ALUMNOS ──
+window.exportarAlumnosCSV = () => {
+  const lista = getListaFiltrada();
+  const rows = lista.map(a=>[a.nombre, a.rut, a.correo||'', normalizarAreas(a).join(' / ')].map(v=>`"${v}"`).join(','));
+  const csv = ['nombre,rut,correo,areas', ...rows].join('\n');
+  const blob = new Blob(['\uFEFF'+csv], {type:'text/csv;charset=utf-8;'});
+  const a = document.createElement('a'); a.href=URL.createObjectURL(blob);
+  a.download = 'alumnos_preudd_'+(document.getElementById('alu-filtro-area').value||'todos')+'_'+new Date().toISOString().slice(0,10)+'.csv';
+  a.click();
+  document.getElementById('exportar-dropdown').style.display='none';
+};
+
+window.exportarAlumnosExcel = () => {
+  const lista = getListaFiltrada();
+  const areaFiltro = document.getElementById('alu-filtro-area').value || 'Todos los alumnos';
+
+  // Construir tabla HTML que Excel puede abrir
+  const filas = lista.map((a,i)=>`<tr>
+    <td>${i+1}</td>
+    <td>${a.nombre}</td>
+    <td>${a.rut}</td>
+    <td>${a.correo||''}</td>
+    <td>${normalizarAreas(a).join(', ')}</td>
+  </tr>`).join('');
+
+  const html = `<html xmlns:o="urn:schemas-microsoft-com:office:office"
+    xmlns:x="urn:schemas-microsoft-com:office:excel"
+    xmlns="http://www.w3.org/TR/REC-html40">
+  <head><meta charset="UTF-8">
+  <!--[if gte mso 9]><xml><x:ExcelWorkbook><x:ExcelWorksheets>
+  <x:ExcelWorksheet><x:Name>Alumnos</x:Name>
+  <x:WorksheetOptions><x:DisplayGridlines/></x:WorksheetOptions>
+  </x:ExcelWorksheet></x:ExcelWorksheets></x:ExcelWorkbook></xml><![endif]-->
+  </head><body>
+  <table border="1">
+    <thead><tr style="background:#2D3748;color:#ffffff;font-weight:bold;">
+      <th>#</th><th>Nombre</th><th>RUT</th><th>Correo</th><th>Áreas</th>
+    </tr></thead>
+    <tbody>${filas}</tbody>
+  </table>
+  </body></html>`;
+
+  const blob = new Blob([html], {type:'application/vnd.ms-excel;charset=utf-8;'});
+  const a = document.createElement('a'); a.href=URL.createObjectURL(blob);
+  a.download = 'alumnos_preudd_'+areaFiltro.replace(/ /g,'_')+'_'+new Date().toISOString().slice(0,10)+'.xls';
+  a.click();
+  document.getElementById('exportar-dropdown').style.display='none';
+};
+
+window.exportarAlumnosPDF = () => {
+  const lista = getListaFiltrada();
+  const areaFiltro = document.getElementById('alu-filtro-area').value || 'Todos los alumnos';
+  const fecha = new Date().toLocaleDateString('es-CL');
+
+  const filas = lista.map((a,i)=>`<tr>
+    <td style="text-align:center;color:#6b7a90;">${i+1}</td>
+    <td><strong>${a.nombre}</strong></td>
+    <td>${a.rut}</td>
+    <td style="color:#6b7a90;font-size:11px;">${a.correo||'—'}</td>
+    <td>${normalizarAreas(a).map(x=>`<span style="background:#e8f5f5;color:#2a7978;font-size:10px;padding:1px 6px;border-radius:999px;margin-right:3px;">${x}</span>`).join('')}</td>
+  </tr>`).join('');
+
+  const html = `<!DOCTYPE html><html lang="es"><head><meta charset="UTF-8">
+  <style>
+    *{margin:0;padding:0;box-sizing:border-box;}
+    body{font-family:'Helvetica Neue',Arial,sans-serif;font-size:12px;color:#2D3748;padding:32px;}
+    .header{display:flex;justify-content:space-between;align-items:flex-end;margin-bottom:24px;padding-bottom:16px;border-bottom:2px solid #369C9B;}
+    .title{font-size:20px;font-weight:800;color:#2D3748;}
+    .subtitle{font-size:13px;color:#6b7a90;margin-top:4px;}
+    .meta{text-align:right;font-size:11px;color:#6b7a90;}
+    table{width:100%;border-collapse:collapse;}
+    th{background:#2D3748;color:#fff;padding:8px 10px;text-align:left;font-size:10px;letter-spacing:.06em;text-transform:uppercase;}
+    td{padding:8px 10px;border-bottom:1px solid #e8f5f5;}
+    tr:nth-child(even) td{background:#f5f4f0;}
+    .footer{margin-top:20px;text-align:center;font-size:10px;color:#9a9891;}
+  </style></head><body>
+  <div class="header">
+    <div>
+      <div class="title">PREUDD — Nómina de Alumnos</div>
+      <div class="subtitle">${areaFiltro} · ${lista.length} alumnos</div>
+    </div>
+    <div class="meta">Generado el ${fecha}<br>Preuniversitario UDD Concepción 2026</div>
+  </div>
+  <table>
+    <thead><tr><th>#</th><th>Nombre</th><th>RUT</th><th>Correo</th><th>Áreas inscritas</th></tr></thead>
+    <tbody>${filas}</tbody>
+  </table>
+  <div class="footer">Documento generado automáticamente desde la plataforma de asistencia PreuUDD 2026</div>
+  </body></html>`;
+
+  const w = window.open('', '_blank');
+  w.document.write(html);
+  w.document.close();
+  setTimeout(()=>{ w.focus(); w.print(); }, 400);
+  document.getElementById('exportar-dropdown').style.display='none';
+};
+
+function getListaFiltrada(){
+  const busq = document.getElementById('alu-buscar').value.toLowerCase();
+  const areaFil = document.getElementById('alu-filtro-area').value;
+  let lista = todosAlumnos;
+  if(busq) lista = lista.filter(a=>a.nombre?.toLowerCase().includes(busq)||a.rut?.includes(busq)||a.correo?.toLowerCase().includes(busq));
+  if(areaFil) lista = lista.filter(a=>normalizarAreas(a).includes(areaFil));
+  return lista;
+}
+
 const AREAS_DISPONIBLES = ['Matemáticas','Comprensión Lectora','Historia','Química','Biología','Física','Orientación'];
 let todosAlumnos = [];
 
@@ -1099,22 +1377,10 @@ window.abrirModalNuevo=()=>{
   document.getElementById('mod-man').scrollIntoView({behavior:'smooth',block:'nearest'});
 };
 
-// Abrir modal para EDITAR alumno existente
-window.editarAlumno=id=>{
-  const a=todosAlumnos.find(x=>x.id===id);if(!a)return;
-  document.getElementById('mod-man-title').textContent='Editar alumno';
-  document.getElementById('m-id').value=a.id;
-  document.getElementById('m-n').value=a.nombre||'';
-  document.getElementById('m-r').value=a.rut||'';
-  document.getElementById('m-r').disabled=true; // no cambiar RUT (es el ID)
-  document.getElementById('m-c').value=a.correo||'';
-  document.getElementById('btn-eliminar-modal').style.display='';
-  renderAreasCheckboxes(normalizarAreas(a));
-  document.getElementById('mod-man').style.display='block';
-  document.getElementById('mod-man').scrollIntoView({behavior:'smooth',block:'nearest'});
-};
+// Abrir modal para EDITAR alumno existente → ahora abre el perfil completo
+window.editarAlumno=id=>abrirPerfil(id);
 
-// Guardar (nuevo o edición)
+// Guardar alumno (modal simple - solo para nuevos)
 window.guardarAlumno=async()=>{
   const nombre=document.getElementById('m-n').value.trim();
   const rut=document.getElementById('m-r').value.trim();
@@ -1130,10 +1396,233 @@ window.guardarAlumno=async()=>{
 
 window.eliminarDesdeModal=async()=>{
   const id=document.getElementById('m-id').value;
-  if(!id||!confirm('¿Eliminar este alumno? Esta acción no se puede deshacer.'))return;
+  if(!id||!confirm('¿Eliminar este alumno?'))return;
   await deleteDoc(doc(db,'alumnos',id));
   cerrarModalAlumno();
   cargarAlumnos();
+};
+
+// ── PERFIL COMPLETO ──────────────────────────────────────────
+let perfilActual = null;
+let perfilAreaActual = null;
+let perfilRegs = [];
+let perfilAreasEditadas = null;
+
+window.abrirPerfil = async id => {
+  const a = todosAlumnos.find(x=>x.id===id); if(!a) return;
+  perfilActual = a;
+  perfilAreasEditadas = null;
+
+  // Iniciales para avatar
+  const iniciales = a.nombre.split(' ').filter(Boolean).slice(0,2).map(w=>w[0].toUpperCase()).join('');
+  document.getElementById('p-avatar').textContent = iniciales;
+  document.getElementById('p-nombre').textContent = a.nombre;
+  document.getElementById('p-rut').textContent = a.rut;
+  document.getElementById('p-correo').textContent = a.correo || 'Sin correo';
+  document.getElementById('pe-nombre').value = a.nombre;
+  document.getElementById('pe-correo').value = a.correo||'';
+  document.getElementById('perfil-edit-form').classList.remove('show');
+
+  // Cargar registros del alumno desde Firebase
+  document.getElementById('p-tend').innerHTML = '<div style="grid-column:1/-1;text-align:center;padding:12px;color:var(--tx2);font-size:12px;"><span class="sp"></span> Cargando...</div>';
+  document.getElementById('perfil-overlay').classList.add('show');
+
+  const snap = await getDocs(query(collection(db,'registros'), where('rut','==',a.rut)));
+  perfilRegs = snap.docs.map(d=>d.data()).sort((x,y)=>x.sesion_fecha.localeCompare(y.sesion_fecha));
+
+  renderPerfilTendencia(a);
+  renderPerfilAreas(a);
+  const areas = normalizarAreas(a);
+  if(areas.length) renderPerfilAreaTab(areas[0]);
+};
+
+function renderPerfilTendencia(a){
+  const regs = perfilRegs;
+  const total = regs.length;
+  const pres = regs.filter(r=>r.estado==='1').length;
+  const aus = regs.filter(r=>r.estado==='0').length;
+  const pct = total ? Math.round(pres/total*100) : 0;
+
+  // Racha actual (últimas clases consecutivas)
+  const ultimas = [...regs].reverse();
+  let racha = 0;
+  for(const r of ultimas){
+    if(r.estado==='1') racha++;
+    else break;
+  }
+  let rachaFalta = 0;
+  for(const r of ultimas){
+    if(r.estado==='0') rachaFalta++;
+    else break;
+  }
+
+  // Color del porcentaje
+  const pctColor = pct>=80?'var(--vd)':pct>=60?'var(--am)':'var(--rj)';
+
+  document.getElementById('p-tend').innerHTML = `
+    <div class="tend-card">
+      <div class="tend-val" style="color:${pctColor}">${pct}%</div>
+      <div class="tend-label">Asistencia global</div>
+    </div>
+    <div class="tend-card">
+      <div class="tend-val" style="color:var(--vd)">${pres}</div>
+      <div class="tend-label">Presencias</div>
+    </div>
+    <div class="tend-card">
+      <div class="tend-val" style="color:var(--rj)">${aus}</div>
+      <div class="tend-label">Faltas</div>
+    </div>
+    <div class="tend-card">
+      <div class="tend-val ${racha>0?'racha-pos':rachaFalta>1?'racha-neg':'racha-neu'}">
+        ${racha>0?'+'+racha:rachaFalta>0?'-'+rachaFalta:'—'}
+      </div>
+      <div class="tend-label">${racha>0?'Racha asist.':rachaFalta>0?'Faltas seguidas':'Sin datos'}</div>
+    </div>`;
+}
+
+function renderPerfilAreas(a){
+  const areas = normalizarAreas(a);
+  // Chips de área editables
+  document.getElementById('p-areas-chips').innerHTML = AREAS_DISPONIBLES.map(ar=>`
+    <button type="button" class="area-chip-opt ${areas.includes(ar)?'on':''}"
+      data-area="${ar}" onclick="toggleAreaPerfil(this)">
+      <span class="chip-dot"></span>${ar}
+    </button>`).join('');
+  document.getElementById('p-areas-save').style.display='none';
+
+  // Tabs
+  if(!areas.length){
+    document.getElementById('p-tabs').innerHTML='<div style="padding:12px 0;font-size:12px;color:var(--tx2)">Sin áreas inscritas</div>';
+    document.getElementById('p-area-content').innerHTML='';
+    return;
+  }
+  document.getElementById('p-tabs').innerHTML = areas.map((ar,i)=>
+    `<button class="ptab ${i===0?'active':''}" data-area="${ar}" onclick="switchPerfilTab(this,'${ar}')">${ar}</button>`
+  ).join('');
+  perfilAreaActual = areas[0];
+}
+
+window.toggleAreaPerfil = btn => {
+  btn.classList.toggle('on');
+  document.getElementById('p-areas-save').style.display='';
+};
+
+window.guardarAreasDesdefPerfil = async () => {
+  if(!perfilActual) return;
+  const nuevasAreas = [...document.querySelectorAll('#p-areas-chips .area-chip-opt.on')].map(b=>b.dataset.area);
+  await setDoc(doc(db,'alumnos',perfilActual.id),{areas:nuevasAreas},{merge:true});
+  perfilActual.areas = nuevasAreas;
+  document.getElementById('p-areas-save').style.display='none';
+  // Refrescar tabs
+  renderPerfilAreas(perfilActual);
+  if(nuevasAreas.length) renderPerfilAreaTab(nuevasAreas[0]);
+  // Refrescar tabla principal en background
+  const idx = todosAlumnos.findIndex(x=>x.id===perfilActual.id);
+  if(idx>=0) todosAlumnos[idx].areas = nuevasAreas;
+  filtrarAlumnos();
+};
+
+window.switchPerfilTab = (btn, area) => {
+  document.querySelectorAll('.ptab').forEach(b=>b.classList.toggle('active', b===btn));
+  perfilAreaActual = area;
+  renderPerfilAreaTab(area);
+};
+
+function renderPerfilAreaTab(area){
+  perfilAreaActual = area;
+  const regsArea = perfilRegs.filter(r=>r.sesion_nombre===area||r.sesion_materia_key===Object.keys(MATERIAS).find(k=>MATERIAS[k].nombre===area||MATERIAS[k].area===area));
+  // Más flexible: buscar por nombre de sesión que contenga el área
+  const regsArea2 = perfilRegs.filter(r=>{
+    const key = Object.keys(MATERIAS).find(k=>MATERIAS[k].area===area||MATERIAS[k].nombre===area);
+    return r.sesion_materia_key===key || r.sesion_nombre===area || (key && MATERIAS[key] && r.sesion_nombre===MATERIAS[key].nombre);
+  });
+  const regsUsar = regsArea2.length ? regsArea2 : regsArea;
+
+  if(!regsUsar.length){
+    document.getElementById('p-area-content').innerHTML=
+      '<div class="empty" style="padding:24px 0">Sin registros de asistencia para esta área aún</div>';
+    return;
+  }
+
+  const pres = regsUsar.filter(r=>r.estado==='1').length;
+  const total = regsUsar.length;
+  const pct = Math.round(pres/total*100);
+  const pctColor = pct>=80?'var(--vd)':pct>=60?'var(--am)':'var(--rj)';
+
+  // Mini histograma de tendencia (últimas 10)
+  const ultimas10 = regsUsar.slice(-10);
+  const dots = ultimas10.map(r=>
+    `<div title="${r.sesion_fecha}" style="width:14px;height:14px;border-radius:3px;background:${r.estado==='1'?'var(--vd)':r.estado==='J'?'var(--am)':'var(--rj)'}"></div>`
+  ).join('');
+
+  document.getElementById('p-area-content').innerHTML = `
+    <!-- Barra progreso -->
+    <div class="area-prog-wrap">
+      <div class="area-prog-label">
+        <span class="area-prog-name">${pres} de ${total} clases asistidas</span>
+        <span class="area-prog-pct" style="color:${pctColor}">${pct}%</span>
+      </div>
+      <div class="area-prog-bg">
+        <div class="area-prog-fill" style="width:${pct}%;background:${pctColor}"></div>
+      </div>
+    </div>
+
+    <!-- Mini tendencia visual -->
+    <div style="margin-bottom:16px;">
+      <div style="font-size:11px;font-weight:700;color:var(--tx2);letter-spacing:.05em;text-transform:uppercase;margin-bottom:8px;">Últimas ${ultimas10.length} clases</div>
+      <div style="display:flex;gap:4px;align-items:center;flex-wrap:wrap;">${dots}
+        <span style="font-size:10px;color:var(--tx2);margin-left:4px;">← más reciente</span>
+      </div>
+    </div>
+
+    <!-- Historial completo -->
+    <div style="font-size:11px;font-weight:700;color:var(--tx2);letter-spacing:.05em;text-transform:uppercase;margin-bottom:8px;">Historial completo</div>
+    <div>${[...regsUsar].reverse().map(r=>{
+      const eIcon = r.estado==='1'?'✓':r.estado==='J'?'J':'✗';
+      const eCls = r.estado==='1'?'p':r.estado==='J'?'j':'a';
+      const eColor = r.estado==='1'?'var(--vd)':r.estado==='J'?'var(--am)':'var(--rj)';
+      return `<div class="hist-item">
+        <div class="flex" style="gap:10px;align-items:center;">
+          <div class="hist-dot ${eCls}"></div>
+          <span class="hist-fecha">${r.sesion_fecha}</span>
+        </div>
+        <span style="font-size:12px;font-weight:700;color:${eColor}">${eIcon} ${r.estado==='1'?'Presente':r.estado==='J'?'Justificado':'Ausente'}</span>
+      </div>`;
+    }).join('')}</div>`;
+}
+
+window.toggleEditPerfil = () => {
+  document.getElementById('perfil-edit-form').classList.toggle('show');
+};
+
+window.guardarDatosPerfil = async () => {
+  if(!perfilActual) return;
+  const nombre = document.getElementById('pe-nombre').value.trim();
+  const correo = document.getElementById('pe-correo').value.trim();
+  if(!nombre){alert('El nombre es obligatorio.');return;}
+  await setDoc(doc(db,'alumnos',perfilActual.id),{nombre,correo},{merge:true});
+  perfilActual.nombre = nombre; perfilActual.correo = correo;
+  document.getElementById('p-nombre').textContent = nombre;
+  document.getElementById('p-correo').textContent = correo||'Sin correo';
+  const iniciales = nombre.split(' ').filter(Boolean).slice(0,2).map(w=>w[0].toUpperCase()).join('');
+  document.getElementById('p-avatar').textContent = iniciales;
+  document.getElementById('perfil-edit-form').classList.remove('show');
+  // Actualizar en lista local
+  const idx = todosAlumnos.findIndex(x=>x.id===perfilActual.id);
+  if(idx>=0){todosAlumnos[idx].nombre=nombre;todosAlumnos[idx].correo=correo;}
+  filtrarAlumnos();
+};
+
+window.eliminarDesdefPerfil = async () => {
+  if(!perfilActual||!confirm(`¿Eliminar a ${perfilActual.nombre}? Esta acción no se puede deshacer.`)) return;
+  await deleteDoc(doc(db,'alumnos',perfilActual.id));
+  cerrarPerfil();
+  cargarAlumnos();
+};
+
+window.cerrarPerfil = () => {
+  document.getElementById('perfil-overlay').classList.remove('show');
+  perfilActual = null; perfilRegs = [];
 };
 
 window.limpiarAlumnos=async()=>{
@@ -1144,38 +1633,36 @@ window.limpiarAlumnos=async()=>{
 };
 
 // Filtrar tabla
-window.filtrarAlumnos=()=>{
-  const busq=document.getElementById('alu-buscar').value.toLowerCase();
-  const areaFil=document.getElementById('alu-filtro-area').value;
-  let lista=todosAlumnos;
-  if(busq) lista=lista.filter(a=>a.nombre?.toLowerCase().includes(busq)||a.rut?.includes(busq)||a.correo?.toLowerCase().includes(busq));
-  if(areaFil) lista=lista.filter(a=>normalizarAreas(a).includes(areaFil));
-  renderTablaAlumnos(lista);
-};
+window.filtrarAlumnos=()=>renderTablaAlumnos(getListaFiltrada());
 
 function renderTablaAlumnos(lista){
   const w=document.getElementById('t-alu');
-  if(!lista.length){w.innerHTML='<div class="empty">Sin resultados</div>';return;}
+  if(!lista.length){w.innerHTML='<div class="empty" style="padding:36px">Sin resultados</div>';return;}
   w.innerHTML=`<div class="tw"><table>
-    <thead><tr><th>#</th><th>Nombre</th><th>RUT</th><th>Correo</th><th>Áreas inscritas</th></tr></thead>
+    <thead><tr><th>#</th><th>Nombre</th><th>RUT</th><th>Correo</th><th>Áreas</th></tr></thead>
     <tbody>${lista.map((a,i)=>{
       const areas=normalizarAreas(a);
       const pillsHTML=areas.length
-        ?areas.map(x=>`<span class="area-pill">${x}</span>`).join('')
+        ?areas.map(x=>`<span class="area-pill-count">${x}</span>`).join('')
         :'<span style="color:var(--tx2);font-size:11px">Sin área</span>';
-      return `<tr class="alu-row-edit" onclick="editarAlumno('${a.id}')">
+      return `<tr class="alu-row-edit" data-id="${a.id}">
         <td style="color:var(--tx2);font-size:11px;font-weight:700">${String(i+1).padStart(2,'0')}</td>
         <td><strong>${a.nombre}</strong></td>
-        <td>${a.rut}</td>
-        <td style="color:var(--tx2)">${a.correo||'—'}</td>
+        <td style="color:var(--tx2)">${a.rut}</td>
+        <td style="color:var(--tx2);font-size:12px">${a.correo||'—'}</td>
         <td><div class="areas-inline">${pillsHTML}</div></td>
       </tr>`;
     }).join('')}</tbody>
   </table></div>`;
+  // Event listeners en vez de onclick inline (evita problema con módulos)
+  w.querySelectorAll('tr.alu-row-edit').forEach(tr=>{
+    tr.addEventListener('click', ()=>window.abrirPerfil(tr.dataset.id));
+  });
 }
 
 async function cargarAlumnos(){
-  document.getElementById('t-alu').innerHTML='<div class="loading"><span class="sp"></span>Cargando...</div>';
+  document.getElementById('t-alu').innerHTML='<div class="loading" style="padding:28px;"><span class="sp"></span>Cargando...</div>';
+  initAlumnosListeners();
   const snap=await getDocs(collection(db,'alumnos'));
   todosAlumnos=snap.docs.map(d=>d.data()).sort((a,b)=>a.nombre?.localeCompare(b.nombre)||0);
   document.getElementById('alu-count').textContent=todosAlumnos.length;
@@ -1228,6 +1715,8 @@ async function initProfe(){
     const snap=await getDoc(doc(db,'sesiones',lastId));
     if(snap.exists()&&snap.data().activa){
       sesion=snap.data();matSel=sesion.matKey||sesion.materiaKey;
+      // Resetear estado de verificación al recuperar sesión
+      estadoVerif={}; window._vlist=null; window._vpmap=null;
       document.querySelectorAll('.mb2').forEach(b=>b.classList.toggle('sel',b.dataset.k===matSel));
       mostrarQR();suscribirLive(lastId);setHeader(sesion.matNom||sesion.materiaNombre,sesion.fechaLabel);
       document.getElementById('livebar').classList.add('on');
