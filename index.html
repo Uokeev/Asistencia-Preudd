@@ -187,6 +187,10 @@ tbody tr:hover td{background:var(--cal-l);}
 .okt{font-size:19px;font-weight:800;color:var(--mar);margin-bottom:5px;}
 .oks{font-size:12px;font-weight:500;color:var(--tx2);line-height:1.6;}
 .aft{margin-top:18px;text-align:center;font-size:10px;font-weight:600;color:rgba(255,255,255,0.22);letter-spacing:.08em;text-transform:uppercase;}
+/* Filas anómalas en tabla registros */
+tr[style*="am-l"] td { color: var(--am) !important; }
+tr[style*="am-l"] strong { color: var(--amber) !important; }
+
 /* ── DROPDOWNS ── */
 .dropdown-item{display:block;width:100%;padding:9px 14px;text-align:left;background:transparent;border:none;font-family:'Poppins',sans-serif;font-size:13px;font-weight:500;color:var(--tx);cursor:pointer;transition:background .1s;}
 .dropdown-item:hover{background:var(--cal-l);color:var(--cal-d);}
@@ -1438,30 +1442,60 @@ function renderDetalle(ses, busq){
     return a.nombre?.localeCompare(b.nombre)||0;
   });
 
+  // Construir set de RUTs inscritos en el área para detectar anomalías
+  const rutosInscritos = new Set(
+    (ALUMNOS[regAreaSel]||[]).map(a=>a.rut.replace(/\./g,'').toLowerCase())
+  );
+  // También incluir alumnos de Firebase si están cargados
+  if(todosAlumnos.length && regAreaSel){
+    const area = MATERIAS[regAreaSel]?.area;
+    todosAlumnos.filter(a=>normalizarAreas(a).includes(area||regAreaSel))
+      .forEach(a=>rutosInscritos.add((a.rut||'').replace(/\./g,'').toLowerCase()));
+  }
+
   document.getElementById('reg-tabla').innerHTML=sorted.length?`<table>
     <thead><tr><th>Nombre</th><th>RUT</th><th>Estado</th><th>Hora</th><th style="width:90px"></th></tr></thead>
     <tbody>${sorted.map(r=>{
+      const rutNorm = (r.rut||'').replace(/\./g,'').toLowerCase();
+      const esAnonimo = !rutosInscritos.has(rutNorm);
+      const anomalia = esAnonimo
+        ? '<span title="No está en la nómina del área" style="font-size:10px;font-weight:700;color:var(--am);margin-left:4px;">⚠ No inscrito</span>'
+        : '';
+      const rowStyle = esAnonimo ? 'background:var(--am-l);' : '';
       const e=r.estado==='1'?'<span class="badge bgn">✓ Presente</span>'
         :r.estado==='0'?'<span class="badge brd">✗ Ausente</span>'
         :'<span class="badge bam">J Justificado</span>';
       const hora=r.estado==='1'&&r.timestamp
         ?`<span class="chipv">${new Date(r.timestamp).toLocaleTimeString('es-CL',{hour:'2-digit',minute:'2-digit'})}</span>`:'—';
-      const rid=encodeURIComponent(r.id);
-      return `<tr>
-        <td><strong>${r.nombre}</strong></td>
-        <td>${r.rut}</td>
+      return `<tr style="${rowStyle}" data-rid="${encodeURIComponent(r.id)}">
+        <td><strong>${r.nombre}</strong>${anomalia}</td>
+        <td style="font-size:12px">${r.rut}</td>
         <td>${e}</td>
         <td>${hora}</td>
         <td>
           <div class="flex" style="gap:4px;justify-content:flex-end;">
-            <button class="btn bsm" style="padding:3px 8px;font-size:10px;" onclick="cambiarEstadoReg('${rid}')" title="Cambiar estado">✎</button>
-            <button class="btn br bxs" onclick="eliminarRegistro('${rid}')" title="Eliminar registro">✕</button>
+            <button class="btn bsm btn-cambiar-estado" data-rid="${encodeURIComponent(r.id)}" style="padding:3px 8px;font-size:10px;" title="Cambiar estado">✎</button>
+            <button class="btn br bxs btn-eliminar-reg" data-rid="${encodeURIComponent(r.id)}" title="Eliminar registro">✕</button>
           </div>
         </td>
       </tr>`;
     }).join('')}</tbody>
   </table>`:'<div class="empty">Sin resultados</div>';
+
 }
+
+// Delegación para botones de tabla de registros — en contenedor permanente
+(function(){
+  if(window._regTablaDelegated) return;
+  window._regTablaDelegated = true;
+  // Esperar a que el DOM esté listo
+  document.addEventListener('click', e=>{
+    const btnCambiar = e.target.closest('.btn-cambiar-estado');
+    if(btnCambiar){ window.cambiarEstadoReg(btnCambiar.dataset.rid); return; }
+    const btnEliminar = e.target.closest('.btn-eliminar-reg');
+    if(btnEliminar){ window.eliminarRegistro(btnEliminar.dataset.rid); return; }
+  });
+})();
 
 window.filtrarDetalle=()=>{
   const ses=window._regSesiones?.find(s=>s.id===regSesionSel);
