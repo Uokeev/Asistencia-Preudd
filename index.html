@@ -706,8 +706,18 @@ Juan Pérez	12345678-9	juan@mail.com"></textarea></div>
         <div class="adiv"></div>
         <div class="atitle">Marcar asistencia</div>
         <div class="asubt" id="alu-info">Verificando sesión...</div>
-        <div class="field"><label>Nombre completo</label><input id="al-n" placeholder="Tu nombre"/></div>
-        <div class="field"><label>RUT</label><input id="al-r" placeholder="12345678-9"/></div>
+        <div class="field">
+          <label>RUT</label>
+          <input id="al-r" placeholder="12345678-9" oninput="buscarAlumnoPorRUT(this.value)"/>
+        </div>
+        <div class="field">
+          <label>Nombre completo</label>
+          <input id="al-n" placeholder="Se completa automáticamente con tu RUT" readonly style="background:var(--fondo);color:var(--tx2);cursor:default;"/>
+          <div id="al-n-manual-wrap" style="display:none;margin-top:6px;">
+            <input id="al-n-manual" placeholder="Ingresa tu nombre completo" style="border-color:var(--am);"/>
+            <div style="font-size:11px;color:var(--am);font-weight:600;margin-top:4px;">⚠ RUT no encontrado en la nómina — ingresa tu nombre manualmente</div>
+          </div>
+        </div>
         <div class="field"><label>Correo</label><input id="al-c" type="email" placeholder="tu@correo.com"/></div>
         <button class="bsub" id="al-btn" onclick="marcarAsistencia()">Marcar mi asistencia</button>
         <div class="msg me" id="al-err"></div>
@@ -1522,16 +1532,16 @@ function initAlumnosListeners(){
   if(!window._aluDelegated){
     window._aluDelegated = true;
     document.addEventListener('click', e=>{
+      // Click en fila de tabla → abrir perfil
       const tr = e.target.closest('tr.alu-row-edit');
-      if(tr && tr.dataset.id) window.abrirPerfil(tr.dataset.id);
+      if(tr && tr.dataset.id){ window.abrirPerfil(tr.dataset.id); return; }
+      // Click en botón agregar alumno
+      if(e.target.closest('#btn-nuevo-alu')){ window.abrirModalNuevo(); return; }
     });
   }
 
   if(_alumnosListenersInit) return; // los botones fijos solo se adjuntan una vez
   _alumnosListenersInit = true;
-
-  // Botón nuevo alumno
-  document.getElementById('btn-nuevo-alu')?.addEventListener('click', ()=>window.abrirModalNuevo());
 
   // Dropdown importar
   const btnImp = document.getElementById('btn-importar-menu');
@@ -2068,9 +2078,51 @@ async function cargarAlumno(sid,tok){
   window._ses=s;
 }
 
+// ── AUTOCOMPLETADO RUT en vista alumno ───────────────────────
+let _rutTimer = null;
+window.buscarAlumnoPorRUT = function(val){
+  clearTimeout(_rutTimer);
+  const nInput = document.getElementById('al-n');
+  const manualWrap = document.getElementById('al-n-manual-wrap');
+  const rut = val.replace(/\./g,'').toLowerCase().trim();
+  if(rut.length < 7){ nInput.value=''; return; }
+  _rutTimer = setTimeout(async()=>{
+    // 1. Buscar en array estático (sin red, instantáneo)
+    const todos = Object.values(ALUMNOS).flat();
+    const norm = s => s.replace(/\./g,'').toLowerCase().trim();
+    const found = todos.find(a => norm(a.rut||'') === rut);
+    if(found){
+      nInput.value = found.nombre;
+      nInput.style.color = 'var(--vd)'; nInput.style.fontWeight = '600';
+      if(found.correo) document.getElementById('al-c').value = found.correo;
+      manualWrap.style.display = 'none';
+      return;
+    }
+    // 2. Buscar en Firebase
+    try {
+      const snap = await getDocs(query(collection(db,'alumnos'), where('rut','==',val.trim())));
+      if(snap.docs.length){
+        const d = snap.docs[0].data();
+        nInput.value = d.nombre;
+        nInput.style.color = 'var(--vd)'; nInput.style.fontWeight = '600';
+        if(d.correo) document.getElementById('al-c').value = d.correo;
+        manualWrap.style.display = 'none';
+      } else {
+        nInput.value = '';
+        nInput.style.color = ''; nInput.style.fontWeight = '';
+        manualWrap.style.display = 'block';
+      }
+    } catch(e){ manualWrap.style.display = 'block'; }
+  }, 450);
+};
+
 window.marcarAsistencia=async()=>{
   const s=window._ses;
-  const n=document.getElementById('al-n').value.trim(),r=document.getElementById('al-r').value.trim(),c=document.getElementById('al-c').value.trim();
+  const nAuto = document.getElementById('al-n').value.trim();
+  const nManual = (document.getElementById('al-n-manual')?.value||'').trim();
+  const n = nAuto || nManual;
+  const r=document.getElementById('al-r').value.trim();
+  const c=document.getElementById('al-c').value.trim();
   const err=document.getElementById('al-err');
   if(!n||!r||!c){err.style.display='block';err.textContent='Completa todos los campos.';return;}
   if(!s){err.style.display='block';err.textContent='Sesión no válida.';return;}
