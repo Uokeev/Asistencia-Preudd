@@ -378,10 +378,17 @@ tbody tr:hover td{background:var(--cal-l);}
 
   <!-- Selector área -->
   <div class="card">
-    <div class="ch"><div class="ct">Seleccionar área</div></div>
+    <div class="ch">
+      <div class="ct">Seleccionar área</div>
+      <button class="btn bsm" id="btn-diagnostico" style="font-size:11px;color:var(--tx2);">🔍 Diagnóstico</button>
+    </div>
     <div class="area-cards" id="area-cards">
       <div class="loading"><span class="sp"></span>Cargando...</div>
     </div>
+  </div>
+  <div id="diag-panel" style="display:none;" class="card">
+    <div class="ch"><div class="ct">Registros en Firebase (raw)</div><button class="btn bsm" onclick="document.getElementById('diag-panel').style.display='none'">✕</button></div>
+    <div id="diag-content" style="font-size:11px;font-family:monospace;overflow-x:auto;"></div>
   </div>
 
   <!-- Selector fecha sesión -->
@@ -651,6 +658,45 @@ Juan Pérez	12345678-9	juan@mail.com"></textarea></div>
   </div>
 </div>
 
+
+<!-- PERFIL ALUMNO OVERLAY -->
+<div class="perfil-overlay" id="perfil-overlay">
+  <div class="perfil-modal">
+    <div class="perfil-head">
+      <div style="display:flex;align-items:center;gap:14px;margin-bottom:12px;">
+        <div class="perfil-avatar" id="p-avatar">?</div>
+        <div style="flex:1;min-width:0;">
+          <div class="perfil-nombre" id="p-nombre">—</div>
+          <div class="perfil-rut" id="p-rut">—</div>
+          <div class="perfil-correo" id="p-correo">—</div>
+        </div>
+        <button class="btn bsm" style="color:rgba(255,255,255,0.5);border-color:rgba(255,255,255,0.2);background:rgba(255,255,255,0.08);flex-shrink:0;" id="btn-cerrar-perfil">✕ Cerrar</button>
+      </div>
+    </div>
+    <div class="tend-grid" id="p-tend"></div>
+    <div class="perfil-areas-wrap">
+      <span class="perfil-areas-label">Áreas:</span>
+      <div id="p-areas-chips" style="display:flex;flex-wrap:wrap;gap:6px;"></div>
+      <button class="btn bsm" id="p-areas-save" style="display:none;">Guardar áreas</button>
+    </div>
+    <div class="perfil-tabs" id="p-tabs"></div>
+    <div id="p-area-content" class="perfil-area-content"></div>
+    <div class="perfil-edit-section">
+      <button class="perfil-edit-toggle" id="btn-toggle-edit">✎ Editar datos personales</button>
+      <div class="perfil-edit-form" id="perfil-edit-form">
+        <div class="g2" style="gap:12px;margin-top:8px;">
+          <div class="field"><label>Nombre completo</label><input id="pe-nombre" placeholder="Juan Pérez"/></div>
+          <div class="field"><label>Correo</label><input id="pe-correo" type="email" placeholder="juan@mail.com"/></div>
+        </div>
+        <div style="display:flex;gap:8px;margin-top:4px;">
+          <button class="btn bp bsm" id="btn-guardar-datos">Guardar datos</button>
+          <button class="btn br bsm" id="btn-eliminar-perfil">Eliminar alumno</button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
 <!-- ALUMNO -->
 <div id="alumno-page" class="page">
   <div class="abg">
@@ -676,22 +722,220 @@ Juan Pérez	12345678-9	juan@mail.com"></textarea></div>
   </div>
 </div>
 
-<script type="module">
-import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
-import {
-  getFirestore, collection, doc, setDoc, getDoc, getDocs,
-  onSnapshot, query, where, deleteDoc, writeBatch
-} from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
+<script>
+// ════════════════════════════════════════════════════════
+// Firestore REST API — sin dependencias externas
+// ════════════════════════════════════════════════════════
+const FIREBASE_PROJECT = 'asistencia-preudd';
+const FIREBASE_API_KEY = 'AIzaSyDPSviAOeyW62v9r39j6OgQNGQIbcSmbJM';
+const FS_BASE = `https://firestore.googleapis.com/v1/projects/${FIREBASE_PROJECT}/databases/(default)/documents`;
 
-const app = initializeApp({
-  apiKey:"AIzaSyDPSviAOeyW62v9r39j6OgQNGQIbcSmbJM",
-  authDomain:"asistencia-preudd.firebaseapp.com",
-  projectId:"asistencia-preudd",
-  storageBucket:"asistencia-preudd.firebasestorage.app",
-  messagingSenderId:"839687910254",
-  appId:"1:839687910254:web:111985b4726aaa424f077f"
-});
-const db = getFirestore(app);
+// ── Conversores ──
+function toFS(data) {
+  const fields = {};
+  for (const [k, v] of Object.entries(data)) {
+    if (v === null || v === undefined) fields[k] = {nullValue: null};
+    else if (typeof v === 'boolean') fields[k] = {booleanValue: v};
+    else if (typeof v === 'number' && Number.isInteger(v)) fields[k] = {integerValue: String(v)};
+    else if (typeof v === 'number') fields[k] = {doubleValue: v};
+    else if (typeof v === 'string') fields[k] = {stringValue: v};
+    else if (Array.isArray(v)) fields[k] = {arrayValue: {values: v.map(x => toFSValue(x))}};
+    else if (typeof v === 'object') fields[k] = {mapValue: {fields: toFS(v)}};
+  }
+  return fields;
+}
+function toFSValue(v) {
+  if (v === null) return {nullValue: null};
+  if (typeof v === 'boolean') return {booleanValue: v};
+  if (typeof v === 'number' && Number.isInteger(v)) return {integerValue: String(v)};
+  if (typeof v === 'number') return {doubleValue: v};
+  if (typeof v === 'string') return {stringValue: v};
+  if (Array.isArray(v)) return {arrayValue: {values: v.map(toFSValue)}};
+  if (typeof v === 'object') return {mapValue: {fields: toFS(v)}};
+  return {stringValue: String(v)};
+}
+function fromFS(fields) {
+  if (!fields) return {};
+  const obj = {};
+  for (const [k, v] of Object.entries(fields)) {
+    obj[k] = fromFSValue(v);
+  }
+  return obj;
+}
+function fromFSValue(v) {
+  if ('nullValue'    in v) return null;
+  if ('booleanValue' in v) return v.booleanValue;
+  if ('integerValue' in v) return parseInt(v.integerValue);
+  if ('doubleValue'  in v) return v.doubleValue;
+  if ('stringValue'  in v) return v.stringValue;
+  if ('arrayValue'   in v) return (v.arrayValue.values || []).map(fromFSValue);
+  if ('mapValue'     in v) return fromFS(v.mapValue.fields || {});
+  return null;
+}
+
+// ── DB object ──
+const db = {_col: (name) => new ColRef(name)};
+function collection(db, name) { return new ColRef(name); }
+function doc(db, col, id) {
+  if (typeof db === 'string') { id = col; col = db; }
+  if (db instanceof ColRef) return new DocRef(db.name, col);
+  return new DocRef(col, id);
+}
+
+class ColRef {
+  constructor(name) { this.name = name; }
+  doc(id) { return new DocRef(this.name, id); }
+}
+class DocRef {
+  constructor(col, id) { this.col = col; this.id = id; }
+  get path() { return `${this.col}/${this.id}`; }
+}
+
+// ── CRUD ──
+async function getDoc(ref) {
+  const url = `${FS_BASE}/${ref.path}?key=${FIREBASE_API_KEY}`;
+  const r = await fetch(url);
+  if (!r.ok) return {exists: ()=>false, data: ()=>({}), id: ref.id};
+  const d = await r.json();
+  return {exists: ()=>true, data: ()=>fromFS(d.fields||{}), id: ref.id};
+}
+
+async function getDocs(qRef) {
+  if (qRef instanceof ColRef) {
+    // Paginación completa — descarga TODOS los documentos sin límite
+    let allDocs = [];
+    let pageToken = null;
+    do {
+      const url = `${FS_BASE}/${qRef.name}?key=${FIREBASE_API_KEY}&pageSize=300`
+        + (pageToken ? `&pageToken=${pageToken}` : '');
+      const r = await fetch(url);
+      if (!r.ok) break;
+      const d = await r.json();
+      const batch = (d.documents||[]).map(doc => ({
+        id: doc.name.split('/').pop(),
+        data: () => fromFS(doc.fields||{}),
+        exists: () => true
+      }));
+      allDocs = allDocs.concat(batch);
+      pageToken = d.nextPageToken || null;
+    } while (pageToken);
+    return {docs: allDocs};
+  }
+  // Query object
+  return await qRef._execute();
+}
+
+async function setDoc(ref, data, opts={}) {
+  const url = `${FS_BASE}/${ref.path}?key=${FIREBASE_API_KEY}` +
+    (opts.merge ? `&updateMask.fieldPaths=${Object.keys(data).join('&updateMask.fieldPaths=')}` : '');
+  const body = {fields: toFS(data)};
+  const method = opts.merge ? 'PATCH' : 'PATCH';
+  await fetch(url, {method:'PATCH', headers:{'Content-Type':'application/json'}, body: JSON.stringify(body)});
+}
+
+async function deleteDoc(ref) {
+  const url = `${FS_BASE}/${ref.path}?key=${FIREBASE_API_KEY}`;
+  await fetch(url, {method:'DELETE'});
+}
+
+// ── Query ──
+function query(colRef, ...constraints) {
+  return new QueryRef(colRef, constraints);
+}
+function where(field, op, value) {
+  return {type:'where', field, op, value};
+}
+function orderBy(field, dir='asc') {
+  return {type:'orderBy', field, dir};
+}
+
+class QueryRef {
+  constructor(col, constraints) {
+    this.col = col;
+    this.constraints = constraints;
+  }
+  async _execute() {
+    const wheres = this.constraints.filter(c=>c.type==='where');
+    const baseQuery = {
+      from: [{collectionId: this.col.name}],
+      where: wheres.length === 1 ? _buildWhere(wheres[0]) :
+             wheres.length > 1 ? {compositeFilter:{op:'AND', filters: wheres.map(_buildWhere)}} : undefined,
+    };
+    const url = `${FS_BASE}:runQuery?key=${FIREBASE_API_KEY}`;
+    let allDocs = [];
+    let offset = 0;
+    const pageSize = 300;
+    while(true) {
+      const body = {structuredQuery: {...baseQuery, limit: pageSize, offset}};
+      const r = await fetch(url, {method:'POST', headers:{'Content-Type':'application/json'}, body: JSON.stringify(body)});
+      const results = await r.json();
+      const batch = (Array.isArray(results)?results:[results])
+        .filter(x=>x.document)
+        .map(x=>({
+          id: x.document.name.split('/').pop(),
+          data: ()=>fromFS(x.document.fields||{}),
+          exists: ()=>true
+        }));
+      allDocs = allDocs.concat(batch);
+      if(batch.length < pageSize) break; // última página
+      offset += pageSize;
+    }
+    return {docs: allDocs};
+  }
+}
+
+function _buildWhere(w) {
+  const opMap = {'==':'EQUAL','!=':'NOT_EQUAL','<':'LESS_THAN','<=':'LESS_THAN_OR_EQUAL','>':'GREATER_THAN','>=':'GREATER_THAN_OR_EQUAL','array-contains':'ARRAY_CONTAINS'};
+  return {fieldFilter:{
+    field:{fieldPath: w.field},
+    op: opMap[w.op] || 'EQUAL',
+    value: toFSValue(w.value)
+  }};
+}
+
+// ── Batch ──
+function writeBatch() {
+  const writes = [];
+  return {
+    set(ref, data, opts={}) {
+      if (opts.merge) {
+        writes.push({update:{name:`projects/${FIREBASE_PROJECT}/databases/(default)/documents/${ref.path}`,fields:toFS(data)}, updateMask:{fieldPaths:Object.keys(data)}});
+      } else {
+        writes.push({update:{name:`projects/${FIREBASE_PROJECT}/databases/(default)/documents/${ref.path}`,fields:toFS(data)}});
+      }
+    },
+    update(ref, data) {
+      writes.push({update:{name:`projects/${FIREBASE_PROJECT}/databases/(default)/documents/${ref.path}`,fields:toFS(data)}, updateMask:{fieldPaths:Object.keys(data)}});
+    },
+    delete(ref) {
+      writes.push({delete:`projects/${FIREBASE_PROJECT}/databases/(default)/documents/${ref.path}`});
+    },
+    async commit() {
+      if (!writes.length) return;
+      const url = `https://firestore.googleapis.com/v1/projects/${FIREBASE_PROJECT}/databases/(default)/documents:batchWrite?key=${FIREBASE_API_KEY}`;
+      await fetch(url, {method:'POST', headers:{'Content-Type':'application/json'}, body: JSON.stringify({writes})});
+    }
+  };
+}
+
+// ── onSnapshot (polling cada 4 segundos) ──
+function onSnapshot(queryRef, callback) {
+  let lastData = null;
+  async function poll() {
+    try {
+      const result = await getDocs(queryRef);
+      const json = JSON.stringify(result.docs.map(d=>d.data()));
+      if (json !== lastData) {
+        lastData = json;
+        callback(result);
+      }
+    } catch(e) {}
+  }
+  poll();
+  const id = setInterval(poll, 4000);
+  return () => clearInterval(id);
+}
+
 
 const MATERIAS = {"M1": {"nombre": "Matemáticas M1", "area": "Matemáticas", "fechas": [{"col": 3, "fecha": "2026-04-06", "label": "6 Abr (L)"}, {"col": 4, "fecha": "2026-04-07", "label": "7 Abr (M)"}, {"col": 5, "fecha": "2026-04-13", "label": "13 Abr (L)"}, {"col": 6, "fecha": "2026-04-14", "label": "14 Abr (M)"}, {"col": 7, "fecha": "2026-04-20", "label": "20 Abr (L)"}, {"col": 8, "fecha": "2026-04-21", "label": "21 Abr (M)"}, {"col": 9, "fecha": "2026-04-27", "label": "27 Abr (L)"}, {"col": 10, "fecha": "2026-04-28", "label": "28 Abr (M)"}, {"col": 11, "fecha": "2026-05-04", "label": "4 May (L)"}, {"col": 12, "fecha": "2026-05-05", "label": "5 May (M)"}, {"col": 13, "fecha": "2026-05-11", "label": "11 May (L)"}, {"col": 14, "fecha": "2026-05-12", "label": "12 May (M)"}, {"col": 15, "fecha": "2026-05-18", "label": "18 May (L)"}, {"col": 16, "fecha": "2026-05-19", "label": "19 May (M)"}, {"col": 17, "fecha": "2026-05-25", "label": "25 May (L)"}, {"col": 18, "fecha": "2026-05-26", "label": "26 May (M)"}, {"col": 19, "fecha": "2026-06-01", "label": "1 Jun (L)"}, {"col": 20, "fecha": "2026-06-02", "label": "2 Jun (M)"}, {"col": 21, "fecha": "2026-06-08", "label": "8 Jun (L)"}, {"col": 22, "fecha": "2026-06-09", "label": "9 Jun (M)"}, {"col": 23, "fecha": "2026-06-15", "label": "15 Jun (L)"}, {"col": 24, "fecha": "2026-06-16", "label": "16 Jun (M)"}, {"col": 25, "fecha": "2026-06-22", "label": "22 Jun (L)"}, {"col": 26, "fecha": "2026-06-23", "label": "23 Jun (M)"}, {"col": 27, "fecha": "2026-06-30", "label": "30 Jun (M)"}, {"col": 28, "fecha": "2026-08-03", "label": "3 Ago (L)"}, {"col": 29, "fecha": "2026-08-04", "label": "4 Ago (M)"}, {"col": 30, "fecha": "2026-08-10", "label": "10 Ago (L)"}, {"col": 31, "fecha": "2026-08-11", "label": "11 Ago (M)"}, {"col": 32, "fecha": "2026-08-17", "label": "17 Ago (L)"}, {"col": 33, "fecha": "2026-08-18", "label": "18 Ago (M)"}, {"col": 34, "fecha": "2026-08-24", "label": "24 Ago (L)"}, {"col": 35, "fecha": "2026-08-25", "label": "25 Ago (M)"}, {"col": 36, "fecha": "2026-08-31", "label": "31 Ago (L)"}, {"col": 37, "fecha": "2026-09-01", "label": "1 Sep (M)"}, {"col": 38, "fecha": "2026-09-07", "label": "7 Sep (L)"}, {"col": 39, "fecha": "2026-09-08", "label": "8 Sep (M)"}, {"col": 40, "fecha": "2026-09-14", "label": "14 Sep (L)"}, {"col": 41, "fecha": "2026-09-15", "label": "15 Sep (M)"}, {"col": 42, "fecha": "2026-09-21", "label": "21 Sep (L)"}, {"col": 43, "fecha": "2026-09-22", "label": "22 Sep (M)"}, {"col": 44, "fecha": "2026-09-28", "label": "28 Sep (L)"}, {"col": 45, "fecha": "2026-09-29", "label": "29 Sep (M)"}, {"col": 46, "fecha": "2026-10-05", "label": "5 Oct (L)"}, {"col": 47, "fecha": "2026-10-06", "label": "6 Oct (M)"}, {"col": 48, "fecha": "2026-10-13", "label": "13 Oct (M)"}, {"col": 49, "fecha": "2026-10-19", "label": "19 Oct (L)"}, {"col": 50, "fecha": "2026-10-20", "label": "20 Oct (M)"}, {"col": 51, "fecha": "2026-10-26", "label": "26 Oct (L)"}, {"col": 52, "fecha": "2026-10-27", "label": "27 Oct (M)"}, {"col": 53, "fecha": "2026-11-02", "label": "2 Nov (L)"}, {"col": 54, "fecha": "2026-11-03", "label": "3 Nov (M)"}, {"col": 55, "fecha": "2026-11-09", "label": "9 Nov (L)"}, {"col": 56, "fecha": "2026-11-10", "label": "10 Nov (M)"}, {"col": 57, "fecha": "2026-11-16", "label": "16 Nov (L)"}, {"col": 58, "fecha": "2026-11-17", "label": "17 Nov (M)"}, {"col": 59, "fecha": "2026-11-23", "label": "23 Nov (L)"}, {"col": 60, "fecha": "2026-11-24", "label": "24 Nov (M)"}, {"col": 61, "fecha": "2026-11-30", "label": "30 Nov (L)"}]}, "M2": {"nombre": "Matemáticas M2", "area": "Matemáticas", "fechas": [{"col": 3, "fecha": "2026-08-05", "label": "5 Ago (X)"}, {"col": 4, "fecha": "2026-08-12", "label": "12 Ago (X)"}, {"col": 5, "fecha": "2026-08-19", "label": "19 Ago (X)"}, {"col": 6, "fecha": "2026-08-26", "label": "26 Ago (X)"}, {"col": 7, "fecha": "2026-09-02", "label": "2 Sep (X)"}, {"col": 8, "fecha": "2026-09-09", "label": "9 Sep (X)"}, {"col": 9, "fecha": "2026-09-16", "label": "16 Sep (X)"}, {"col": 10, "fecha": "2026-09-23", "label": "23 Sep (X)"}, {"col": 11, "fecha": "2026-09-30", "label": "30 Sep (X)"}, {"col": 12, "fecha": "2026-10-07", "label": "7 Oct (X)"}, {"col": 13, "fecha": "2026-10-14", "label": "14 Oct (X)"}, {"col": 14, "fecha": "2026-10-21", "label": "21 Oct (X)"}, {"col": 15, "fecha": "2026-10-28", "label": "28 Oct (X)"}, {"col": 16, "fecha": "2026-11-04", "label": "4 Nov (X)"}, {"col": 17, "fecha": "2026-11-11", "label": "11 Nov (X)"}, {"col": 18, "fecha": "2026-11-18", "label": "18 Nov (X)"}, {"col": 19, "fecha": "2026-11-25", "label": "25 Nov (X)"}]}, "Lenguaje": {"nombre": "Comprensión Lectora", "area": "Comprensión Lectora", "fechas": [{"col": 3, "fecha": "2026-04-09", "label": "9 Abr (J)"}, {"col": 4, "fecha": "2026-04-16", "label": "16 Abr (J)"}, {"col": 5, "fecha": "2026-04-23", "label": "23 Abr (J)"}, {"col": 6, "fecha": "2026-04-30", "label": "30 Abr (J)"}, {"col": 7, "fecha": "2026-05-07", "label": "7 May (J)"}, {"col": 8, "fecha": "2026-05-14", "label": "14 May (J)"}, {"col": 9, "fecha": "2026-05-28", "label": "28 May (J)"}, {"col": 10, "fecha": "2026-06-04", "label": "4 Jun (J)"}, {"col": 11, "fecha": "2026-06-11", "label": "11 Jun (J)"}, {"col": 12, "fecha": "2026-06-18", "label": "18 Jun (J)"}, {"col": 13, "fecha": "2026-06-25", "label": "25 Jun (J)"}, {"col": 14, "fecha": "2026-08-06", "label": "6 Ago (J)"}, {"col": 15, "fecha": "2026-08-13", "label": "13 Ago (J)"}, {"col": 16, "fecha": "2026-08-20", "label": "20 Ago (J)"}, {"col": 17, "fecha": "2026-08-27", "label": "27 Ago (J)"}, {"col": 18, "fecha": "2026-09-03", "label": "3 Sep (J)"}, {"col": 19, "fecha": "2026-09-10", "label": "10 Sep (J)"}, {"col": 20, "fecha": "2026-09-17", "label": "17 Sep (J)"}, {"col": 21, "fecha": "2026-09-24", "label": "24 Sep (J)"}, {"col": 22, "fecha": "2026-10-01", "label": "1 Oct (J)"}, {"col": 23, "fecha": "2026-10-08", "label": "8 Oct (J)"}, {"col": 24, "fecha": "2026-10-15", "label": "15 Oct (J)"}, {"col": 25, "fecha": "2026-10-22", "label": "22 Oct (J)"}, {"col": 26, "fecha": "2026-10-29", "label": "29 Oct (J)"}, {"col": 27, "fecha": "2026-11-05", "label": "5 Nov (J)"}, {"col": 28, "fecha": "2026-11-12", "label": "12 Nov (J)"}, {"col": 29, "fecha": "2026-11-19", "label": "19 Nov (J)"}, {"col": 30, "fecha": "2026-11-26", "label": "26 Nov (J)"}]}, "Historia": {"nombre": "Historia", "area": "Historia", "fechas": [{"col": 3, "fecha": "2026-04-06", "label": "6 Abr (L)"}, {"col": 4, "fecha": "2026-04-13", "label": "13 Abr (L)"}, {"col": 5, "fecha": "2026-04-20", "label": "20 Abr (L)"}, {"col": 6, "fecha": "2026-04-27", "label": "27 Abr (L)"}, {"col": 7, "fecha": "2026-05-04", "label": "4 May (L)"}, {"col": 8, "fecha": "2026-05-11", "label": "11 May (L)"}, {"col": 9, "fecha": "2026-05-18", "label": "18 May (L)"}, {"col": 10, "fecha": "2026-05-25", "label": "25 May (L)"}, {"col": 11, "fecha": "2026-06-01", "label": "1 Jun (L)"}, {"col": 12, "fecha": "2026-06-08", "label": "8 Jun (L)"}, {"col": 13, "fecha": "2026-06-15", "label": "15 Jun (L)"}, {"col": 14, "fecha": "2026-06-22", "label": "22 Jun (L)"}, {"col": 15, "fecha": "2026-08-03", "label": "3 Ago (L)"}, {"col": 16, "fecha": "2026-08-10", "label": "10 Ago (L)"}, {"col": 17, "fecha": "2026-08-17", "label": "17 Ago (L)"}, {"col": 18, "fecha": "2026-08-24", "label": "24 Ago (L)"}, {"col": 19, "fecha": "2026-08-31", "label": "31 Ago (L)"}, {"col": 20, "fecha": "2026-09-07", "label": "7 Sep (L)"}, {"col": 21, "fecha": "2026-09-14", "label": "14 Sep (L)"}, {"col": 22, "fecha": "2026-09-21", "label": "21 Sep (L)"}, {"col": 23, "fecha": "2026-09-28", "label": "28 Sep (L)"}, {"col": 24, "fecha": "2026-10-05", "label": "5 Oct (L)"}, {"col": 25, "fecha": "2026-10-19", "label": "19 Oct (L)"}, {"col": 26, "fecha": "2026-10-26", "label": "26 Oct (L)"}, {"col": 27, "fecha": "2026-11-02", "label": "2 Nov (L)"}, {"col": 28, "fecha": "2026-11-09", "label": "9 Nov (L)"}, {"col": 29, "fecha": "2026-11-16", "label": "16 Nov (L)"}, {"col": 30, "fecha": "2026-11-23", "label": "23 Nov (L)"}, {"col": 31, "fecha": "2026-11-30", "label": "30 Nov (L)"}]}, "Química": {"nombre": "Química", "area": "Química", "fechas": [{"col": 3, "fecha": "2026-04-08", "label": "8 Abr (X)"}, {"col": 4, "fecha": "2026-04-15", "label": "15 Abr (X)"}, {"col": 5, "fecha": "2026-04-22", "label": "22 Abr (X)"}, {"col": 6, "fecha": "2026-04-29", "label": "29 Abr (X)"}, {"col": 7, "fecha": "2026-05-06", "label": "6 May (X)"}, {"col": 8, "fecha": "2026-05-13", "label": "13 May (X)"}, {"col": 9, "fecha": "2026-05-20", "label": "20 May (X)"}, {"col": 10, "fecha": "2026-05-27", "label": "27 May (X)"}, {"col": 11, "fecha": "2026-06-03", "label": "3 Jun (X)"}, {"col": 12, "fecha": "2026-06-10", "label": "10 Jun (X)"}, {"col": 13, "fecha": "2026-06-17", "label": "17 Jun (X)"}, {"col": 14, "fecha": "2026-06-24", "label": "24 Jun (X)"}, {"col": 15, "fecha": "2026-08-05", "label": "5 Ago (X)"}, {"col": 16, "fecha": "2026-08-12", "label": "12 Ago (X)"}, {"col": 17, "fecha": "2026-08-19", "label": "19 Ago (X)"}, {"col": 18, "fecha": "2026-08-26", "label": "26 Ago (X)"}, {"col": 19, "fecha": "2026-09-02", "label": "2 Sep (X)"}, {"col": 20, "fecha": "2026-09-09", "label": "9 Sep (X)"}, {"col": 21, "fecha": "2026-09-16", "label": "16 Sep (X)"}, {"col": 22, "fecha": "2026-09-23", "label": "23 Sep (X)"}, {"col": 23, "fecha": "2026-09-30", "label": "30 Sep (X)"}, {"col": 24, "fecha": "2026-10-07", "label": "7 Oct (X)"}, {"col": 25, "fecha": "2026-10-14", "label": "14 Oct (X)"}, {"col": 26, "fecha": "2026-10-21", "label": "21 Oct (X)"}, {"col": 27, "fecha": "2026-10-28", "label": "28 Oct (X)"}, {"col": 28, "fecha": "2026-11-04", "label": "4 Nov (X)"}, {"col": 29, "fecha": "2026-11-11", "label": "11 Nov (X)"}, {"col": 30, "fecha": "2026-11-18", "label": "18 Nov (X)"}, {"col": 31, "fecha": "2026-11-25", "label": "25 Nov (X)"}]}, "Biología": {"nombre": "Biología", "area": "Biología", "fechas": [{"col": 3, "fecha": "2026-04-08", "label": "8 Abr (X)"}, {"col": 4, "fecha": "2026-04-15", "label": "15 Abr (X)"}, {"col": 5, "fecha": "2026-04-22", "label": "22 Abr (X)"}, {"col": 6, "fecha": "2026-04-29", "label": "29 Abr (X)"}, {"col": 7, "fecha": "2026-05-06", "label": "6 May (X)"}, {"col": 8, "fecha": "2026-05-13", "label": "13 May (X)"}, {"col": 9, "fecha": "2026-05-20", "label": "20 May (X)"}, {"col": 10, "fecha": "2026-05-27", "label": "27 May (X)"}, {"col": 11, "fecha": "2026-06-03", "label": "3 Jun (X)"}, {"col": 12, "fecha": "2026-06-10", "label": "10 Jun (X)"}, {"col": 13, "fecha": "2026-06-17", "label": "17 Jun (X)"}, {"col": 14, "fecha": "2026-06-24", "label": "24 Jun (X)"}, {"col": 15, "fecha": "2026-08-05", "label": "5 Ago (X)"}, {"col": 16, "fecha": "2026-08-12", "label": "12 Ago (X)"}, {"col": 17, "fecha": "2026-08-19", "label": "19 Ago (X)"}, {"col": 18, "fecha": "2026-08-26", "label": "26 Ago (X)"}, {"col": 19, "fecha": "2026-09-02", "label": "2 Sep (X)"}, {"col": 20, "fecha": "2026-09-09", "label": "9 Sep (X)"}, {"col": 21, "fecha": "2026-09-16", "label": "16 Sep (X)"}, {"col": 22, "fecha": "2026-09-23", "label": "23 Sep (X)"}, {"col": 23, "fecha": "2026-09-30", "label": "30 Sep (X)"}, {"col": 24, "fecha": "2026-10-07", "label": "7 Oct (X)"}, {"col": 25, "fecha": "2026-10-14", "label": "14 Oct (X)"}, {"col": 26, "fecha": "2026-10-21", "label": "21 Oct (X)"}, {"col": 27, "fecha": "2026-10-28", "label": "28 Oct (X)"}, {"col": 28, "fecha": "2026-11-04", "label": "4 Nov (X)"}, {"col": 29, "fecha": "2026-11-11", "label": "11 Nov (X)"}, {"col": 30, "fecha": "2026-11-18", "label": "18 Nov (X)"}, {"col": 31, "fecha": "2026-11-25", "label": "25 Nov (X)"}]}, "Física": {"nombre": "Física", "area": "Física", "fechas": [{"col": 3, "fecha": "2026-04-07", "label": "7 Abr (M)"}, {"col": 4, "fecha": "2026-04-14", "label": "14 Abr (M)"}, {"col": 5, "fecha": "2026-04-21", "label": "21 Abr (M)"}, {"col": 6, "fecha": "2026-04-28", "label": "28 Abr (M)"}, {"col": 7, "fecha": "2026-05-05", "label": "5 May (M)"}, {"col": 8, "fecha": "2026-05-12", "label": "12 May (M)"}, {"col": 9, "fecha": "2026-05-19", "label": "19 May (M)"}, {"col": 10, "fecha": "2026-05-26", "label": "26 May (M)"}, {"col": 11, "fecha": "2026-06-02", "label": "2 Jun (M)"}, {"col": 12, "fecha": "2026-06-09", "label": "9 Jun (M)"}, {"col": 13, "fecha": "2026-06-16", "label": "16 Jun (M)"}, {"col": 14, "fecha": "2026-06-23", "label": "23 Jun (M)"}, {"col": 15, "fecha": "2026-06-30", "label": "30 Jun (M)"}, {"col": 16, "fecha": "2026-08-04", "label": "4 Ago (M)"}, {"col": 17, "fecha": "2026-08-11", "label": "11 Ago (M)"}, {"col": 18, "fecha": "2026-08-18", "label": "18 Ago (M)"}, {"col": 19, "fecha": "2026-08-25", "label": "25 Ago (M)"}, {"col": 20, "fecha": "2026-09-01", "label": "1 Sep (M)"}, {"col": 21, "fecha": "2026-09-08", "label": "8 Sep (M)"}, {"col": 22, "fecha": "2026-09-15", "label": "15 Sep (M)"}, {"col": 23, "fecha": "2026-09-22", "label": "22 Sep (M)"}, {"col": 24, "fecha": "2026-09-29", "label": "29 Sep (M)"}, {"col": 25, "fecha": "2026-10-06", "label": "6 Oct (M)"}, {"col": 26, "fecha": "2026-10-13", "label": "13 Oct (M)"}, {"col": 27, "fecha": "2026-10-20", "label": "20 Oct (M)"}, {"col": 28, "fecha": "2026-10-27", "label": "27 Oct (M)"}, {"col": 29, "fecha": "2026-11-03", "label": "3 Nov (M)"}, {"col": 30, "fecha": "2026-11-10", "label": "10 Nov (M)"}, {"col": 31, "fecha": "2026-11-17", "label": "17 Nov (M)"}, {"col": 32, "fecha": "2026-11-24", "label": "24 Nov (M)"}]}, "Orientación": {"nombre": "Orientación", "area": null, "fechas": [{"col": 3, "fecha": "2026-04-10", "label": "10 Abr (V)"}, {"col": 4, "fecha": "2026-04-17", "label": "17 Abr (V)"}, {"col": 5, "fecha": "2026-04-24", "label": "24 Abr (V)"}, {"col": 6, "fecha": "2026-05-08", "label": "8 May (V)"}, {"col": 7, "fecha": "2026-05-15", "label": "15 May (V)"}, {"col": 8, "fecha": "2026-05-22", "label": "22 May (V)"}, {"col": 9, "fecha": "2026-05-29", "label": "29 May (V)"}, {"col": 10, "fecha": "2026-06-05", "label": "5 Jun (V)"}, {"col": 11, "fecha": "2026-06-12", "label": "12 Jun (V)"}, {"col": 12, "fecha": "2026-06-19", "label": "19 Jun (V)"}, {"col": 13, "fecha": "2026-06-26", "label": "26 Jun (V)"}, {"col": 14, "fecha": "2026-08-07", "label": "7 Ago (V)"}, {"col": 15, "fecha": "2026-08-14", "label": "14 Ago (V)"}, {"col": 16, "fecha": "2026-08-21", "label": "21 Ago (V)"}, {"col": 17, "fecha": "2026-08-28", "label": "28 Ago (V)"}, {"col": 18, "fecha": "2026-09-04", "label": "4 Sep (V)"}, {"col": 19, "fecha": "2026-09-11", "label": "11 Sep (V)"}, {"col": 20, "fecha": "2026-09-25", "label": "25 Sep (V)"}, {"col": 21, "fecha": "2026-10-02", "label": "2 Oct (V)"}, {"col": 22, "fecha": "2026-10-09", "label": "9 Oct (V)"}, {"col": 23, "fecha": "2026-10-16", "label": "16 Oct (V)"}, {"col": 24, "fecha": "2026-10-23", "label": "23 Oct (V)"}, {"col": 25, "fecha": "2026-10-30", "label": "30 Oct (V)"}, {"col": 26, "fecha": "2026-11-06", "label": "6 Nov (V)"}, {"col": 27, "fecha": "2026-11-13", "label": "13 Nov (V)"}, {"col": 28, "fecha": "2026-11-20", "label": "20 Nov (V)"}, {"col": 29, "fecha": "2026-11-27", "label": "27 Nov (V)"}]}};
 const ALUMNOS  = {"M1": [{"correo": "malarconveloso@gmail.com", "nombre": "Matilda Antonia Alarcon Veloso", "rut": "22849985-4"}, {"correo": "valeriapaolaalvarezfernandez@gmail.com", "nombre": "Valeria Paola Alvarez Fernández", "rut": "27358799-3"}, {"correo": "astualonso123@gmail.com", "nombre": "Alonso Agustin Astudillo Fernandez", "rut": "23002266-6"}, {"correo": "gacituamimi99@gmail.com", "nombre": "Evolet Naybth Isidora Benitez Gacitua", "rut": "23239474-9"}, {"correo": "florencia.caceres.donoso24@gmail.com", "nombre": "Florencia Paloma Cáceres Donoso", "rut": "23006455-5"}, {"correo": "mcaceresv2020@ihcass.cl", "nombre": "Martina Caceres Vergara", "rut": "23241569-k"}, {"correo": "javieracatalan2022@gmail.com", "nombre": "Javiera Yubitza Catalan Mendoza", "rut": "22887105-2"}, {"correo": "aconstanzochamorro@gmail.com", "nombre": "Amanda Alejandra Chamorro Constanzo", "rut": "23205129-9"}, {"correo": "valesca.anahis28@gmail.com", "nombre": "Valesca Anahis Cid Muñoz", "rut": "23038236-0"}, {"correo": "elvzabetthsalamanca@gmail.com", "nombre": "Elizabeth Dayana Cuevas Salamanca", "rut": "23239814-0"}, {"correo": "pipedlc18@gmail.com", "nombre": "Felipe Alonso Diaz Torres", "rut": "22975434-3"}, {"correo": "sara_fuentes_82@yahoo.cl", "nombre": "Alonso Durán Fuentes", "rut": "23337342-7"}, {"correo": "sescalonasaavedra@gmail.com", "nombre": "Stephanie Andrea Escalona Saavedra", "rut": "23345673-k"}, {"correo": "polethferrari@gmail.com", "nombre": "Poleth Mikaela Ferrari Fuetes", "rut": "22.693.316-6"}, {"correo": "figueroamartinezchelsea@gmail.com", "nombre": "Chelsea Mabel Figueroa Martínez", "rut": "22271501-6"}, {"correo": "angelineb.colegioedwardccp@gmail.com", "nombre": "Javier Alonso Gajardo Basualto", "rut": "22974574-3"}, {"correo": "pamerodriguezf@gmail.com", "nombre": "Carol Esperanza García Rodríguez", "rut": "23004821-5"}, {"correo": "benjamingonzalezchamorro2006@gmail.com", "nombre": "Benjamin Gonzalez Chamorro", "rut": "22265232-4"}, {"correo": "fernandagonzalez020908@gmail.com", "nombre": "Fernanda Ignacia González Flores", "rut": "22809749-7"}, {"correo": "benjaguerrero581@gmail.com", "nombre": "Benjamín Ignacio Guerrero Quiroga", "rut": "22696731-1"}, {"correo": "francisca.igd.12@gmail.com", "nombre": "Francisca Guzmán Díaz", "rut": "23351472-1"}, {"correo": "chormaz.dickinson@gmail.com", "nombre": "Christian Hormazabal Dickinson", "rut": "22423736-7"}, {"correo": "angelinneinzunzap09@gmail.com", "nombre": "Angelinne Millaray Inzunza Peña", "rut": "22764459-1"}, {"correo": "bbarbarajerez.tapia@gmail.com", "nombre": "Barbara Jerez", "rut": "22765962-8"}, {"correo": "samartinh@almondale.cl", "nombre": "Sofía Antonia Martin Hurst", "rut": "22971901-7"}, {"correo": "camilabelen2277@gmail.com", "nombre": "Camila Belén Matus Creixell", "rut": "22425298-6"}, {"correo": "mellab.valentina@gmail.com", "nombre": "Valentina Paz Mella Bobadilla", "rut": "22535139-2"}, {"correo": "elisamillar7@gmail.com", "nombre": "Elisa Millar Faúndez", "rut": "22856241-6"}, {"correo": "fernamorag22@gmail.com", "nombre": "Fernanda Alejandra Mora González", "rut": "23011609-1"}, {"correo": "maurolavet@gmail.com", "nombre": "Mauro Nicolás Olave Torres", "rut": "23276213-6"}, {"correo": "antonella25.olivares.02@gmail.com", "nombre": "Antonella Paz Olivares Vera", "rut": "22652824-5"}, {"correo": "parrasofia1148@gmail.com", "nombre": "Sofía Antonia Parra Barrientos", "rut": "22877452-9"}, {"correo": "penadiannelys01@gmail.com", "nombre": "Diannelys Sofía Peña Rossodivita", "rut": "26287360-9"}, {"correo": "cota.ramirez.coddou@gmail.com", "nombre": "Constanza Beatriz Ramírez Coddou", "rut": "23112415-2"}, {"correo": "agu.escobar1908@gmail.com", "nombre": "Agustina Del Pilar Riquelme Escobar", "rut": "22777429-0"}, {"correo": "seba26andres@gmail.com", "nombre": "Sebastián Andrés Riquelme Oñate", "rut": "22730058-2"}, {"correo": "keilayazminrobles@gmail.com", "nombre": "Keila Yazmin Robles Espinoza", "rut": "22608509-2"}, {"correo": "luciorodriguez10000@gmail.com", "nombre": "Lucio Alejandro Rodriguez Aguilera", "rut": "22782577-4"}, {"correo": "fersaez1002@gmail.com", "nombre": "Fernanda Dannae Sáez Rodriguez", "rut": "23247015-1"}, {"correo": "elena.san1608@gmail.com", "nombre": "Elena Victoria San Martín Olate", "rut": "22795719-0"}, {"correo": "cristobal.silva.medina.30@gmail.com", "nombre": "Cristóbal Ignacio Silva Medina", "rut": "22967956-2"}, {"correo": "amandat.onate@gmail.com", "nombre": "Amanda Isabel Tapia Oñate", "rut": "22819295-3"}, {"correo": "ampyvallejosv@gmail.com", "nombre": "Amparo Isabella Vallejos Valenzuela", "rut": "22784926-6"}, {"correo": "victoriawega17@gmail.com", "nombre": "Victoria Monserrat Vega Lucero", "rut": "22617442-7"}, {"correo": "lvega@santasabina.cl", "nombre": "Luis Felipe Vega Salazar", "rut": "22916054-0"}, {"correo": "valppetitbrenilh@gmail.com", "nombre": "Mateo Alonso Sebastián Zúñiga Petit-Brenilh", "rut": "22741483-9"}, {"correo": "alexlabra66@gmail.com", "nombre": "Alex Antonio Labra Villegas", "rut": "22377947-6"}, {"correo": "patriciiovasros@gmail.com", "nombre": "Patricio Vásquez Rosales", "rut": "22863079-9"}, {"correo": "valentinaabelenp@gmail.com", "nombre": "Valentina Portiño Cabezas", "rut": "22820638-5"}, {"correo": "sofiaparis0808@gmail.com", "nombre": "Sofia Catalina Paris Lazcano", "rut": "22790587-5"}, {"correo": "anais2009.av@gmail.com", "nombre": "Anais Patricia Villegas Aarcón", "rut": "23011347-5"}, {"correo": "fernandabelensalgadoflores758@gmail.com", "nombre": "Fernanda Salgado Flores", "rut": "22732244-6"}, {"correo": "stefania.zorritolover@gmail.com", "nombre": "Estefania Muñoz Villanueva", "rut": "22763181-3"}, {"correo": "carmengloria3105@gmail.com", "nombre": "Carmen Gloria Silva Bravo", "rut": "23034663-1"}, {"correo": "catalinapedrero73@gmail.com", "nombre": "Catalina Pedreros Aguayo", "rut": "22495082-9"}, {"correo": "mm4293676@gmail.com", "nombre": "Matías Alonso Muñoz Soto", "rut": "22489792-8"}], "M2": [{"correo": "malarconveloso@gmail.com", "nombre": "Matilda Antonia Alarcon Veloso", "rut": "22849985-4"}, {"correo": "valeriapaolaalvarezfernandez@gmail.com", "nombre": "Valeria Paola Alvarez Fernández", "rut": "27358799-3"}, {"correo": "astualonso123@gmail.com", "nombre": "Alonso Agustin Astudillo Fernandez", "rut": "23002266-6"}, {"correo": "gacituamimi99@gmail.com", "nombre": "Evolet Naybth Isidora Benitez Gacitua", "rut": "23239474-9"}, {"correo": "florencia.caceres.donoso24@gmail.com", "nombre": "Florencia Paloma Cáceres Donoso", "rut": "23006455-5"}, {"correo": "mcaceresv2020@ihcass.cl", "nombre": "Martina Caceres Vergara", "rut": "23241569-k"}, {"correo": "javieracatalan2022@gmail.com", "nombre": "Javiera Yubitza Catalan Mendoza", "rut": "22887105-2"}, {"correo": "aconstanzochamorro@gmail.com", "nombre": "Amanda Alejandra Chamorro Constanzo", "rut": "23205129-9"}, {"correo": "valesca.anahis28@gmail.com", "nombre": "Valesca Anahis Cid Muñoz", "rut": "23038236-0"}, {"correo": "elvzabetthsalamanca@gmail.com", "nombre": "Elizabeth Dayana Cuevas Salamanca", "rut": "23239814-0"}, {"correo": "pipedlc18@gmail.com", "nombre": "Felipe Alonso Diaz Torres", "rut": "22975434-3"}, {"correo": "sara_fuentes_82@yahoo.cl", "nombre": "Alonso Durán Fuentes", "rut": "23337342-7"}, {"correo": "sescalonasaavedra@gmail.com", "nombre": "Stephanie Andrea Escalona Saavedra", "rut": "23345673-k"}, {"correo": "polethferrari@gmail.com", "nombre": "Poleth Mikaela Ferrari Fuetes", "rut": "22.693.316-6"}, {"correo": "figueroamartinezchelsea@gmail.com", "nombre": "Chelsea Mabel Figueroa Martínez", "rut": "22271501-6"}, {"correo": "angelineb.colegioedwardccp@gmail.com", "nombre": "Javier Alonso Gajardo Basualto", "rut": "22974574-3"}, {"correo": "pamerodriguezf@gmail.com", "nombre": "Carol Esperanza García Rodríguez", "rut": "23004821-5"}, {"correo": "benjamingonzalezchamorro2006@gmail.com", "nombre": "Benjamin Gonzalez Chamorro", "rut": "22265232-4"}, {"correo": "fernandagonzalez020908@gmail.com", "nombre": "Fernanda Ignacia González Flores", "rut": "22809749-7"}, {"correo": "benjaguerrero581@gmail.com", "nombre": "Benjamín Ignacio Guerrero Quiroga", "rut": "22696731-1"}, {"correo": "francisca.igd.12@gmail.com", "nombre": "Francisca Guzmán Díaz", "rut": "23351472-1"}, {"correo": "chormaz.dickinson@gmail.com", "nombre": "Christian Hormazabal Dickinson", "rut": "22423736-7"}, {"correo": "angelinneinzunzap09@gmail.com", "nombre": "Angelinne Millaray Inzunza Peña", "rut": "22764459-1"}, {"correo": "bbarbarajerez.tapia@gmail.com", "nombre": "Barbara Jerez", "rut": "22765962-8"}, {"correo": "samartinh@almondale.cl", "nombre": "Sofía Antonia Martin Hurst", "rut": "22971901-7"}, {"correo": "camilabelen2277@gmail.com", "nombre": "Camila Belén Matus Creixell", "rut": "22425298-6"}, {"correo": "mellab.valentina@gmail.com", "nombre": "Valentina Paz Mella Bobadilla", "rut": "22535139-2"}, {"correo": "elisamillar7@gmail.com", "nombre": "Elisa Millar Faúndez", "rut": "22856241-6"}, {"correo": "fernamorag22@gmail.com", "nombre": "Fernanda Alejandra Mora González", "rut": "23011609-1"}, {"correo": "maurolavet@gmail.com", "nombre": "Mauro Nicolás Olave Torres", "rut": "23276213-6"}, {"correo": "antonella25.olivares.02@gmail.com", "nombre": "Antonella Paz Olivares Vera", "rut": "22652824-5"}, {"correo": "parrasofia1148@gmail.com", "nombre": "Sofía Antonia Parra Barrientos", "rut": "22877452-9"}, {"correo": "penadiannelys01@gmail.com", "nombre": "Diannelys Sofía Peña Rossodivita", "rut": "26287360-9"}, {"correo": "cota.ramirez.coddou@gmail.com", "nombre": "Constanza Beatriz Ramírez Coddou", "rut": "23112415-2"}, {"correo": "agu.escobar1908@gmail.com", "nombre": "Agustina Del Pilar Riquelme Escobar", "rut": "22777429-0"}, {"correo": "seba26andres@gmail.com", "nombre": "Sebastián Andrés Riquelme Oñate", "rut": "22730058-2"}, {"correo": "keilayazminrobles@gmail.com", "nombre": "Keila Yazmin Robles Espinoza", "rut": "22608509-2"}, {"correo": "luciorodriguez10000@gmail.com", "nombre": "Lucio Alejandro Rodriguez Aguilera", "rut": "22782577-4"}, {"correo": "fersaez1002@gmail.com", "nombre": "Fernanda Dannae Sáez Rodriguez", "rut": "23247015-1"}, {"correo": "elena.san1608@gmail.com", "nombre": "Elena Victoria San Martín Olate", "rut": "22795719-0"}, {"correo": "cristobal.silva.medina.30@gmail.com", "nombre": "Cristóbal Ignacio Silva Medina", "rut": "22967956-2"}, {"correo": "amandat.onate@gmail.com", "nombre": "Amanda Isabel Tapia Oñate", "rut": "22819295-3"}, {"correo": "ampyvallejosv@gmail.com", "nombre": "Amparo Isabella Vallejos Valenzuela", "rut": "22784926-6"}, {"correo": "victoriawega17@gmail.com", "nombre": "Victoria Monserrat Vega Lucero", "rut": "22617442-7"}, {"correo": "lvega@santasabina.cl", "nombre": "Luis Felipe Vega Salazar", "rut": "22916054-0"}, {"correo": "valppetitbrenilh@gmail.com", "nombre": "Mateo Alonso Sebastián Zúñiga Petit-Brenilh", "rut": "22741483-9"}, {"correo": "alexlabra66@gmail.com", "nombre": "Alex Antonio Labra Villegas", "rut": "22377947-6"}, {"correo": "patriciiovasros@gmail.com", "nombre": "Patricio Vásquez Rosales", "rut": "22863079-9"}, {"correo": "valentinaabelenp@gmail.com", "nombre": "Valentina Portiño Cabezas", "rut": "22820638-5"}, {"correo": "sofiaparis0808@gmail.com", "nombre": "Sofia Catalina Paris Lazcano", "rut": "22790587-5"}, {"correo": "anais2009.av@gmail.com", "nombre": "Anais Patricia Villegas Aarcón", "rut": "23011347-5"}, {"correo": "fernandabelensalgadoflores758@gmail.com", "nombre": "Fernanda Salgado Flores", "rut": "22732244-6"}, {"correo": "stefania.zorritolover@gmail.com", "nombre": "Estefania Muñoz Villanueva", "rut": "22763181-3"}, {"correo": "carmengloria3105@gmail.com", "nombre": "Carmen Gloria Silva Bravo", "rut": "23034663-1"}, {"correo": "catalinapedrero73@gmail.com", "nombre": "Catalina Pedreros Aguayo", "rut": "22495082-9"}, {"correo": "mm4293676@gmail.com", "nombre": "Matías Alonso Muñoz Soto", "rut": "22489792-8"}], "Lenguaje": [{"correo": "malarconveloso@gmail.com", "nombre": "Matilda Antonia Alarcon Veloso", "rut": "22849985-4"}, {"correo": "valeriapaolaalvarezfernandez@gmail.com", "nombre": "Valeria Paola Alvarez Fernández", "rut": "27358799-3"}, {"correo": "florencia.caceres.donoso24@gmail.com", "nombre": "Florencia Paloma Cáceres Donoso", "rut": "23006455-5"}, {"correo": "mcaceresv2020@ihcass.cl", "nombre": "Martina Caceres Vergara", "rut": "23241569-k"}, {"correo": "javieracatalan2022@gmail.com", "nombre": "Javiera Yubitza Catalan Mendoza", "rut": "22887105-2"}, {"correo": "aconstanzochamorro@gmail.com", "nombre": "Amanda Alejandra Chamorro Constanzo", "rut": "23205129-9"}, {"correo": "valesca.anahis28@gmail.com", "nombre": "Valesca Anahis Cid Muñoz", "rut": "23038236-0"}, {"correo": "elvzabetthsalamanca@gmail.com", "nombre": "Elizabeth Dayana Cuevas Salamanca", "rut": "23239814-0"}, {"correo": "pipedlc18@gmail.com", "nombre": "Felipe Alonso Diaz Torres", "rut": "22975434-3"}, {"correo": "sara_fuentes_82@yahoo.cl", "nombre": "Alonso Durán Fuentes", "rut": "23337342-7"}, {"correo": "sescalonasaavedra@gmail.com", "nombre": "Stephanie Andrea Escalona Saavedra", "rut": "23345673-k"}, {"correo": "angelineb.colegioedwardccp@gmail.com", "nombre": "Javier Alonso Gajardo Basualto", "rut": "22974574-3"}, {"correo": "pamerodriguezf@gmail.com", "nombre": "Carol Esperanza García Rodríguez", "rut": "23004821-5"}, {"correo": "benjamingatica.bgz@gmail.com", "nombre": "Benjamin Vicente Gatica Zapata", "rut": "22788738-9"}, {"correo": "benjamingonzalezchamorro2006@gmail.com", "nombre": "Benjamin Gonzalez Chamorro", "rut": "22265232-4"}, {"correo": "fernandagonzalez020908@gmail.com", "nombre": "Fernanda Ignacia González Flores", "rut": "22809749-7"}, {"correo": "benjaguerrero581@gmail.com", "nombre": "Benjamín Ignacio Guerrero Quiroga", "rut": "22696731-1"}, {"correo": "francisca.igd.12@gmail.com", "nombre": "Francisca Guzmán Díaz", "rut": "23351472-1"}, {"correo": "chormaz.dickinson@gmail.com", "nombre": "Christian Hormazabal Dickinson", "rut": "22423736-7"}, {"correo": "bbarbarajerez.tapia@gmail.com", "nombre": "Barbara Jerez", "rut": "22765962-8"}, {"correo": "samartinh@almondale.cl", "nombre": "Sofía Antonia Martin Hurst", "rut": "22971901-7"}, {"correo": "camilabelen2277@gmail.com", "nombre": "Camila Belén Matus Creixell", "rut": "22425298-6"}, {"correo": "mellab.valentina@gmail.com", "nombre": "Valentina Paz Mella Bobadilla", "rut": "22535139-2"}, {"correo": "elisamillar7@gmail.com", "nombre": "Elisa Millar Faúndez", "rut": "22856241-6"}, {"correo": "maurolavet@gmail.com", "nombre": "Mauro Nicolás Olave Torres", "rut": "23276213-6"}, {"correo": "antonella25.olivares.02@gmail.com", "nombre": "Antonella Paz Olivares Vera", "rut": "22652824-5"}, {"correo": "penadiannelys01@gmail.com", "nombre": "Diannelys Sofía Peña Rossodivita", "rut": "26287360-9"}, {"correo": "trinidadreyesrecabal@icloud.com", "nombre": "Florencia Reyes", "rut": "23057548-7"}, {"correo": "agu.escobar1908@gmail.com", "nombre": "Agustina Del Pilar Riquelme Escobar", "rut": "22777429-0"}, {"correo": "seba26andres@gmail.com", "nombre": "Sebastián Andrés Riquelme Oñate", "rut": "22730058-2"}, {"correo": "keilayazminrobles@gmail.com", "nombre": "Keila Yazmin Robles Espinoza", "rut": "22608509-2"}, {"correo": "luciorodriguez10000@gmail.com", "nombre": "Lucio Alejandro Rodriguez Aguilera", "rut": "22782577-4"}, {"correo": "fersaez1002@gmail.com", "nombre": "Fernanda Dannae Sáez Rodriguez", "rut": "23247015-1"}, {"correo": "elena.san1608@gmail.com", "nombre": "Elena Victoria San Martín Olate", "rut": "22795719-0"}, {"correo": "cristobal.silva.medina.30@gmail.com", "nombre": "Cristóbal Ignacio Silva Medina", "rut": "22967956-2"}, {"correo": "amandat.onate@gmail.com", "nombre": "Amanda Isabel Tapia Oñate", "rut": "22819295-3"}, {"correo": "ampyvallejosv@gmail.com", "nombre": "Amparo Isabella Vallejos Valenzuela", "rut": "22784926-6"}, {"correo": "victoriawega17@gmail.com", "nombre": "Victoria Monserrat Vega Lucero", "rut": "22617442-7"}, {"correo": "lvega@santasabina.cl", "nombre": "Luis Felipe Vega Salazar", "rut": "22916054-0"}, {"correo": "valppetitbrenilh@gmail.com", "nombre": "Mateo Alonso Sebastián Zúñiga Petit-Brenilh", "rut": "22741483-9"}, {"correo": "alexlabra66@gmail.com", "nombre": "Alex Antonio Labra Villegas", "rut": "22377947-6"}, {"correo": "patriciiovasros@gmail.com", "nombre": "Patricio Vásquez Rosales", "rut": "22863079-9"}, {"correo": "valentinaabelenp@gmail.com", "nombre": "Valentina Portiño Cabezas", "rut": "22820638-5"}, {"correo": "sofiaparis0808@gmail.com", "nombre": "Sofia Catalina Paris Lazcano", "rut": "22790587-5"}, {"correo": "anais2009.av@gmail.com", "nombre": "Anais Patricia Villegas Aarcón", "rut": "23011347-5"}, {"correo": "fernandabelensalgadoflores758@gmail.com", "nombre": "Fernanda Salgado Flores", "rut": "22732244-6"}, {"correo": "stefania.zorritolover@gmail.com", "nombre": "Estefania Muñoz Villanueva", "rut": "22763181-3"}, {"correo": "carmengloria3105@gmail.com", "nombre": "Carmen Gloria Silva Bravo", "rut": "23034663-1"}, {"correo": "catalinapedrero73@gmail.com", "nombre": "Catalina Pedreros Aguayo", "rut": "22495082-9"}, {"correo": "mm4293676@gmail.com", "nombre": "Matías Alonso Muñoz Soto", "rut": "22489792-8"}], "Historia": [{"correo": "valeriapaolaalvarezfernandez@gmail.com", "nombre": "Valeria Paola Alvarez Fernández", "rut": "27358799-3"}, {"correo": "florencia.caceres.donoso24@gmail.com", "nombre": "Florencia Paloma Cáceres Donoso", "rut": "23006455-5"}, {"correo": "mcaceresv2020@ihcass.cl", "nombre": "Martina Caceres Vergara", "rut": "23241569-k"}, {"correo": "valesca.anahis28@gmail.com", "nombre": "Valesca Anahis Cid Muñoz", "rut": "23038236-0"}, {"correo": "sara_fuentes_82@yahoo.cl", "nombre": "Alonso Durán Fuentes", "rut": "23337342-7"}, {"correo": "sescalonasaavedra@gmail.com", "nombre": "Stephanie Andrea Escalona Saavedra", "rut": "23345673-k"}, {"correo": "angelineb.colegioedwardccp@gmail.com", "nombre": "Javier Alonso Gajardo Basualto", "rut": "22974574-3"}, {"correo": "pamerodriguezf@gmail.com", "nombre": "Carol Esperanza García Rodríguez", "rut": "23004821-5"}, {"correo": "benjamingatica.bgz@gmail.com", "nombre": "Benjamin Vicente Gatica Zapata", "rut": "22788738-9"}, {"correo": "benjaguerrero581@gmail.com", "nombre": "Benjamín Ignacio Guerrero Quiroga", "rut": "22696731-1"}, {"correo": "samartinh@almondale.cl", "nombre": "Sofía Antonia Martin Hurst", "rut": "22971901-7"}, {"correo": "camilabelen2277@gmail.com", "nombre": "Camila Belén Matus Creixell", "rut": "22425298-6"}, {"correo": "elisamillar7@gmail.com", "nombre": "Elisa Millar Faúndez", "rut": "22856241-6"}, {"correo": "elena.san1608@gmail.com", "nombre": "Elena Victoria San Martín Olate", "rut": "22795719-0"}, {"correo": "victoriawega17@gmail.com", "nombre": "Victoria Monserrat Vega Lucero", "rut": "22617442-7"}, {"correo": "sofiaparis0808@gmail.com", "nombre": "Sofia Catalina Paris Lazcano", "rut": "22790587-5"}, {"correo": "fernandabelensalgadoflores758@gmail.com", "nombre": "Fernanda Salgado Flores", "rut": "22732244-6"}, {"correo": "mm4293676@gmail.com", "nombre": "Matías Alonso Muñoz Soto", "rut": "22489792-8"}], "Física": [{"correo": "figueroamartinezchelsea@gmail.com", "nombre": "Chelsea Mabel Figueroa Martínez", "rut": "22271501-6"}, {"correo": "benjamingonzalezchamorro2006@gmail.com", "nombre": "Benjamin Gonzalez Chamorro", "rut": "22265232-4"}, {"correo": "mellab.valentina@gmail.com", "nombre": "Valentina Paz Mella Bobadilla", "rut": "22535139-2"}, {"correo": "fernamorag22@gmail.com", "nombre": "Fernanda Alejandra Mora González", "rut": "23011609-1"}, {"correo": "maurolavet@gmail.com", "nombre": "Mauro Nicolás Olave Torres", "rut": "23276213-6"}], "Orientación": [{"correo": "malarconveloso@gmail.com", "nombre": "Matilda Antonia Alarcon Veloso", "rut": "22849985-4"}, {"correo": "valeriapaolaalvarezfernandez@gmail.com", "nombre": "Valeria Paola Alvarez Fernández", "rut": "27358799-3"}, {"correo": "astualonso123@gmail.com", "nombre": "Alonso Agustin Astudillo Fernandez", "rut": "23002266-6"}, {"correo": "gacituamimi99@gmail.com", "nombre": "Evolet Naybth Isidora Benitez Gacitua", "rut": "23239474-9"}, {"correo": "florencia.caceres.donoso24@gmail.com", "nombre": "Florencia Paloma Cáceres Donoso", "rut": "23006455-5"}, {"correo": "mcaceresv2020@ihcass.cl", "nombre": "Martina Caceres Vergara", "rut": "23241569-k"}, {"correo": "javieracatalan2022@gmail.com", "nombre": "Javiera Yubitza Catalan Mendoza", "rut": "22887105-2"}, {"correo": "aconstanzochamorro@gmail.com", "nombre": "Amanda Alejandra Chamorro Constanzo", "rut": "23205129-9"}, {"correo": "valesca.anahis28@gmail.com", "nombre": "Valesca Anahis Cid Muñoz", "rut": "23038236-0"}, {"correo": "elvzabetthsalamanca@gmail.com", "nombre": "Elizabeth Dayana Cuevas Salamanca", "rut": "23239814-0"}, {"correo": "pipedlc18@gmail.com", "nombre": "Felipe Alonso Diaz Torres", "rut": "22975434-3"}, {"correo": "sara_fuentes_82@yahoo.cl", "nombre": "Alonso Durán Fuentes", "rut": "23337342-7"}, {"correo": "sescalonasaavedra@gmail.com", "nombre": "Stephanie Andrea Escalona Saavedra", "rut": "23345673-k"}, {"correo": "polethferrari@gmail.com", "nombre": "Poleth Mikaela Ferrari Fuetes", "rut": "22.693.316-6"}, {"correo": "figueroamartinezchelsea@gmail.com", "nombre": "Chelsea Mabel Figueroa Martínez", "rut": "22271501-6"}, {"correo": "angelineb.colegioedwardccp@gmail.com", "nombre": "Javier Alonso Gajardo Basualto", "rut": "22974574-3"}, {"correo": "pamerodriguezf@gmail.com", "nombre": "Carol Esperanza García Rodríguez", "rut": "23004821-5"}, {"correo": "benjamingonzalezchamorro2006@gmail.com", "nombre": "Benjamin Gonzalez Chamorro", "rut": "22265232-4"}, {"correo": "fernandagonzalez020908@gmail.com", "nombre": "Fernanda Ignacia González Flores", "rut": "22809749-7"}, {"correo": "benjaguerrero581@gmail.com", "nombre": "Benjamín Ignacio Guerrero Quiroga", "rut": "22696731-1"}, {"correo": "francisca.igd.12@gmail.com", "nombre": "Francisca Guzmán Díaz", "rut": "23351472-1"}, {"correo": "chormaz.dickinson@gmail.com", "nombre": "Christian Hormazabal Dickinson", "rut": "22423736-7"}, {"correo": "angelinneinzunzap09@gmail.com", "nombre": "Angelinne Millaray Inzunza Peña", "rut": "22764459-1"}, {"correo": "bbarbarajerez.tapia@gmail.com", "nombre": "Barbara Jerez", "rut": "22765962-8"}, {"correo": "samartinh@almondale.cl", "nombre": "Sofía Antonia Martin Hurst", "rut": "22971901-7"}, {"correo": "camilabelen2277@gmail.com", "nombre": "Camila Belén Matus Creixell", "rut": "22425298-6"}, {"correo": "mellab.valentina@gmail.com", "nombre": "Valentina Paz Mella Bobadilla", "rut": "22535139-2"}, {"correo": "elisamillar7@gmail.com", "nombre": "Elisa Millar Faúndez", "rut": "22856241-6"}, {"correo": "fernamorag22@gmail.com", "nombre": "Fernanda Alejandra Mora González", "rut": "23011609-1"}, {"correo": "maurolavet@gmail.com", "nombre": "Mauro Nicolás Olave Torres", "rut": "23276213-6"}, {"correo": "antonella25.olivares.02@gmail.com", "nombre": "Antonella Paz Olivares Vera", "rut": "22652824-5"}, {"correo": "parrasofia1148@gmail.com", "nombre": "Sofía Antonia Parra Barrientos", "rut": "22877452-9"}, {"correo": "penadiannelys01@gmail.com", "nombre": "Diannelys Sofía Peña Rossodivita", "rut": "26287360-9"}, {"correo": "cota.ramirez.coddou@gmail.com", "nombre": "Constanza Beatriz Ramírez Coddou", "rut": "23112415-2"}, {"correo": "agu.escobar1908@gmail.com", "nombre": "Agustina Del Pilar Riquelme Escobar", "rut": "22777429-0"}, {"correo": "seba26andres@gmail.com", "nombre": "Sebastián Andrés Riquelme Oñate", "rut": "22730058-2"}, {"correo": "keilayazminrobles@gmail.com", "nombre": "Keila Yazmin Robles Espinoza", "rut": "22608509-2"}, {"correo": "luciorodriguez10000@gmail.com", "nombre": "Lucio Alejandro Rodriguez Aguilera", "rut": "22782577-4"}, {"correo": "fersaez1002@gmail.com", "nombre": "Fernanda Dannae Sáez Rodriguez", "rut": "23247015-1"}, {"correo": "elena.san1608@gmail.com", "nombre": "Elena Victoria San Martín Olate", "rut": "22795719-0"}, {"correo": "cristobal.silva.medina.30@gmail.com", "nombre": "Cristóbal Ignacio Silva Medina", "rut": "22967956-2"}, {"correo": "amandat.onate@gmail.com", "nombre": "Amanda Isabel Tapia Oñate", "rut": "22819295-3"}, {"correo": "ampyvallejosv@gmail.com", "nombre": "Amparo Isabella Vallejos Valenzuela", "rut": "22784926-6"}, {"correo": "victoriawega17@gmail.com", "nombre": "Victoria Monserrat Vega Lucero", "rut": "22617442-7"}, {"correo": "lvega@santasabina.cl", "nombre": "Luis Felipe Vega Salazar", "rut": "22916054-0"}, {"correo": "valppetitbrenilh@gmail.com", "nombre": "Mateo Alonso Sebastián Zúñiga Petit-Brenilh", "rut": "22741483-9"}, {"correo": "alexlabra66@gmail.com", "nombre": "Alex Antonio Labra Villegas", "rut": "22377947-6"}, {"correo": "patriciiovasros@gmail.com", "nombre": "Patricio Vásquez Rosales", "rut": "22863079-9"}, {"correo": "valentinaabelenp@gmail.com", "nombre": "Valentina Portiño Cabezas", "rut": "22820638-5"}, {"correo": "sofiaparis0808@gmail.com", "nombre": "Sofia Catalina Paris Lazcano", "rut": "22790587-5"}, {"correo": "anais2009.av@gmail.com", "nombre": "Anais Patricia Villegas Aarcón", "rut": "23011347-5"}, {"correo": "fernandabelensalgadoflores758@gmail.com", "nombre": "Fernanda Salgado Flores", "rut": "22732244-6"}, {"correo": "stefania.zorritolover@gmail.com", "nombre": "Estefania Muñoz Villanueva", "rut": "22763181-3"}, {"correo": "carmengloria3105@gmail.com", "nombre": "Carmen Gloria Silva Bravo", "rut": "23034663-1"}, {"correo": "catalinapedrero73@gmail.com", "nombre": "Catalina Pedreros Aguayo", "rut": "22495082-9"}, {"correo": "mm4293676@gmail.com", "nombre": "Matías Alonso Muñoz Soto", "rut": "22489792-8"}, {"correo": "benjamingatica.bgz@gmail.com", "nombre": "Benjamin Vicente Gatica Zapata", "rut": "22788738-9"}, {"correo": "trinidadreyesrecabal@icloud.com", "nombre": "Florencia Reyes", "rut": "23057548-7"}, {"correo": "reyescanoagustin@gmail.com", "nombre": "Jorge Agustin Cano Reyes", "rut": "22452097-2"}, {"correo": "echeverriacris2009@gmail.com", "nombre": "Cristóbal Vicente Echeverría Oliva", "rut": "23159815-4"}], "Química": [{"correo": "elvzabetthsalamanca@gmail.com", "nombre": "Elizabeth Dayana Cuevas Salamanca", "rut": "23239814-0"}, {"correo": "sescalonasaavedra@gmail.com", "nombre": "Stephanie Andrea Escalona Saavedra", "rut": "23345673-k"}, {"correo": "fernandagonzalez020908@gmail.com", "nombre": "Fernanda Ignacia González Flores", "rut": "22809749-7"}, {"correo": "chormaz.dickinson@gmail.com", "nombre": "Christian Hormazabal Dickinson", "rut": "22423736-7"}, {"correo": "parrasofia1148@gmail.com", "nombre": "Sofía Antonia Parra Barrientos", "rut": "22877452-9"}, {"correo": "penadiannelys01@gmail.com", "nombre": "Diannelys Sofía Peña Rossodivita", "rut": "26287360-9"}, {"correo": "luciorodriguez10000@gmail.com", "nombre": "Lucio Alejandro Rodriguez Aguilera", "rut": "22782577-4"}, {"correo": "elena.san1608@gmail.com", "nombre": "Elena Victoria San Martín Olate", "rut": "22795719-0"}, {"correo": "amandat.onate@gmail.com", "nombre": "Amanda Isabel Tapia Oñate", "rut": "22819295-3"}, {"correo": "lvega@santasabina.cl", "nombre": "Luis Felipe Vega Salazar", "rut": "22916054-0"}], "Biología": [{"correo": "malarconveloso@gmail.com", "nombre": "Matilda Antonia Alarcon Veloso", "rut": "22849985-4"}, {"correo": "gacituamimi99@gmail.com", "nombre": "Evolet Naybth Isidora Benitez Gacitua", "rut": "23239474-9"}, {"correo": "reyescanoagustin@gmail.com", "nombre": "Jorge Agustin Cano Reyes", "rut": "22452097-2"}, {"correo": "echeverriacris2009@gmail.com", "nombre": "Cristóbal Vicente Echeverría Oliva", "rut": "23159815-4"}, {"correo": "polethferrari@gmail.com", "nombre": "Poleth Mikaela Ferrari Fuetes", "rut": "22.693.316-6"}, {"correo": "benjaguerrero581@gmail.com", "nombre": "Benjamín Ignacio Guerrero Quiroga", "rut": "22696731-1"}, {"correo": "francisca.igd.12@gmail.com", "nombre": "Francisca Guzmán Díaz", "rut": "23351472-1"}, {"correo": "angelinneinzunzap09@gmail.com", "nombre": "Angelinne Millaray Inzunza Peña", "rut": "22764459-1"}, {"correo": "bbarbarajerez.tapia@gmail.com", "nombre": "Barbara Jerez", "rut": "22765962-8"}, {"correo": "elisamillar7@gmail.com", "nombre": "Elisa Millar Faúndez", "rut": "22856241-6"}, {"correo": "antonella25.olivares.02@gmail.com", "nombre": "Antonella Paz Olivares Vera", "rut": "22652824-5"}, {"correo": "trinidadreyesrecabal@icloud.com", "nombre": "Florencia Reyes", "rut": "23057548-7"}, {"correo": "agu.escobar1908@gmail.com", "nombre": "Agustina Del Pilar Riquelme Escobar", "rut": "22777429-0"}, {"correo": "seba26andres@gmail.com", "nombre": "Sebastián Andrés Riquelme Oñate", "rut": "22730058-2"}, {"correo": "keilayazminrobles@gmail.com", "nombre": "Keila Yazmin Robles Espinoza", "rut": "22608509-2"}, {"correo": "fersaez1002@gmail.com", "nombre": "Fernanda Dannae Sáez Rodriguez", "rut": "23247015-1"}, {"correo": "cristobal.silva.medina.30@gmail.com", "nombre": "Cristóbal Ignacio Silva Medina", "rut": "22967956-2"}, {"correo": "victoriawega17@gmail.com", "nombre": "Victoria Monserrat Vega Lucero", "rut": "22617442-7"}, {"correo": "valppetitbrenilh@gmail.com", "nombre": "Mateo Alonso Sebastián Zúñiga Petit-Brenilh", "rut": "22741483-9"}, {"correo": "figueroamartinezchelsea@gmail.com", "nombre": "Chelsea Mabel Figueroa Martínez", "rut": "22271501-6"}, {"correo": "benjamingonzalezchamorro2006@gmail.com", "nombre": "Benjamin Gonzalez Chamorro", "rut": "22265232-4"}, {"correo": "mellab.valentina@gmail.com", "nombre": "Valentina Paz Mella Bobadilla", "rut": "22535139-2"}, {"correo": "fernamorag22@gmail.com", "nombre": "Fernanda Alejandra Mora González", "rut": "23011609-1"}, {"correo": "maurolavet@gmail.com", "nombre": "Mauro Nicolás Olave Torres", "rut": "23276213-6"}]};
@@ -826,7 +1070,11 @@ window.abrirVerif=async()=>{
 
   // Si no tenemos la lista cargada aún, cargarla desde Firebase
   if(!window._vlist){
-    const area=sesion.matArea;
+    // Normalizar matArea para keys legacy
+    const matKey = sesion.matKey||sesion.materiaKey||'';
+    const area = matKey==='Ciencias'
+      ? (sesion.matNom?.toLowerCase().includes('quim')?'Química':'Biología')
+      : sesion.matArea;
     let snapAlu;
     if(area){
       snapAlu=await getDocs(query(collection(db,'alumnos'),where('areas','array-contains',area)));
@@ -960,28 +1208,114 @@ window.confirmarCierre=async()=>{
   document.getElementById('voverlay').classList.remove('show');
 };
 
+
+// Total de alumnos inscritos en un área (desde Firebase o fallback estático)
+function totalInscritosArea(materiaKey){
+  if(!materiaKey) return 0;
+  const area = MATERIAS[materiaKey]?.area;
+
+  // 1. Intentar con Firebase (alumnos con campo areas actualizado)
+  if(todosAlumnos.length){
+    if(area){
+      const n = todosAlumnos.filter(a=>normalizarAreas(a).includes(area)).length;
+      if(n > 0) return n;
+    }
+    // Para Orientación (area=null): buscar por materia key
+    const nKey = todosAlumnos.filter(a=>normalizarAreas(a).includes(materiaKey)).length;
+    if(nKey > 0) return nKey;
+  }
+
+  // 2. Fallback al array estático del Excel (siempre disponible)
+  return (ALUMNOS[materiaKey]||[]).length;
+}
+
+// ── DIAGNÓSTICO ──────────────────────────────────────────────
+async function correrDiagnostico(){
+  const panel = document.getElementById('diag-panel');
+  const content = document.getElementById('diag-content');
+  panel.style.display = 'block';
+  content.innerHTML = '<span class="sp"></span> Cargando...';
+
+  const snap = await getDocs(collection(db,'registros'));
+  const todos = snap.docs.map(d=>d.data());
+
+  // Agrupar por fecha y materia_key
+  const grupos = {};
+  for(const r of todos){
+    const k = `${r.sesion_fecha || '?'} | ${r.sesion_materia_key || '?'} | ${r.sesion_nombre || '?'}`;
+    if(!grupos[k]) grupos[k] = {pres:0, aus:0, total:0, sesion_id: r.sesion_id};
+    grupos[k].total++;
+    if(r.estado==='1') grupos[k].pres++;
+    else if(r.estado==='0') grupos[k].aus++;
+  }
+
+  // Ordenar por fecha desc
+  const filas = Object.entries(grupos)
+    .sort((a,b)=>b[0].localeCompare(a[0]))
+    .map(([k,v])=>{
+      const [fecha, matKey, matNom] = k.split(' | ');
+      const color = fecha>='2026-04-13' ? 'color:var(--cal);font-weight:700' : '';
+      return `<div style="padding:5px 0;border-bottom:1px solid var(--bd);${color}">
+        <span style="min-width:100px;display:inline-block">${fecha}</span>
+        <span style="min-width:140px;display:inline-block">${matKey}</span>
+        <span style="min-width:180px;display:inline-block;color:var(--tx2)">${matNom}</span>
+        <span style="color:var(--vd)">✓${v.pres}</span>
+        <span style="margin:0 6px;color:var(--tx2)">|</span>
+        <span style="color:var(--rj)">✗${v.aus}</span>
+        <span style="margin:0 6px;color:var(--tx2)">|</span>
+        <span>total:${v.total}</span>
+        <span style="margin-left:8px;font-size:10px;color:var(--tx2)">${v.sesion_id?.slice(0,8)||''}</span>
+      </div>`;
+    });
+
+  content.innerHTML = `<div style="margin-bottom:8px;font-size:12px;font-weight:700;color:var(--mar)">
+    Total registros en Firebase: ${todos.length} | Sesiones únicas: ${new Set(todos.map(r=>r.sesion_id)).size}
+    <br><span style="color:var(--cal)">Resaltados en calipso = 13 y 14 de abril</span>
+  </div>` + filas.join('');
+}
+
 // ── REGISTROS (nueva lógica) ─────────────────────────────────
 async function initRegistros(){
   document.getElementById('area-cards').innerHTML='<div class="loading"><span class="sp"></span>Cargando...</div>';
   document.getElementById('reg-fechas-wrap').style.display='none';
   document.getElementById('reg-detalle').style.display='none';
   document.getElementById('reg-empty').style.display='none';
+  document.getElementById('diag-panel').style.display='none';
   regAreaSel=null; regSesionSel=null;
+
+  // Listener botón diagnóstico
+  const btnDiag = document.getElementById('btn-diagnostico');
+  if(btnDiag && !btnDiag._bound){
+    btnDiag._bound = true;
+    btnDiag.addEventListener('click', ()=>correrDiagnostico());
+  }
 
   // Traer todos los registros
   const snap=await getDocs(collection(db,'registros'));
-  regTodos=snap.docs.map(d=>d.data());
+  regTodos=snap.docs.map(d=>d.data()).map(r=>{
+    // Migrar keys legacy al formato nuevo
+    if(r.sesion_materia_key==='Ciencias'){
+      // Determinar si es Química o Biología según el nombre de sesión
+      const nom=(r.sesion_nombre||'').toLowerCase();
+      if(nom.includes('quim')) return {...r, sesion_materia_key:'Química'};
+      if(nom.includes('biol')) return {...r, sesion_materia_key:'Biología'};
+      // Si no se puede determinar, asignar a Biología (bloque 2, más alumnos)
+      return {...r, sesion_materia_key:'Biología'};
+    }
+    // Otros posibles aliases
+    if(r.sesion_materia_key==='Lenguaje') return {...r, sesion_materia_key:'Lenguaje'};
+    return r;
+  });
 
   // Calcular resumen por área
   const areas=Object.entries(MATERIAS).map(([k,m])=>{
     const regs=regTodos.filter(r=>r.sesion_materia_key===k);
     const sesiones=[...new Set(regs.map(r=>r.sesion_id))];
-    // Contar solo de la sesión más reciente para el resumen
     const ultSes=sesiones[sesiones.length-1];
     const ultRegs=regs.filter(r=>r.sesion_id===ultSes);
     const pres=ultRegs.filter(r=>r.estado==='1').length;
-    const total=ultRegs.length;
-    return {k,nombre:m.nombre,sesiones:sesiones.length,pres,total,hayDatos:regs.length>0};
+    const inscritos=totalInscritosArea(k); // total real de la nómina
+    return {k,nombre:m.nombre,sesiones:sesiones.length,pres,inscritos,hayDatos:regs.length>0};
   });
 
   document.getElementById('area-cards').innerHTML=areas.map(a=>`
@@ -989,15 +1323,13 @@ async function initRegistros(){
       <div class="ac-nombre">${a.nombre}</div>
       ${a.hayDatos?`
         <div class="ac-stats">
-          <span class="ac-pres">✓ ${a.pres}</span>
-          <span class="ac-dot">·</span>
-          <span class="ac-aus">✗ ${a.total-a.pres}</span>
+          <span class="ac-pres">✓ ${a.pres}/${a.inscritos}</span>
           <span class="ac-dot">·</span>
           <span style="font-size:11px;color:var(--tx2);font-weight:600">${a.sesiones} clase${a.sesiones!==1?'s':''}</span>
         </div>
         <div class="prog-bar-wrap">
-          <div class="prog-bar-bg"><div class="prog-bar-fill" style="width:${a.total?Math.round(a.pres/a.total*100):0}%"></div></div>
-          <div class="prog-pct">${a.total?Math.round(a.pres/a.total*100):0}% asistencia última clase</div>
+          <div class="prog-bar-bg"><div class="prog-bar-fill" style="width:${a.inscritos?Math.round(a.pres/a.inscritos*100):0}%"></div></div>
+          <div class="prog-pct">${a.inscritos?Math.round(a.pres/a.inscritos*100):0}% asistencia última clase</div>
         </div>`
       :'<div style="font-size:11px;color:var(--tx2);font-weight:500;margin-top:4px;">Sin registros aún</div>'}
     </div>
@@ -1028,10 +1360,10 @@ window.selArea=k=>{
   window._regSesiones=sesiones;
 
   document.getElementById('reg-area-title').textContent=MATERIAS[k].nombre;
+  const inscritosArea = totalInscritosArea(k);
   document.getElementById('sesion-pills').innerHTML=sesiones.map(s=>{
     const pres=s.regs.filter(r=>r.estado==='1').length;
-    const tot=s.regs.length;
-    return `<button class="spill" data-sid="${s.id}" onclick="selSesionReg('${s.id}')">${s.fecha} <span style="opacity:.6">(${pres}/${tot})</span></button>`;
+    return `<button class="spill" data-sid="${s.id}" onclick="selSesionReg('${s.id}')">${s.fecha} <span style="opacity:.6">(${pres}/${inscritosArea})</span></button>`;
   }).join('');
 
   document.getElementById('reg-fechas-wrap').style.display='block';
@@ -1056,18 +1388,27 @@ function renderDetalle(ses, busq){
   const pres=regs.filter(r=>r.estado==='1').length;
   const aus=regs.filter(r=>r.estado==='0').length;
   const just=regs.filter(r=>r.estado==='J').length;
-  const pct=regs.length?Math.round(pres/regs.length*100):0;
+  const inscritos=totalInscritosArea(regAreaSel)||regs.length;
+  const pct=inscritos?Math.round(pres/inscritos*100):0;
+  const pctColor=pct>=80?'var(--vd)':pct>=60?'var(--am)':'var(--rj)';
 
   document.getElementById('reg-metrics').innerHTML=`
     <div class="metric">
-      <div class="mv">${pres}</div><div class="ml">Presentes</div>
+      <div class="mv">${pres}<span style="font-size:15px;font-weight:500;color:var(--tx2)">/${inscritos}</span></div>
+      <div class="ml">Presentes</div>
       <div class="prog-bar-wrap" style="margin-top:8px;">
-        <div class="prog-bar-bg"><div class="prog-bar-fill" style="width:${pct}%"></div></div>
+        <div class="prog-bar-bg"><div class="prog-bar-fill" style="width:${pct}%;background:${pctColor}"></div></div>
         <div class="prog-pct">${pct}% asistencia</div>
       </div>
     </div>
-    <div class="metric" style="border-left-color:var(--rj)"><div class="mv" style="color:var(--rj)">${aus}</div><div class="ml">Ausentes</div></div>
-    <div class="metric" style="border-left-color:var(--am)"><div class="mv" style="color:var(--am)">${just||0}</div><div class="ml">Justificados</div></div>`;
+    <div class="metric" style="border-left-color:var(--rj)">
+      <div class="mv" style="color:var(--rj)">${aus}<span style="font-size:15px;font-weight:500;color:var(--tx2)">/${inscritos}</span></div>
+      <div class="ml">Ausentes</div>
+    </div>
+    <div class="metric" style="border-left-color:var(--am)">
+      <div class="mv" style="color:var(--am)">${just||0}</div>
+      <div class="ml">Justificados</div>
+    </div>`;
 
   document.getElementById('reg-detalle-title').textContent=ses.fecha+' — '+ses.nombre;
 
@@ -1131,8 +1472,9 @@ window.eliminarRegistro=async rid=>{
     renderDetalle(ses, document.getElementById('reg-buscar').value);
     // Actualizar pill
     const pres=ses.regs.filter(r=>r.estado==='1').length;
+    const ins=totalInscritosArea(regAreaSel)||ses.regs.length;
     const pill=document.querySelector(`.spill[data-sid="${regSesionSel}"]`);
-    if(pill) pill.innerHTML=`${ses.fecha} <span style="opacity:.6">(${pres}/${ses.regs.length})</span>`;
+    if(pill) pill.innerHTML=`${ses.fecha} <span style="opacity:.6">(${pres}/${ins})</span>`;
   }
 };
 
@@ -1174,7 +1516,20 @@ window.cambiarEstadoReg=async rid=>{
 // ── ALUMNOS ──────────────────────────────────────────────────
 
 // Dropdowns y event listeners (todos via JS para evitar problema de módulo)
+let _alumnosListenersInit = false;
 function initAlumnosListeners(){
+  // Delegación de eventos en document — sobrevive cualquier re-render
+  if(!window._aluDelegated){
+    window._aluDelegated = true;
+    document.addEventListener('click', e=>{
+      const tr = e.target.closest('tr.alu-row-edit');
+      if(tr && tr.dataset.id) window.abrirPerfil(tr.dataset.id);
+    });
+  }
+
+  if(_alumnosListenersInit) return; // los botones fijos solo se adjuntan una vez
+  _alumnosListenersInit = true;
+
   // Botón nuevo alumno
   document.getElementById('btn-nuevo-alu')?.addEventListener('click', ()=>window.abrirModalNuevo());
 
@@ -1434,7 +1789,33 @@ window.abrirPerfil = async id => {
   renderPerfilAreas(a);
   const areas = normalizarAreas(a);
   if(areas.length) renderPerfilAreaTab(areas[0]);
+  initPerfilListeners();
 };
+
+function initPerfilListeners(){
+  // Solo adjuntar una vez por apertura usando un flag en el elemento
+  const overlay = document.getElementById('perfil-overlay');
+  if(overlay._listenersOk) return;
+  overlay._listenersOk = true;
+
+  document.getElementById('btn-cerrar-perfil')
+    ?.addEventListener('click', ()=>window.cerrarPerfil());
+  document.getElementById('p-areas-save')
+    ?.addEventListener('click', ()=>window.guardarAreasDesdefPerfil());
+  document.getElementById('btn-toggle-edit')
+    ?.addEventListener('click', ()=>window.toggleEditPerfil());
+  document.getElementById('btn-guardar-datos')
+    ?.addEventListener('click', ()=>window.guardarDatosPerfil());
+  document.getElementById('btn-eliminar-perfil')
+    ?.addEventListener('click', ()=>window.eliminarDesdefPerfil());
+  // Delegación para tabs y chips de área dentro del perfil
+  overlay.addEventListener('click', e=>{
+    const ptab = e.target.closest('.ptab');
+    if(ptab) window.switchPerfilTab(ptab, ptab.dataset.area);
+    const chip = e.target.closest('.area-chip-opt[data-area]');
+    if(chip && overlay.contains(chip)) window.toggleAreaPerfil(chip);
+  });
+}
 
 function renderPerfilTendencia(a){
   const regs = perfilRegs;
@@ -1534,7 +1915,11 @@ function renderPerfilAreaTab(area){
   // Más flexible: buscar por nombre de sesión que contenga el área
   const regsArea2 = perfilRegs.filter(r=>{
     const key = Object.keys(MATERIAS).find(k=>MATERIAS[k].area===area||MATERIAS[k].nombre===area);
-    return r.sesion_materia_key===key || r.sesion_nombre===area || (key && MATERIAS[key] && r.sesion_nombre===MATERIAS[key].nombre);
+    // Incluir registros legacy con key 'Ciencias' para Biología/Química
+    const legacyMatch = (area==='Biología'||area==='Química') && r.sesion_materia_key==='Ciencias';
+    return r.sesion_materia_key===key || r.sesion_nombre===area
+      || (key && MATERIAS[key] && r.sesion_nombre===MATERIAS[key].nombre)
+      || legacyMatch;
   });
   const regsUsar = regsArea2.length ? regsArea2 : regsArea;
 
@@ -1654,15 +2039,10 @@ function renderTablaAlumnos(lista){
       </tr>`;
     }).join('')}</tbody>
   </table></div>`;
-  // Event listeners en vez de onclick inline (evita problema con módulos)
-  w.querySelectorAll('tr.alu-row-edit').forEach(tr=>{
-    tr.addEventListener('click', ()=>window.abrirPerfil(tr.dataset.id));
-  });
 }
 
 async function cargarAlumnos(){
   document.getElementById('t-alu').innerHTML='<div class="loading" style="padding:28px;"><span class="sp"></span>Cargando...</div>';
-  initAlumnosListeners();
   const snap=await getDocs(collection(db,'alumnos'));
   todosAlumnos=snap.docs.map(d=>d.data()).sort((a,b)=>a.nombre?.localeCompare(b.nombre)||0);
   document.getElementById('alu-count').textContent=todosAlumnos.length;
@@ -1671,6 +2051,7 @@ async function cargarAlumnos(){
   selArea.innerHTML='<option value="">Todas las áreas</option>'+
     AREAS_DISPONIBLES.map(a=>`<option value="${a}">${a}</option>`).join('');
   filtrarAlumnos();
+  initAlumnosListeners(); // después de renderizar la tabla
 }
 
 // ── VISTA ALUMNO ─────────────────────────────────────────────
@@ -1726,6 +2107,7 @@ async function initProfe(){
     }
   }
 }
+
 </script>
 </body>
 </html>
