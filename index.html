@@ -1539,115 +1539,106 @@ async function normalizarRutsFirebase(){
 // ── LIMPIEZA AUTOMÁTICA (normalizar RUTs + fusionar duplicados) ──────────────
 // Corre silenciosamente cada vez que se abre la pestaña Registros.
 // Un solo fetch de todos los registros, sin doble lectura.
-async function limpiarRegistrosAuto(){
-  const snapR = await getDocs(collection(db,'registros'));
-  const todos = snapR.docs.map(d=>{ const o=d.data(); o._docId=d.id; return o; });
+async function limpiarRegistrosAuto() {
+  const snapR = await getDocs(collection(db, 'registros'));
+  const todos = snapR.docs.map(d => { 
+    const data = d.data(); 
+    data._docId = d.id;
+    return data; 
+  });
 
-  // Construir nómina map: rutNorm → {nombre, correo}
-  const nominaMap = new Map();
-  for(const lista of Object.values(ALUMNOS)){
-    for(const a of lista){
-      const n = normalizarRut(a.rut||'');
-      if(n && !nominaMap.has(n)) nominaMap.set(n,{nombre:a.nombre,correo:a.correo||''});
-    }
-  }
+  if (todos.length === 0) return;
 
-  // Agrupar por "materia_key|fecha" → rutNorm → mejor registro
-  // Esto resuelve simultáneamente: RUTs mal formateados Y sesiones duplicadas
-  const grupos = new Map(); // "matKey|fecha" → Map(rutNorm → mejorRegistro)
-  const sidGanador = new Map(); // "matKey|fecha" → sesion_id ganador (el más reciente)
-
-  for(const r of todos){
-    const rn = normalizarRut(r.rut||'');
-    if(!rn) continue;
-    const clave = `${r.sesion_materia_key||'?'}|${r.sesion_fecha||'?'}`;
-
-    // Determinar sesión ganadora (mayor timestamp)
-    const tsActual = r.timestamp||0;
-    if(!sidGanador.has(clave) || tsActual > (sidGanador.get(clave).ts||0)){
-      sidGanador.set(clave, {sid: r.sesion_id, nombre: r.sesion_nombre||'', ts: tsActual});
-    }
-
-    if(!grupos.has(clave)) grupos.set(clave, new Map());
-    const porRut = grupos.get(clave);
-    const prev = porRut.get(rn);
-    const prioridad = e => e==='1'?3 : e==='J'||e==='j'?2 : e==='0'?1 : 0;
-    if(!prev
-      || prioridad(r.estado) > prioridad(prev.estado)
-      || (prioridad(r.estado)===prioridad(prev.estado) && tsActual>(prev.timestamp||0))){
-      porRut.set(rn, r);
-    }
-  }
-
-  // Calcular operaciones necesarias
+  const grupos = new Map();
   const opsSet = [];
   const opsDelete = new Set();
 
-  for(const [clave, porRut] of grupos){
-    const [matKey, fecha] = clave.split('|');
-    const {sid: ganSid, nombre: ganNombre} = sidGanador.get(clave);
-
-    for(const [rn, r] of porRut){
-      const regIdFinal = ganSid + '_' + rn.replace(/[^0-9k]/g,'');
-      const datosNomina = nominaMap.get(rn);
-      const rutOriginalOk = r.rut === rn;
-      const idOk = r._docId === regIdFinal;
-
-      // Solo escribir si algo cambió
-      if(!rutOriginalOk || !idOk){
-        opsSet.push({ id: regIdFinal, data:{
-          id: regIdFinal,
-          sesion_id: ganSid,
-          sesion_fecha: fecha,
-          sesion_nombre: ganNombre,
-          sesion_materia_key: matKey,
-          rut: rn,
-          nombre: datosNomina?.nombre || r.nombre,
-          correo: datosNomina?.correo || r.correo||'',
-          estado: r.estado,
-          timestamp: r.timestamp||Date.now(),
-          marcado_manual: r.marcado_manual||false,
-          _limpiado: true,
-        }});
-      }
-      // Marcar el doc original para borrar si tiene ID incorrecto
-      if(!idOk) opsDelete.add(r._docId);
+  for (const r of todos) {
+    const clave = `${r.sesion_materia_key}|${r.sesion_fecha}`;
+    if (!grupos.has(clave)) {
+      grupos.set(clave, {
+        sesionGanadoraId: r.sesion_id,
+        sesionGanadoraNombre: r.sesion_nombre||'',
+        registrosPorRut: new Map()
+      });
     }
-  }
 
-  // Marcar para borrar todos los docs que no son el mejor de su grupo
-  for(const r of todos){
-    const rn = normalizarRut(r.rut||'');
-    if(!rn) continue;
-    const clave = `${r.sesion_materia_key||'?'}|${r.sesion_fecha||'?'}`;
-    const {sid: ganSid} = sidGanador.get(clave)||{};
-    const regIdFinal = ganSid + '_' + rn.replace(/[^0-9k]/g,'');
-    if(r._docId !== regIdFinal){
+    const grupo = grupos.get(clave);
+
+    // Actualizar sesión ganadora si este registro es más reciente
+    if ((r.timestamp||0) > (grupo.maxTs||0)) {
+      grupo.sesionGanadoraId = r.sesion_id;
+      grupo.sesionGanadoraNombre = r.sesion_nombre||'';
+      grupo.maxTs = r.timestamp||0;
+    }
+
+    const rutNorm = normalizarRut(r.rut || '');
+    if (!rutNorm) {
+      opsDelete.add(r._docId);
+      continue;
+    }
+
+    const existente = grupo.registrosPorRut.get(rutNorm);
+    const prioridad = e => e === '1' ? 3 : (e === 'J' || e === 'j' ? 2 : 1);
+    
+    if (!existente || prioridad(r.estado) > prioridad(existente.estado) || 
+       (prioridad(r.estado) === prioridad(existente.estado) && (r.timestamp||0) > (existente.timestamp||0))) {
+      if (existente) opsDelete.add(existente._docId);
+      grupo.registrosPorRut.set(rutNorm, r);
+    } else {
       opsDelete.add(r._docId);
     }
   }
 
-  // No borrar IDs que acabamos de escribir
-  const opsSetIds = new Set(opsSet.map(o=>o.id));
-  const opsDeleteFinal = [...opsDelete].filter(id=>!opsSetIds.has(id));
-
-  if(!opsSet.length && !opsDeleteFinal.length) return; // todo limpio, nada que hacer
-
-  // Ejecutar en batches de 400
-  const allOps = [
-    ...opsSet.map(o=>({type:'set', id:o.id, data:o.data})),
-    ...opsDeleteFinal.map(id=>({type:'delete', id})),
-  ];
-  const BATCH = 400;
-  for(let i=0;i<allOps.length;i+=BATCH){
-    const batch = writeBatch(db);
-    for(const op of allOps.slice(i,i+BATCH)){
-      if(op.type==='set') batch.set(doc(db,'registros',op.id), op.data);
-      else                batch.delete(doc(db,'registros',op.id));
+  for (const [clave, grupo] of grupos) {
+    const [matKey, fecha] = clave.split('|');
+    for (const [rutNorm, reg] of grupo.registrosPorRut) {
+      const regIdCorrecto = grupo.sesionGanadoraId + '_' + rutNorm.replace(/[^0-9k]/g, '');
+      
+      if (reg._docId !== regIdCorrecto || reg.rut !== rutNorm || reg.sesion_id !== grupo.sesionGanadoraId) {
+        opsSet.push({
+          id: regIdCorrecto,
+          data: {
+            ...reg,
+            id: regIdCorrecto,
+            rut: rutNorm,
+            sesion_id: grupo.sesionGanadoraId,
+            sesion_nombre: grupo.sesionGanadoraNombre,
+            sesion_fecha: fecha,
+            sesion_materia_key: matKey,
+            _limpiado: true
+          }
+        });
+        if (reg._docId !== regIdCorrecto) opsDelete.add(reg._docId);
+      }
     }
-    try{ await batch.commit(); }
-    catch(e){ console.error('limpiarRegistrosAuto batch error:', e); }
   }
+
+  const idsParaSet = new Set(opsSet.map(o => o.id));
+  const allOps = [
+    ...opsSet.map(o => ({ type: 'set', id: o.id, data: o.data })),
+    ...Array.from(opsDelete).filter(id => !idsParaSet.has(id)).map(id => ({ type: 'delete', id }))
+  ];
+
+  if (!allOps.length) return;
+
+  const BATCH_SIZE = 400;
+  for (let i = 0; i < allOps.length; i += BATCH_SIZE) {
+    const batch = writeBatch(db);
+    allOps.slice(i, i + BATCH_SIZE).forEach(op => {
+      const ref = doc(db, 'registros', op.id);
+      if (op.type === 'set') {
+        const cleanedData = { ...op.data };
+        delete cleanedData._docId;
+        batch.set(ref, cleanedData);
+      } else {
+        batch.delete(ref);
+      }
+    });
+    await batch.commit();
+  }
+  
+  if (allOps.length > 0) console.log(`Limpieza: ${allOps.length} ops (${opsSet.length} set, ${allOps.length - opsSet.length} delete)`);
 }
 
 // ── FUSIONAR SESIONES DUPLICADAS ─────────────────────────────
@@ -1864,57 +1855,30 @@ async function correrDiagnostico(){
 }
 
 // ── REGISTROS (nueva lógica) ─────────────────────────────────
-async function initRegistros(){
-  document.getElementById('area-cards').innerHTML='<div class="loading"><span class="sp"></span>Cargando...</div>';
-  document.getElementById('reg-fechas-wrap').style.display='none';
-  document.getElementById('reg-detalle').style.display='none';
-  document.getElementById('reg-empty').style.display='none';
-  document.getElementById('diag-panel').style.display='none';
-  regAreaSel=null; regSesionSel=null;
+async function initRegistros() {
+  const areaGrid = document.getElementById('area-cards');
+  areaGrid.innerHTML = '<div class="loading"><span class="sp"></span>Limpiando y cargando datos...</div>';
+  document.getElementById('reg-fechas-wrap').style.display = 'none';
+  document.getElementById('reg-detalle').style.display = 'none';
+  document.getElementById('reg-empty').style.display = 'none';
+  document.getElementById('diag-panel').style.display = 'none';
+  regAreaSel = null;
+  regSesionSel = null;
 
-  // Listener botón diagnóstico
+  // Registrar listeners de botones (una sola vez)
   const btnDiag = document.getElementById('btn-diagnostico');
-  if(btnDiag && !btnDiag._bound){
-    btnDiag._bound = true;
-    btnDiag.addEventListener('click', ()=>correrDiagnostico());
-  }
-
-  // Listener botón normalizar RUTs
+  if(btnDiag && !btnDiag._bound){ btnDiag._bound=true; btnDiag.addEventListener('click', ()=>correrDiagnostico()); }
   const btnNorm = document.getElementById('btn-normalizar-ruts');
-  if(btnNorm && !btnNorm._bound){
-    btnNorm._bound = true;
-    btnNorm.addEventListener('click', ()=>normalizarRutsFirebase());
-  }
-
-  // Listener botón fusionar duplicados
+  if(btnNorm && !btnNorm._bound){ btnNorm._bound=true; btnNorm.addEventListener('click', ()=>normalizarRutsFirebase()); }
   const btnFus = document.getElementById('btn-fusionar-duplicados');
-  if(btnFus && !btnFus._bound){
-    btnFus._bound = true;
-    btnFus.addEventListener('click', ()=>fusionarDuplicados());
-  }
+  if(btnFus && !btnFus._bound){ btnFus._bound=true; btnFus.addEventListener('click', ()=>fusionarDuplicados()); }
 
-  // Traer todos los registros
-  const snap=await getDocs(collection(db,'registros'));
-  regTodos=snap.docs.map(d=>d.data()).map(r=>{
-    // Migrar keys legacy al formato nuevo
-    if(r.sesion_materia_key==='Ciencias'){
-      // Determinar si es Química o Biología según el nombre de sesión
-      const nom=(r.sesion_nombre||'').toLowerCase();
-      if(nom.includes('quim')) return {...r, sesion_materia_key:'Química'};
-      if(nom.includes('biol')) return {...r, sesion_materia_key:'Biología'};
-      // Si no se puede determinar, asignar a Biología (bloque 2, más alumnos)
-      return {...r, sesion_materia_key:'Biología'};
-    }
-    // Otros posibles aliases
-    if(r.sesion_materia_key==='Lenguaje') return {...r, sesion_materia_key:'Lenguaje'};
-    return r;
-  });
+  // Limpieza automática silenciosa
+  try { await limpiarRegistrosAuto(); } catch(e) { console.error('Error en limpieza:', e); }
 
-  // Limpiar datos automáticamente: primero normalizar RUTs, luego fusionar duplicados
-  await limpiarRegistrosAuto();
-  // Recargar regTodos ya limpio
-  const snap2=await getDocs(collection(db,'registros'));
-  regTodos=snap2.docs.map(d=>d.data()).map(r=>{
+  // Traer registros ya limpios
+  const snap = await getDocs(collection(db, 'registros'));
+  regTodos = snap.docs.map(d => d.data()).map(r => {
     if(r.sesion_materia_key==='Ciencias'){
       const nom=(r.sesion_nombre||'').toLowerCase();
       if(nom.includes('quim')) return {...r, sesion_materia_key:'Química'};
@@ -1925,21 +1889,21 @@ async function initRegistros(){
     return r;
   });
 
-  // Calcular resumen por área
-  const areas=Object.entries(MATERIAS).map(([k,m])=>{
-    const regs=regTodos.filter(r=>r.sesion_materia_key===k);
-    const sesiones=[...new Set(regs.map(r=>r.sesion_id))];
-    const ultSes=sesiones[sesiones.length-1];
-    const ultRegs=regs.filter(r=>r.sesion_id===ultSes);
-    const pres=ultRegs.filter(r=>r.estado==='1').length;
-    const inscritos=totalInscritosArea(k); // total real de la nómina
-    return {k,nombre:m.nombre,sesiones:sesiones.length,pres,inscritos,hayDatos:regs.length>0};
+  // Calcular y renderizar cards de área
+  const areas = Object.entries(MATERIAS).map(([k, m]) => {
+    const regs = regTodos.filter(r => r.sesion_materia_key === k);
+    const sesiones = [...new Set(regs.map(r => r.sesion_id))];
+    const ultSes = sesiones[sesiones.length - 1];
+    const ultRegs = regs.filter(r => r.sesion_id === ultSes);
+    const pres = ultRegs.filter(r => r.estado === '1').length;
+    const inscritos = totalInscritosArea(k);
+    return { k, nombre: m.nombre, sesiones: sesiones.length, pres, inscritos, hayDatos: regs.length > 0 };
   });
 
-  document.getElementById('area-cards').innerHTML=areas.map(a=>`
+  areaGrid.innerHTML = areas.map(a => `
     <div class="area-card" id="ac-${a.k}" onclick="selArea('${a.k}')">
       <div class="ac-nombre">${a.nombre}</div>
-      ${a.hayDatos?`
+      ${a.hayDatos ? `
         <div class="ac-stats">
           <span class="ac-pres">✓ ${a.pres}/${a.inscritos}</span>
           <span class="ac-dot">·</span>
@@ -1947,12 +1911,13 @@ async function initRegistros(){
         </div>
         <div class="prog-bar-wrap">
           <div class="prog-bar-bg"><div class="prog-bar-fill" style="width:${a.inscritos?Math.round(a.pres/a.inscritos*100):0}%"></div></div>
-          <div class="prog-pct">${a.inscritos?Math.round(a.pres/a.inscritos*100):0}% asistencia última clase</div>
+          <div class="prog-pct">${a.inscritos?Math.round(a.pres/a.inscritos*100):0}% asistencia últ. clase</div>
         </div>`
       :'<div style="font-size:11px;color:var(--tx2);font-weight:500;margin-top:4px;">Sin registros aún</div>'}
     </div>
   `).join('');
 }
+
 
 window.selArea=k=>{
   regAreaSel=k; regSesionSel=null;
