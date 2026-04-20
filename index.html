@@ -196,6 +196,29 @@ tr[style*="am-l"] strong { color: var(--amber) !important; }
 .dropdown-item:hover{background:var(--cal-l);color:var(--cal-d);}
 .dropdown-sep{height:1px;background:var(--bd);margin:4px 0;}
 
+/* ── VISTA TOGGLE Y TABLA COMPLETA ── */
+.vista-toggle{display:flex;gap:4px;align-items:center;}
+.vt-btn{padding:4px 12px;border-radius:var(--r);border:1.5px solid var(--bd);font-size:11px;font-weight:700;font-family:'Poppins',sans-serif;cursor:pointer;background:var(--bl);color:var(--tx2);transition:all .15s;}
+.vt-btn.active{background:var(--cal);color:#fff;border-color:var(--cal);}
+.tabla-completa-wrap{overflow-x:auto;border-radius:var(--r);border:1px solid var(--bd);}
+.tabla-completa{width:max-content;min-width:100%;border-collapse:collapse;font-size:12px;}
+.tabla-completa th,.tabla-completa td{border:1px solid var(--bd);padding:0;}
+.tc-mes{background:var(--mar);color:#fff;font-size:10px;font-weight:700;letter-spacing:.06em;text-transform:uppercase;text-align:center;padding:5px 8px;}
+.tc-dia{background:var(--cal);color:#fff;font-size:10px;font-weight:700;text-align:center;padding:4px 8px;min-width:40px;}
+.tc-header-fijo{background:var(--fondo);color:var(--tx2);font-size:10px;font-weight:700;letter-spacing:.06em;text-transform:uppercase;padding:6px 18px;position:sticky;left:0;z-index:2;border-right:2px solid var(--cal-m);}
+.tc-nombre{font-size:12px;font-weight:500;color:var(--mar);padding:8px 18px;white-space:nowrap;min-width:180px;position:sticky;left:0;z-index:1;background:var(--bl);border-right:2px solid var(--cal-m);}
+.tc-cel{text-align:center;padding:7px 6px;min-width:40px;font-size:12px;font-weight:600;cursor:pointer;transition:filter .1s;}
+.tc-cel:hover{filter:brightness(.92);}
+.tc-cel.p{background:var(--vd-l);color:var(--vd);}
+.tc-cel.a{background:var(--rj-l);color:var(--rj);}
+.tc-cel.j{background:var(--am-l);color:var(--am);}
+.tc-cel.v{background:var(--fondo);color:var(--tx2);font-weight:400;}
+.tc-total{background:var(--mar);color:#fff;font-size:11px;font-weight:700;text-align:center;padding:5px 10px;min-width:56px;}
+.tc-total-val{background:var(--fondo);text-align:center;padding:7px 8px;font-weight:700;font-size:12px;}
+.tc-total-val.ok{color:var(--vd);}
+.tc-total-val.warn{color:var(--am);}
+.tc-total-val.bad{color:var(--rj);}
+
 /* Tabla sin padding exterior */
 #t-alu table{width:100%;}
 #t-alu .tw{padding:0;}
@@ -384,7 +407,11 @@ tr[style*="am-l"] strong { color: var(--amber) !important; }
   <div class="card">
     <div class="ch">
       <div class="ct">Seleccionar área</div>
-      <button class="btn bsm" id="btn-diagnostico" style="font-size:11px;color:var(--tx2);">🔍 Diagnóstico</button>
+      <div class="flex" style="gap:6px;">
+        <button class="btn bsm" id="btn-diagnostico" style="font-size:11px;color:var(--tx2);">🔍 Diagnóstico</button>
+        <button class="btn bsm" id="btn-normalizar-ruts" style="font-size:11px;color:var(--am);" title="Normaliza los RUTs de todos los registros en Firebase">🔧 Normalizar RUTs</button>
+        <button class="btn bsm" id="btn-fusionar-duplicados" style="font-size:11px;color:var(--cal-d);" title="Fusiona sesiones duplicadas del mismo día">🔀 Fusionar duplicados</button>
+      </div>
     </div>
     <div class="area-cards" id="area-cards">
       <div class="loading"><span class="sp"></span>Cargando...</div>
@@ -395,15 +422,43 @@ tr[style*="am-l"] strong { color: var(--amber) !important; }
     <div id="diag-content" style="font-size:11px;font-family:monospace;overflow-x:auto;"></div>
   </div>
 
+  <div id="norm-panel" style="display:none;" class="card">
+    <div class="ch">
+      <div class="ct">Normalizar RUTs en Firebase</div>
+      <button class="btn bsm" onclick="document.getElementById('norm-panel').style.display='none'">✕</button>
+    </div>
+    <div id="norm-content"></div>
+  </div>
+
+  <div id="fusion-panel" style="display:none;" class="card">
+    <div class="ch">
+      <div class="ct">Fusionar sesiones duplicadas</div>
+      <button class="btn bsm" onclick="document.getElementById('fusion-panel').style.display='none'">✕</button>
+    </div>
+    <div id="fusion-content"></div>
+  </div>
+
   <!-- Selector fecha sesión -->
   <div id="reg-fechas-wrap" style="display:none">
     <div class="card">
       <div class="ch">
         <div class="ct" id="reg-area-title">Clases registradas</div>
-        <button class="btn bg bsm" onclick="exportarCSVFiltrado()">Exportar CSV</button>
+        <div class="flex" style="gap:6px;flex-wrap:wrap;">
+          <div class="vista-toggle">
+            <button class="vt-btn active" id="vt-sesion" onclick="setVistaReg('sesion')">Por clase</button>
+            <button class="vt-btn" id="vt-tabla" onclick="setVistaReg('tabla')">Tabla completa</button>
+          </div>
+          <button class="btn bg bsm" id="btn-exportar-reg" onclick="exportarRegistros()">↓ Descargar</button>
+        </div>
       </div>
-      <p style="font-size:12px;font-weight:500;color:var(--tx2);margin-bottom:12px;">Elige una clase para ver la asistencia detallada</p>
-      <div class="sesion-pills" id="sesion-pills"></div>
+      <div id="reg-vista-sesion">
+        <p style="font-size:12px;font-weight:500;color:var(--tx2);margin-bottom:12px;">Elige una clase para ver la asistencia detallada</p>
+        <div class="sesion-pills" id="sesion-pills"></div>
+      </div>
+      <div id="reg-vista-tabla" style="display:none;">
+        <p style="font-size:12px;font-weight:500;color:var(--tx2);margin-bottom:10px;">Todos los alumnos · todas las clases registradas para esta área</p>
+        <div class="tabla-completa-wrap" id="reg-tabla-completa"></div>
+      </div>
     </div>
   </div>
 
@@ -966,6 +1021,38 @@ const ALUMNOS  = {"M1": [{"correo": "malarconveloso@gmail.com", "nombre": "Matil
 
 let sesion=null, timerIv=null, timerTotal=0, liveUnsub=null;
 let matSel=null, estadoVerif={};
+// ── NORMALIZACIÓN DE RUT ─────────────────────────────────────
+// Convierte cualquier formato a "NNNNNNNN-D" (sin puntos, con guión, minúsculas)
+// Soporta: "12345678-9", "12.345.678-9", "123456789" (9 dígitos sin guión),
+//          "12345678k", "12345678K", "12.345.678-k", etc.
+function normalizarRut(rut){
+  if(!rut) return '';
+  // Quitar puntos y espacios, pasar a minúsculas
+  let s = rut.replace(/\./g,'').replace(/\s/g,'').toLowerCase().trim();
+  // Si ya tiene guión → extraer partes
+  if(s.includes('-')){
+    const [body, dv] = s.split('-');
+    const digits = body.replace(/\D/g,'');
+    return digits + '-' + (dv||'');
+  }
+  // Sin guión: si tiene 8 o 9 caracteres, el último es el dígito verificador
+  const solo = s.replace(/\D/g,'') + (s.endsWith('k') ? 'k' : '');
+  // Reconstruir: quitar k del bloque numérico si quedó ahí
+  const nums = s.replace(/[^0-9]/g,'');
+  const dvChar = s.slice(-1).match(/[0-9k]/) ? s.slice(-1) : '';
+  if(nums.length >= 7){
+    // Si el último char es dígito Y ya está en nums, lo separamos
+    if(dvChar && nums.endsWith(dvChar) && nums.length > 7){
+      return nums.slice(0,-1) + '-' + dvChar;
+    }
+    if(dvChar === 'k'){
+      return nums + '-k';
+    }
+  }
+  // Fallback: devolver sin guión limpio
+  return s.replace(/[^0-9k]/g,'');
+}
+
 // Registros estado global para la sección registros
 let regAreaSel=null, regSesionSel=null, regTodos=[], regDetalleCache=[];
 
@@ -1114,14 +1201,14 @@ window.abrirVerif=async()=>{
   // Siempre leer estado actual desde Firebase (incluye marcas manuales y QR)
   const snap=await getDocs(query(collection(db,'registros'),where('sesion_id','==',sesion.id)));
   const regsActuales=snap.docs.map(d=>d.data());
-  window._vpmap=new Map(regsActuales.filter(r=>r.estado==='1'||!r.estado).map(r=>[r.rut,r]));
+  window._vpmap=new Map(regsActuales.filter(r=>r.estado==='1'||!r.estado).map(r=>[normalizarRut(r.rut||''),r]));
 
   // Reconstruir estadoVerif respetando cambios manuales previos
   // Si ya existe estadoVerif, solo actualizar los que llegaron por QR (no pisar los manuales)
   if(Object.keys(estadoVerif).length===0){
     // Primera apertura: inicializar desde Firebase
     window._vlist.forEach(a=>{
-      const reg=regsActuales.find(r=>r.rut===a.rut);
+      const reg=regsActuales.find(r=>normalizarRut(r.rut||'')===normalizarRut(a.rut||''));
       estadoVerif[a.rut]=reg ? reg.estado==='1' : false;
     });
   } else {
@@ -1164,7 +1251,7 @@ window.toggleVerif=async(rut,checked)=>{
   actualizarStats();
   // Guardar inmediatamente en Firebase
   if(!sesion) return;
-  const regId=sesion.id+'_'+rut.replace(/[^0-9kK]/g,'');
+  const regId=sesion.id+'_'+normalizarRut(rut).replace(/[^0-9k]/g,'');
   const alumno=window._vlist?.find(a=>a.rut===rut);
   if(!alumno) return;
   if(checked){
@@ -1190,8 +1277,13 @@ window.toggleVerif=async(rut,checked)=>{
 
 function actualizarStats(){
   const vals=Object.values(estadoVerif);
-  document.getElementById('vs-p').textContent=vals.filter(Boolean).length+' presentes';
-  document.getElementById('vs-a').textContent=vals.filter(v=>!v).length+' ausentes';
+  const presentes=vals.filter(Boolean).length;
+  const ausentes=vals.filter(v=>!v).length;
+  document.getElementById('vs-p').textContent=presentes+' presentes';
+  document.getElementById('vs-a').textContent=ausentes+' ausentes';
+  // Sincronizar también el contador del header y la barra live
+  document.getElementById('conteo-tag').textContent=presentes+' presentes';
+  document.getElementById('live-n').textContent=presentes;
 }
 
 window.filtrarVerif=()=>renderVerif(document.getElementById('v-buscar').value);
@@ -1199,22 +1291,32 @@ window.filtrarVerif=()=>renderVerif(document.getElementById('v-buscar').value);
 window.confirmarCierre=async()=>{
   if(!sesion)return;
   const lista=window._vlist||[];
-  // toggleVerif ya guardó los cambios manuales en Firebase en tiempo real.
-  // Solo necesitamos escribir los alumnos que NO tienen ningún registro aún (ausentes no visitados)
+
+  // Leer estado ACTUAL de Firebase para esta sesión (QR + manual)
   const snapRegs=await getDocs(query(collection(db,'registros'),where('sesion_id','==',sesion.id)));
-  const rutConReg=new Set(snapRegs.docs.map(d=>d.data().rut));
+  const rutConReg=new Set(snapRegs.docs.map(d=>normalizarRut(d.data().rut||'')));
   const batch=writeBatch(db);
+
   for(const a of lista){
-    const regId=sesion.id+'_'+a.rut.replace(/[^0-9kK]/g,'');
-    if(!rutConReg.has(a.rut)){
-      // Sin ningún registro aún: marcar ausente
-      batch.set(doc(db,'registros',regId),{
-        id:regId, sesion_id:sesion.id,
+    const rn=normalizarRut(a.rut);
+    const regIdCorrecto=sesion.id+'_'+rn.replace(/[^0-9k]/g,'');
+
+    if(!rutConReg.has(rn)){
+      // Sin registro: marcar ausente
+      batch.set(doc(db,'registros',regIdCorrecto),{
+        id:regIdCorrecto, sesion_id:sesion.id,
         sesion_nombre:sesion.matNom, sesion_fecha:sesion.fecha,
         sesion_materia_key:sesion.matKey,
-        nombre:a.nombre, rut:a.rut, correo:a.correo||'',
+        nombre:a.nombre, rut:rn, correo:a.correo||'',
         estado:'0', timestamp:Date.now()
       });
+    } else {
+      // Ya registrado — normalizar ID si hace falta
+      const docViejo=snapRegs.docs.find(d=>normalizarRut(d.data().rut||'')===rn && d.id!==regIdCorrecto);
+      if(docViejo){
+        batch.set(doc(db,'registros',regIdCorrecto), {...docViejo.data(), id:regIdCorrecto, rut:rn});
+        batch.delete(doc(db,'registros',docViejo.id));
+      }
     }
   }
   await batch.commit();
@@ -1251,6 +1353,469 @@ function totalInscritosArea(materiaKey){
 
   // 2. Fallback al array estático del Excel (siempre disponible)
   return (ALUMNOS[materiaKey]||[]).length;
+}
+
+// ── NORMALIZAR RUTs EN FIREBASE ──────────────────────────────
+async function normalizarRutsFirebase(){
+  const panel  = document.getElementById('norm-panel');
+  const content= document.getElementById('norm-content');
+  panel.style.display='block';
+  document.getElementById('diag-panel').style.display='none';
+  content.innerHTML='<div class="loading"><span class="sp"></span>Analizando registros...</div>';
+
+  // 1. Traer todos los registros
+  const snapR = await getDocs(collection(db,'registros'));
+  // Guardar ref e id por separado para evitar que el spread de data() los sobrescriba
+  const todos = snapR.docs.map(d=>{
+    const data = d.data();
+    return { _docId: d.id, _docRef: d.ref, ...data };
+  });
+
+  // 2. Construir mapa rut_normalizado → alumno (nombre canónico + correo)
+  //    usando el array estático ALUMNOS como fuente de verdad
+  const nominaMap = new Map(); // normRut → {nombre, correo}
+  for(const lista of Object.values(ALUMNOS)){
+    for(const a of lista){
+      const n = normalizarRut(a.rut||'');
+      if(n && !nominaMap.has(n)) nominaMap.set(n,{nombre:a.nombre,correo:a.correo||''});
+    }
+  }
+  // También agregar alumnos de Firebase si están cargados
+  if(todosAlumnos.length){
+    for(const a of todosAlumnos){
+      const n = normalizarRut(a.rut||'');
+      if(n && !nominaMap.has(n)) nominaMap.set(n,{nombre:a.nombre,correo:a.correo||''});
+    }
+  }
+
+  // 3. Detectar registros que necesitan actualización
+  const aCambiar=[], sinMatch=[], yaOk=[];
+
+  for(const r of todos){
+    const rutOriginal = r.rut||'';
+    const rutNorm = normalizarRut(rutOriginal);
+    const rutYaOk = (rutOriginal === rutNorm);
+
+    // Calcular regId correcto
+    const regIdCorrecto = r.sesion_id + '_' + rutNorm.replace(/[^0-9k]/g,'');
+    const idActual = r._docId;
+    const idCorrecto = (idActual === regIdCorrecto);
+
+    if(rutYaOk && idCorrecto){
+      yaOk.push(r);
+      continue;
+    }
+
+    const datosNomina = nominaMap.get(rutNorm);
+
+    aCambiar.push({
+      docId: idActual,
+      regIdCorrecto,
+      rutOriginal,
+      rutNorm,
+      nombreOriginal: r.nombre,
+      nombreNomina: datosNomina?.nombre||null,
+      correoNomina: datosNomina?.correo||null,
+      sesion_id: r.sesion_id,
+      sesion_fecha: r.sesion_fecha,
+      sesion_nombre: r.sesion_nombre,
+      sesion_materia_key: r.sesion_materia_key,
+      estado: r.estado,
+      timestamp: r.timestamp,
+      marcado_manual: r.marcado_manual||false,
+      enNomina: !!datosNomina,
+    });
+  }
+
+  // 4. Mostrar preview antes de aplicar
+  if(!aCambiar.length){
+    content.innerHTML=`<div class="msg ms" style="display:block;margin:0;">
+      ✓ Todos los ${yaOk.length} registros ya tienen RUT normalizado. No hay nada que actualizar.
+    </div>`;
+    return;
+  }
+
+  const enNomina = aCambiar.filter(r=>r.enNomina);
+  const fuera    = aCambiar.filter(r=>!r.enNomina);
+
+  const filas = aCambiar.map(r=>`
+    <tr style="${r.enNomina?'':'background:var(--am-l)'}">
+      <td style="font-size:11px;white-space:nowrap;padding:5px 8px;">${r.sesion_fecha||'—'}</td>
+      <td style="font-size:11px;padding:5px 8px;">${r.sesion_nombre||'—'}</td>
+      <td style="font-size:11px;font-family:monospace;padding:5px 8px;color:var(--rj);">${r.rutOriginal}</td>
+      <td style="font-size:11px;font-family:monospace;padding:5px 8px;color:var(--vd);">${r.rutNorm}</td>
+      <td style="font-size:11px;padding:5px 8px;">${r.nombreOriginal}</td>
+      <td style="font-size:11px;padding:5px 8px;color:${r.enNomina?'var(--vd)':'var(--am)'};">${r.enNomina?(r.nombreNomina||r.nombreOriginal):'⚠ No en nómina'}</td>
+    </tr>`).join('');
+
+  content.innerHTML=`
+    <p style="font-size:12px;color:var(--tx2);font-weight:500;margin-bottom:12px;">
+      Se encontraron <strong style="color:var(--mar)">${aCambiar.length} registros</strong> con RUT en formato incorrecto.
+      <span style="color:var(--vd)">${enNomina.length} están en la nómina</span> y se corregirán automáticamente.
+      ${fuera.length?`<span style="color:var(--am)">${fuera.length} no están en la nómina</span> (solo se normaliza el formato del RUT).`:''}
+    </p>
+    <div style="overflow-x:auto;border:1px solid var(--bd);border-radius:var(--r);margin-bottom:14px;">
+      <table style="width:100%;border-collapse:collapse;font-size:12px;">
+        <thead><tr style="background:var(--fondo);">
+          <th style="padding:6px 8px;text-align:left;font-size:10px;color:var(--cal-d);text-transform:uppercase;">Fecha</th>
+          <th style="padding:6px 8px;text-align:left;font-size:10px;color:var(--cal-d);text-transform:uppercase;">Materia</th>
+          <th style="padding:6px 8px;text-align:left;font-size:10px;color:var(--cal-d);text-transform:uppercase;">RUT original</th>
+          <th style="padding:6px 8px;text-align:left;font-size:10px;color:var(--cal-d);text-transform:uppercase;">RUT correcto</th>
+          <th style="padding:6px 8px;text-align:left;font-size:10px;color:var(--cal-d);text-transform:uppercase;">Nombre registrado</th>
+          <th style="padding:6px 8px;text-align:left;font-size:10px;color:var(--cal-d);text-transform:uppercase;">Nombre nómina</th>
+        </tr></thead>
+        <tbody>${filas}</tbody>
+      </table>
+    </div>
+    <div class="flex" style="gap:8px;">
+      <button class="btn bp" id="btn-aplicar-norm">✓ Aplicar correcciones (${aCambiar.length})</button>
+      <button class="btn" onclick="document.getElementById('norm-panel').style.display='none'">Cancelar</button>
+    </div>
+    <div id="norm-progress" style="display:none;margin-top:10px;"></div>
+  `;
+
+  // 5. Listener aplicar
+  document.getElementById('btn-aplicar-norm').onclick = async()=>{
+    const progEl = document.getElementById('norm-progress');
+    const btnApl = document.getElementById('btn-aplicar-norm');
+    btnApl.disabled=true; btnApl.textContent='Aplicando...';
+    progEl.style.display='block';
+    progEl.innerHTML='<span class="sp"></span> Actualizando registros en Firebase...';
+
+    let ok=0, err=0;
+    // Firebase batch máx 500 operaciones
+    const BATCH_SIZE=400;
+    for(let i=0;i<aCambiar.length;i+=BATCH_SIZE){
+      const chunk=aCambiar.slice(i,i+BATCH_SIZE);
+      const batch=writeBatch(db);
+      for(const r of chunk){
+        // Si el ID cambió: crear nuevo doc + borrar viejo
+        // Si solo cambió el rut (mismo ID): actualizar con merge
+      for(const r of chunk){
+          const nuevoDoc={
+            id: r.regIdCorrecto,
+            sesion_id: r.sesion_id,
+            sesion_fecha: r.sesion_fecha,
+            sesion_nombre: r.sesion_nombre,
+            sesion_materia_key: r.sesion_materia_key,
+            rut: r.rutNorm,
+            nombre: r.nombreNomina||r.nombreOriginal,
+            correo: r.correoNomina||'',
+            estado: r.estado,
+            timestamp: r.timestamp,
+            marcado_manual: r.marcado_manual,
+            _rut_normalizado: true,
+          };
+          if(r.regIdCorrecto !== r.docId){
+            // ID cambia → crear doc nuevo con ID correcto + borrar el viejo
+            batch.set(doc(db,'registros', r.regIdCorrecto), nuevoDoc);
+            batch.delete(doc(db,'registros', r.docId));
+          } else {
+            // Mismo ID → solo actualizar rut, nombre, correo
+            batch.update(doc(db,'registros', r.docId), {
+              rut: r.rutNorm,
+              nombre: r.nombreNomina||r.nombreOriginal,
+              correo: r.correoNomina||'',
+              _rut_normalizado: true,
+            });
+          }
+          ok++;
+        }
+      }
+      try{ await batch.commit(); }
+      catch(e){ err+=chunk.length; ok-=chunk.length; console.error(e); }
+      progEl.innerHTML=`<span class="sp"></span> ${ok}/${aCambiar.length} registros actualizados...`;
+    }
+
+    if(err){
+      progEl.innerHTML=`<span style="color:var(--rj)">⚠ ${ok} actualizados, ${err} fallaron. Revisa la consola.</span>`;
+    } else {
+      progEl.innerHTML=`<span style="color:var(--vd)">✓ ${ok} registros normalizados correctamente. Recargando vista...</span>`;
+      setTimeout(()=>{ initRegistros(); document.getElementById('norm-panel').style.display='none'; },1500);
+    }
+  };
+}
+
+// ── LIMPIEZA AUTOMÁTICA (normalizar RUTs + fusionar duplicados) ──────────────
+// Corre silenciosamente cada vez que se abre la pestaña Registros.
+// Un solo fetch de todos los registros, sin doble lectura.
+async function limpiarRegistrosAuto(){
+  const snapR = await getDocs(collection(db,'registros'));
+  const todos = snapR.docs.map(d=>{ const o=d.data(); o._docId=d.id; return o; });
+
+  // Construir nómina map: rutNorm → {nombre, correo}
+  const nominaMap = new Map();
+  for(const lista of Object.values(ALUMNOS)){
+    for(const a of lista){
+      const n = normalizarRut(a.rut||'');
+      if(n && !nominaMap.has(n)) nominaMap.set(n,{nombre:a.nombre,correo:a.correo||''});
+    }
+  }
+
+  // Agrupar por "materia_key|fecha" → rutNorm → mejor registro
+  // Esto resuelve simultáneamente: RUTs mal formateados Y sesiones duplicadas
+  const grupos = new Map(); // "matKey|fecha" → Map(rutNorm → mejorRegistro)
+  const sidGanador = new Map(); // "matKey|fecha" → sesion_id ganador (el más reciente)
+
+  for(const r of todos){
+    const rn = normalizarRut(r.rut||'');
+    if(!rn) continue;
+    const clave = `${r.sesion_materia_key||'?'}|${r.sesion_fecha||'?'}`;
+
+    // Determinar sesión ganadora (mayor timestamp)
+    const tsActual = r.timestamp||0;
+    if(!sidGanador.has(clave) || tsActual > (sidGanador.get(clave).ts||0)){
+      sidGanador.set(clave, {sid: r.sesion_id, nombre: r.sesion_nombre||'', ts: tsActual});
+    }
+
+    if(!grupos.has(clave)) grupos.set(clave, new Map());
+    const porRut = grupos.get(clave);
+    const prev = porRut.get(rn);
+    const prioridad = e => e==='1'?3 : e==='J'||e==='j'?2 : e==='0'?1 : 0;
+    if(!prev
+      || prioridad(r.estado) > prioridad(prev.estado)
+      || (prioridad(r.estado)===prioridad(prev.estado) && tsActual>(prev.timestamp||0))){
+      porRut.set(rn, r);
+    }
+  }
+
+  // Calcular operaciones necesarias
+  const opsSet = [];
+  const opsDelete = new Set();
+
+  for(const [clave, porRut] of grupos){
+    const [matKey, fecha] = clave.split('|');
+    const {sid: ganSid, nombre: ganNombre} = sidGanador.get(clave);
+
+    for(const [rn, r] of porRut){
+      const regIdFinal = ganSid + '_' + rn.replace(/[^0-9k]/g,'');
+      const datosNomina = nominaMap.get(rn);
+      const rutOriginalOk = r.rut === rn;
+      const idOk = r._docId === regIdFinal;
+
+      // Solo escribir si algo cambió
+      if(!rutOriginalOk || !idOk){
+        opsSet.push({ id: regIdFinal, data:{
+          id: regIdFinal,
+          sesion_id: ganSid,
+          sesion_fecha: fecha,
+          sesion_nombre: ganNombre,
+          sesion_materia_key: matKey,
+          rut: rn,
+          nombre: datosNomina?.nombre || r.nombre,
+          correo: datosNomina?.correo || r.correo||'',
+          estado: r.estado,
+          timestamp: r.timestamp||Date.now(),
+          marcado_manual: r.marcado_manual||false,
+          _limpiado: true,
+        }});
+      }
+      // Marcar el doc original para borrar si tiene ID incorrecto
+      if(!idOk) opsDelete.add(r._docId);
+    }
+  }
+
+  // Marcar para borrar todos los docs que no son el mejor de su grupo
+  for(const r of todos){
+    const rn = normalizarRut(r.rut||'');
+    if(!rn) continue;
+    const clave = `${r.sesion_materia_key||'?'}|${r.sesion_fecha||'?'}`;
+    const {sid: ganSid} = sidGanador.get(clave)||{};
+    const regIdFinal = ganSid + '_' + rn.replace(/[^0-9k]/g,'');
+    if(r._docId !== regIdFinal){
+      opsDelete.add(r._docId);
+    }
+  }
+
+  // No borrar IDs que acabamos de escribir
+  const opsSetIds = new Set(opsSet.map(o=>o.id));
+  const opsDeleteFinal = [...opsDelete].filter(id=>!opsSetIds.has(id));
+
+  if(!opsSet.length && !opsDeleteFinal.length) return; // todo limpio, nada que hacer
+
+  // Ejecutar en batches de 400
+  const allOps = [
+    ...opsSet.map(o=>({type:'set', id:o.id, data:o.data})),
+    ...opsDeleteFinal.map(id=>({type:'delete', id})),
+  ];
+  const BATCH = 400;
+  for(let i=0;i<allOps.length;i+=BATCH){
+    const batch = writeBatch(db);
+    for(const op of allOps.slice(i,i+BATCH)){
+      if(op.type==='set') batch.set(doc(db,'registros',op.id), op.data);
+      else                batch.delete(doc(db,'registros',op.id));
+    }
+    try{ await batch.commit(); }
+    catch(e){ console.error('limpiarRegistrosAuto batch error:', e); }
+  }
+}
+
+// ── FUSIONAR SESIONES DUPLICADAS ─────────────────────────────
+async function fusionarDuplicados(silencioso=false){
+  const panel  = document.getElementById('fusion-panel');
+  const content= document.getElementById('fusion-content');
+  if(!silencioso){
+    panel.style.display='block';
+    document.getElementById('diag-panel').style.display='none';
+    document.getElementById('norm-panel').style.display='none';
+    content.innerHTML='<div class="loading"><span class="sp"></span>Analizando sesiones duplicadas...</div>';
+  }
+
+  // 1. Traer todos los registros — guardar el ID del documento de Firestore
+  //    en _docId DESPUÉS del spread para que no sea pisado por el campo "id" del doc
+  const snapR = await getDocs(collection(db,'registros'));
+  const todos = snapR.docs.map(d=>{ const o=d.data(); o._docId=d.id; return o; });
+
+  // 2. Agrupar por "materia_key|fecha" → sesion_id → [registros]
+  const grupos = new Map();
+  for(const r of todos){
+    const k = `${r.sesion_materia_key||'?'}|${r.sesion_fecha||'?'}`;
+    if(!grupos.has(k)) grupos.set(k, new Map());
+    const sesMap = grupos.get(k);
+    if(!sesMap.has(r.sesion_id)) sesMap.set(r.sesion_id, []);
+    sesMap.get(r.sesion_id).push(r);
+  }
+
+  // 3. Filtrar solo los que tienen más de una sesión
+  const duplicados=[];
+  for(const [clave, sesMap] of grupos){
+    if(sesMap.size < 2) continue;
+    const [matKey, fecha] = clave.split('|');
+    duplicados.push({ clave, matKey, fecha, sesMap });
+  }
+
+  if(!duplicados.length){
+    if(!silencioso) content.innerHTML='<div class="msg ms" style="display:block;margin:0;">✓ No se encontraron sesiones duplicadas.</div>';
+    return;
+  }
+
+  // 4. Para cada grupo: elegir sesión ganadora y construir registros fusionados
+  const planesTexto=[];
+  const opsSet=[];   // {id, data}  — documentos a escribir/sobreescribir
+  const opsDelete=[]; // ids de documentos a borrar
+
+  for(const d of duplicados){
+    // Ordenar sesiones: la que tenga mayor maxTimestamp es la "ganadora" (más reciente)
+    const sesiones=[...d.sesMap.entries()].map(([sid,regs])=>({
+      sid, regs,
+      maxTs: Math.max(...regs.map(r=>r.timestamp||0))
+    })).sort((a,b)=>b.maxTs-a.maxTs);
+
+    const ganadora = sesiones[0];
+    const perdedoras = sesiones.slice(1);
+
+    // Construir mapa rut_norm → mejor registro de TODAS las sesiones
+    const prioridad = e => e==='1'?3 : e==='J'||e==='j'?2 : e==='0'?1 : 0;
+    const porRut = new Map();
+    for(const {sid, regs} of sesiones){
+      for(const r of regs){
+        const rn = normalizarRut(r.rut||'');
+        if(!rn) continue;
+        const prev = porRut.get(rn);
+        if(!prev
+          || prioridad(r.estado) > prioridad(prev.estado)
+          || (prioridad(r.estado)===prioridad(prev.estado) && (r.timestamp||0)>(prev.timestamp||0))){
+          porRut.set(rn, r);
+        }
+      }
+    }
+
+    // Registros finales → siempre con sesion_id de la ganadora
+    for(const [rn, r] of porRut){
+      const regIdFinal = ganadora.sid + '_' + rn.replace(/[^0-9k]/g,'');
+      opsSet.push({ id:regIdFinal, data:{
+        id: regIdFinal,
+        sesion_id: ganadora.sid,
+        sesion_fecha: d.fecha,
+        sesion_nombre: ganadora.regs[0]?.sesion_nombre || r.sesion_nombre || '',
+        sesion_materia_key: d.matKey,
+        rut: rn,
+        nombre: r.nombre,
+        correo: r.correo||'',
+        estado: r.estado,
+        timestamp: r.timestamp||Date.now(),
+        marcado_manual: r.marcado_manual||false,
+        _fusionado: true,
+      }});
+    }
+
+    // Borrar TODOS los documentos originales de TODAS las sesiones
+    // (los fusionados ya se escribieron arriba con IDs correctos)
+    for(const {regs} of sesiones){
+      for(const r of regs){
+        opsDelete.push(r._docId);
+      }
+    }
+
+    const presTotal=[...porRut.values()].filter(r=>r.estado==='1').length;
+    planesTexto.push(`${d.matKey} · ${d.fecha}: ${sesiones.length} sesiones → 1 fusionada (${presTotal} presentes)`);
+  }
+
+  // Eliminar duplicados en opsDelete (mismo docId puede aparecer si hay set+delete del mismo doc)
+  // Los sets con IDs nuevos no colisionan con los deletes de IDs viejos — salvo si el ID ya era correcto
+  // Para evitar borrar lo que acabamos de escribir: quitamos de opsDelete los IDs que también están en opsSet
+  const opsSetIds = new Set(opsSet.map(o=>o.id));
+  const opsDeleteFinal = [...new Set(opsDelete)].filter(id=>!opsSetIds.has(id));
+
+  if(!silencioso){
+    const lista = planesTexto.map(t=>`<div style="font-size:12px;padding:5px 0;border-bottom:1px solid var(--bd);">${t}</div>`).join('');
+    content.innerHTML=`
+      <p style="font-size:12px;color:var(--tx2);font-weight:500;margin-bottom:12px;">
+        <strong style="color:var(--mar)">${duplicados.length} fechas duplicadas</strong> detectadas.
+        Se escribirán <strong>${opsSet.length}</strong> registros fusionados y se borrarán <strong>${opsDeleteFinal.length}</strong> documentos obsoletos.
+      </p>
+      <div style="margin-bottom:14px;max-height:220px;overflow-y:auto;">${lista}</div>
+      <div class="flex" style="gap:8px;">
+        <button class="btn bp" id="btn-aplicar-fusion">✓ Aplicar fusión</button>
+        <button class="btn" onclick="document.getElementById('fusion-panel').style.display='none'">Cancelar</button>
+      </div>
+      <div id="fusion-progress" style="display:none;margin-top:10px;"></div>
+    `;
+    document.getElementById('btn-aplicar-fusion').onclick = ()=>aplicarFusion(opsSet, opsDeleteFinal);
+  } else {
+    // Modo silencioso: aplicar directo sin confirmación
+    await aplicarFusion(opsSet, opsDeleteFinal, true);
+  }
+}
+
+async function aplicarFusion(opsSet, opsDelete, silencioso=false){
+  const progEl = document.getElementById('fusion-progress');
+  const btnApl = document.getElementById('btn-aplicar-fusion');
+  if(!silencioso){
+    if(btnApl) { btnApl.disabled=true; btnApl.textContent='Aplicando...'; }
+    if(progEl) { progEl.style.display='block'; progEl.innerHTML='<span class="sp"></span> Escribiendo...'; }
+  }
+
+  const BATCH_SIZE=400;
+  let ok=0, errores=0;
+  const totalOps = opsSet.length + opsDelete.length;
+
+  // Primero escribir (set), luego borrar — para no dejar huecos si falla
+  const allOps=[
+    ...opsSet.map(o=>({type:'set', id:o.id, data:o.data})),
+    ...opsDelete.map(id=>({type:'delete', id})),
+  ];
+
+  for(let i=0;i<allOps.length;i+=BATCH_SIZE){
+    const chunk=allOps.slice(i,i+BATCH_SIZE);
+    const batch=writeBatch(db);
+    for(const op of chunk){
+      if(op.type==='set')  batch.set(doc(db,'registros',op.id), op.data);
+      else                 batch.delete(doc(db,'registros',op.id));
+    }
+    try{ await batch.commit(); ok+=chunk.length; }
+    catch(e){ errores+=chunk.length; console.error('Batch error:',e); }
+    if(!silencioso && progEl) progEl.innerHTML=`<span class="sp"></span> ${ok}/${totalOps} operaciones...`;
+  }
+
+  if(!silencioso){
+    if(errores){
+      if(progEl) progEl.innerHTML=`<span style="color:var(--rj)">⚠ ${ok} ok, ${errores} fallaron.</span>`;
+    } else {
+      if(progEl) progEl.innerHTML=`<span style="color:var(--vd)">✓ Fusión completada. Recargando...</span>`;
+      setTimeout(()=>{ initRegistros(); document.getElementById('fusion-panel').style.display='none'; },1200);
+    }
+  }
 }
 
 // ── DIAGNÓSTICO ──────────────────────────────────────────────
@@ -1314,6 +1879,20 @@ async function initRegistros(){
     btnDiag.addEventListener('click', ()=>correrDiagnostico());
   }
 
+  // Listener botón normalizar RUTs
+  const btnNorm = document.getElementById('btn-normalizar-ruts');
+  if(btnNorm && !btnNorm._bound){
+    btnNorm._bound = true;
+    btnNorm.addEventListener('click', ()=>normalizarRutsFirebase());
+  }
+
+  // Listener botón fusionar duplicados
+  const btnFus = document.getElementById('btn-fusionar-duplicados');
+  if(btnFus && !btnFus._bound){
+    btnFus._bound = true;
+    btnFus.addEventListener('click', ()=>fusionarDuplicados());
+  }
+
   // Traer todos los registros
   const snap=await getDocs(collection(db,'registros'));
   regTodos=snap.docs.map(d=>d.data()).map(r=>{
@@ -1327,6 +1906,21 @@ async function initRegistros(){
       return {...r, sesion_materia_key:'Biología'};
     }
     // Otros posibles aliases
+    if(r.sesion_materia_key==='Lenguaje') return {...r, sesion_materia_key:'Lenguaje'};
+    return r;
+  });
+
+  // Limpiar datos automáticamente: primero normalizar RUTs, luego fusionar duplicados
+  await limpiarRegistrosAuto();
+  // Recargar regTodos ya limpio
+  const snap2=await getDocs(collection(db,'registros'));
+  regTodos=snap2.docs.map(d=>d.data()).map(r=>{
+    if(r.sesion_materia_key==='Ciencias'){
+      const nom=(r.sesion_nombre||'').toLowerCase();
+      if(nom.includes('quim')) return {...r, sesion_materia_key:'Química'};
+      if(nom.includes('biol')) return {...r, sesion_materia_key:'Biología'};
+      return {...r, sesion_materia_key:'Biología'};
+    }
     if(r.sesion_materia_key==='Lenguaje') return {...r, sesion_materia_key:'Lenguaje'};
     return r;
   });
@@ -1395,6 +1989,9 @@ window.selArea=k=>{
 
   // Auto-seleccionar la más reciente
   if(sesiones.length) selSesionReg(sesiones[sesiones.length-1].id);
+
+  // Si la vista activa es tabla completa, renderizarla
+  if(vistaRegActual==='tabla') renderTablaCompleta(k);
 };
 
 window.selSesionReg=sid=>{
@@ -1444,19 +2041,19 @@ function renderDetalle(ses, busq){
 
   // Construir set de RUTs inscritos en el área para detectar anomalías
   const rutosInscritos = new Set(
-    (ALUMNOS[regAreaSel]||[]).map(a=>a.rut.replace(/\./g,'').toLowerCase())
+    (ALUMNOS[regAreaSel]||[]).map(a=>normalizarRut(a.rut))
   );
   // También incluir alumnos de Firebase si están cargados
   if(todosAlumnos.length && regAreaSel){
     const area = MATERIAS[regAreaSel]?.area;
     todosAlumnos.filter(a=>normalizarAreas(a).includes(area||regAreaSel))
-      .forEach(a=>rutosInscritos.add((a.rut||'').replace(/\./g,'').toLowerCase()));
+      .forEach(a=>rutosInscritos.add(normalizarRut(a.rut||'')));
   }
 
   document.getElementById('reg-tabla').innerHTML=sorted.length?`<table>
     <thead><tr><th>Nombre</th><th>RUT</th><th>Estado</th><th>Hora</th><th style="width:90px"></th></tr></thead>
     <tbody>${sorted.map(r=>{
-      const rutNorm = (r.rut||'').replace(/\./g,'').toLowerCase();
+      const rutNorm = normalizarRut(r.rut||'');
       const esAnonimo = !rutosInscritos.has(rutNorm);
       const anomalia = esAnonimo
         ? '<span title="No está en la nómina del área" style="font-size:10px;font-weight:700;color:var(--am);margin-left:4px;">⚠ No inscrito</span>'
@@ -1496,6 +2093,234 @@ function renderDetalle(ses, busq){
     if(btnEliminar){ window.eliminarRegistro(btnEliminar.dataset.rid); return; }
   });
 })();
+
+// ── VISTA TOGGLE ─────────────────────────────────────────────
+let vistaRegActual = 'sesion';
+
+window.setVistaReg = v => {
+  vistaRegActual = v;
+  document.getElementById('vt-sesion').classList.toggle('active', v==='sesion');
+  document.getElementById('vt-tabla').classList.toggle('active', v==='tabla');
+  document.getElementById('reg-vista-sesion').style.display = v==='sesion' ? '' : 'none';
+  document.getElementById('reg-vista-tabla').style.display  = v==='tabla'  ? '' : 'none';
+  document.getElementById('reg-detalle').style.display = (v==='sesion' && regSesionSel) ? 'block' : 'none';
+  if(v==='tabla' && regAreaSel) renderTablaCompleta(regAreaSel);
+};
+
+function renderTablaCompleta(areaKey){
+  const regsArea = regTodos.filter(r=>r.sesion_materia_key===areaKey);
+  if(!regsArea.length){
+    document.getElementById('reg-tabla-completa').innerHTML='<div class="empty">Sin registros para esta área</div>';
+    return;
+  }
+
+  // Lista de alumnos ordenada
+  const area = MATERIAS[areaKey]?.area;
+  let alumnos;
+  if(todosAlumnos.length){
+    alumnos = todosAlumnos.filter(a=>normalizarAreas(a).includes(area||areaKey))
+      .sort((a,b)=>(a.nombre||'').localeCompare(b.nombre||''));
+  }
+  if(!alumnos||!alumnos.length) alumnos=(ALUMNOS[areaKey]||[]).slice().sort((a,b)=>a.nombre.localeCompare(b.nombre));
+
+  // Sesiones ordenadas cronológicamente
+  const sesMap=new Map();
+  for(const r of regsArea){
+    if(!sesMap.has(r.sesion_id)) sesMap.set(r.sesion_id,{id:r.sesion_id,fecha:r.sesion_fecha,regs:[]});
+    sesMap.get(r.sesion_id).regs.push(r);
+  }
+  const sesiones=[...sesMap.values()].sort((a,b)=>a.fecha.localeCompare(b.fecha));
+
+  // Agrupar por mes para encabezado
+  const meses={};
+  for(const s of sesiones){
+    const mes=s.fecha.slice(0,7);
+    if(!meses[mes]) meses[mes]=[];
+    meses[mes].push(s);
+  }
+  const nombreMes=m=>{
+    const[y,mo]=m.split('-');
+    const ns=['Enero','Febrero','Marzo','Abril','Mayo','Junio','Julio','Agosto','Septiembre','Octubre','Noviembre','Diciembre'];
+    return ns[parseInt(mo)-1]+' '+y;
+  };
+
+  // Mapa rut_normalizado → sesion_id → estado
+  const mapaEst=new Map();
+  for(const r of regsArea){
+    const rn=normalizarRut(r.rut||'');
+    if(!mapaEst.has(rn)) mapaEst.set(rn,{});
+    mapaEst.get(rn)[r.sesion_id]=r.estado;
+  }
+
+  // Encabezados
+  let thead='<thead><tr><th class="tc-header-fijo" rowspan="2">Alumno</th>';
+  for(const[mes,sess] of Object.entries(meses))
+    thead+=`<th class="tc-mes" colspan="${sess.length}">${nombreMes(mes)}</th>`;
+  thead+='<th class="tc-total" rowspan="2">FALTAS</th></tr><tr>';
+  for(const s of sesiones) thead+=`<th class="tc-dia">${s.fecha.slice(8)}</th>`;
+  thead+='</tr></thead>';
+
+  // Filas
+  let tbody='<tbody>';
+  for(const alu of alumnos){
+    const rn=normalizarRut(alu.rut||'');
+    const estMap=mapaEst.get(rn)||{};
+    let faltas=0, celdas='';
+    for(const s of sesiones){
+      const est=estMap[s.id];
+      let cls,txt;
+      if(est==='1')               { cls='p'; txt='✓'; }
+      else if(est==='0')          { cls='a'; txt='✗'; faltas++; }
+      else if(est==='J'||est==='j'){ cls='j'; txt='J'; }
+      else                        { cls='v'; txt='·'; }
+      // data-sid y data-rut para edición inline
+      celdas+=`<td class="tc-cel ${cls}" data-sid="${s.id}" data-rut="${encodeURIComponent(rn)}" title="Click para cambiar estado">${txt}</td>`;
+    }
+    const fc=faltas>=5?'bad':faltas===4?'warn':'ok';
+    tbody+=`<tr data-rn="${encodeURIComponent(rn)}"><td class="tc-nombre">${alu.nombre}</td>${celdas}<td class="tc-total-val ${fc}" data-faltas="${faltas}">${faltas}</td></tr>`;
+  }
+  tbody+='</tbody>';
+
+  document.getElementById('reg-tabla-completa').innerHTML=`<table class="tabla-completa">${thead}${tbody}</table>`;
+
+  // Delegación de click para edición inline
+  if(!document.getElementById('reg-tabla-completa')._delegated){
+    document.getElementById('reg-tabla-completa')._delegated=true;
+    document.getElementById('reg-tabla-completa').addEventListener('click', e=>{
+      const td=e.target.closest('td.tc-cel');
+      if(!td) return;
+      editarCeldaTabla(td);
+    });
+  }
+}
+
+// ── EDICIÓN INLINE EN TABLA COMPLETA ─────────────────────────
+// Ciclo: vacío → presente → ausente → justificado → vacío
+const _cicloEst = { '·':'1', '1':'0', '0':'J', 'J':'·' };
+const _clsCel   = { '1':'p', '0':'a', 'J':'j', '·':'v' };
+const _txtCel   = { '1':'✓', '0':'✗', 'J':'J', '·':'·' };
+
+async function editarCeldaTabla(td){
+  const sid  = td.dataset.sid;
+  const rut  = decodeURIComponent(td.dataset.rut);
+  const txtActual = td.textContent.trim();
+  // Mapear símbolo actual → clave de estado
+  const estActual = {'✓':'1','✗':'0','J':'J','·':'·'}[txtActual] ?? '·';
+  const nuevoEst  = _cicloEst[estActual];
+
+  // Actualizar UI inmediatamente
+  td.className = `tc-cel ${_clsCel[nuevoEst]}`;
+  td.textContent = _txtCel[nuevoEst];
+
+  // Recalcular faltas de esta fila
+  const tr = td.closest('tr');
+  const celdas = [...tr.querySelectorAll('td.tc-cel')];
+  const faltas = celdas.filter(c=>c.textContent.trim()==='✗').length;
+  const totalTd = tr.querySelector('.tc-total-val');
+  if(totalTd){
+    totalTd.textContent=faltas;
+    totalTd.className='tc-total-val '+(faltas>=5?'bad':faltas===4?'warn':'ok');
+  }
+
+  // Buscar el registro en Firebase (sesion_id + rut normalizado)
+  const regId = sid + '_' + rut.replace(/[^0-9k]/g,'');
+
+  // Buscar datos del alumno para el registro
+  const todosAlus = Object.values(ALUMNOS).flat();
+  const alumno = todosAlumnos.find(a=>normalizarRut(a.rut||'')===rut)
+               || todosAlus.find(a=>normalizarRut(a.rut||'')===rut);
+
+  // Buscar datos de la sesión
+  const sesInfo = window._regSesiones?.find(s=>s.id===sid)
+               || regTodos.find(r=>r.sesion_id===sid);
+
+  try {
+    if(nuevoEst==='·'){
+      // Sin clase → borrar el registro si existe
+      await deleteDoc(doc(db,'registros',regId));
+      // Actualizar cache
+      regTodos = regTodos.filter(r=>!(r.sesion_id===sid && normalizarRut(r.rut||'')===rut));
+    } else {
+      const datos = {
+        id: regId,
+        sesion_id: sid,
+        sesion_fecha: sesInfo?.fecha || sesInfo?.sesion_fecha || '',
+        sesion_nombre: sesInfo?.nombre || sesInfo?.sesion_nombre || '',
+        sesion_materia_key: sesInfo?.sesion_materia_key || regAreaSel,
+        rut,
+        nombre: alumno?.nombre || rut,
+        correo: alumno?.correo || '',
+        estado: nuevoEst,
+        marcado_manual: true,
+        timestamp: Date.now(),
+      };
+      await setDoc(doc(db,'registros',regId), datos, {merge:true});
+      // Actualizar cache
+      const idx = regTodos.findIndex(r=>r.id===regId);
+      if(idx>=0) regTodos[idx]={...regTodos[idx], estado:nuevoEst};
+      else regTodos.push(datos);
+    }
+    // Flash de confirmación
+    td.style.outline='2px solid var(--cal)';
+    setTimeout(()=>td.style.outline='',600);
+  } catch(err){
+    console.error('Error al guardar:', err);
+    // Revertir UI si falló
+    td.className=`tc-cel ${_clsCel[estActual]}`;
+    td.textContent=_txtCel[estActual];
+    alert('Error al guardar. Revisa la consola.');
+  }
+}
+
+// ── DESCARGA ─────────────────────────────────────────────────
+window.exportarRegistros = () => {
+  if(!regAreaSel){alert('Selecciona un área primero.');return;}
+
+  if(vistaRegActual==='sesion'){
+    const ses=window._regSesiones?.find(s=>s.id===regSesionSel);
+    if(!ses){alert('Selecciona una clase primero.');return;}
+    const rows=ses.regs.map(r=>[r.nombre,r.rut,r.correo||'',r.sesion_nombre,r.sesion_fecha,r.estado||'1'].map(v=>`"${String(v).replace(/"/g,'""')}"`).join(','));
+    const csv=['nombre,rut,correo,materia,fecha,estado',...rows].join('\n');
+    const blob=new Blob(['\uFEFF'+csv],{type:'text/csv;charset=utf-8;'});
+    const a=document.createElement('a');a.href=URL.createObjectURL(blob);
+    a.download=`asistencia_${regAreaSel}_${ses.fecha}.csv`;a.click();
+    return;
+  }
+
+  // Tabla completa
+  const regsArea=regTodos.filter(r=>r.sesion_materia_key===regAreaSel);
+  if(!regsArea.length){alert('Sin datos para exportar.');return;}
+  const area=MATERIAS[regAreaSel]?.area;
+  let alumnos;
+  if(todosAlumnos.length){
+    alumnos=todosAlumnos.filter(a=>normalizarAreas(a).includes(area||regAreaSel)).sort((a,b)=>(a.nombre||'').localeCompare(b.nombre||''));
+  }
+  if(!alumnos||!alumnos.length) alumnos=(ALUMNOS[regAreaSel]||[]).slice().sort((a,b)=>a.nombre.localeCompare(b.nombre));
+  const sesMap=new Map();
+  for(const r of regsArea){
+    if(!sesMap.has(r.sesion_id)) sesMap.set(r.sesion_id,{id:r.sesion_id,fecha:r.sesion_fecha});
+  }
+  const sesiones=[...sesMap.values()].sort((a,b)=>a.fecha.localeCompare(b.fecha));
+  const mapaEst=new Map();
+  for(const r of regsArea){
+    const rn=normalizarRut(r.rut||'');
+    if(!mapaEst.has(rn)) mapaEst.set(rn,{});
+    mapaEst.get(rn)[r.sesion_id]=r.estado;
+  }
+  const header=['Nombre','RUT',...sesiones.map(s=>s.fecha),'Faltas'].map(v=>`"${v}"`).join(',');
+  const rows=alumnos.map(alu=>{
+    const rn=normalizarRut(alu.rut||'');
+    const estMap=mapaEst.get(rn)||{};
+    let faltas=0;
+    const celdas=sesiones.map(s=>{const e=estMap[s.id];if(e==='0')faltas++;return`"${e||''}"`;});
+    return[`"${alu.nombre}"`,`"${alu.rut||''}"`, ...celdas, faltas].join(',');
+  });
+  const csv=[header,...rows].join('\n');
+  const blob=new Blob(['\uFEFF'+csv],{type:'text/csv;charset=utf-8;'});
+  const a=document.createElement('a');a.href=URL.createObjectURL(blob);
+  a.download=`asistencia_completa_${regAreaSel}_${new Date().toISOString().slice(0,10)}.csv`;
+  a.click();
+};
 
 window.filtrarDetalle=()=>{
   const ses=window._regSesiones?.find(s=>s.id===regSesionSel);
@@ -1746,7 +2571,7 @@ window.importarAlumnos=async()=>{
     const cols=l.split(/\t|,/).map(x=>x.trim().replace(/^"|"$/g,''));
     if(cols.length<2||cols[0].toLowerCase()==='nombre')continue;
     const[nombre,rut,correo='']=cols;
-    const id='rut_'+rut.replace(/[^0-9kK]/g,'');
+    const id='rut_'+normalizarRut(rut).replace(/[^0-9k]/g,'');
     const ex=await getDoc(doc(db,'alumnos',id));
     if(!ex.exists()){await setDoc(doc(db,'alumnos',id),{id,nombre,rut,correo,areas:[]});n++;}
   }
@@ -1811,7 +2636,7 @@ window.guardarAlumno=async()=>{
   const idExistente=document.getElementById('m-id').value;
   const areas=getAreasSeleccionadas();
   if(!nombre||!rut){alert('Nombre y RUT son obligatorios.');return;}
-  const id=idExistente||('rut_'+rut.replace(/[^0-9kK]/g,''));
+  const id=idExistente||('rut_'+normalizarRut(rut).replace(/[^0-9k]/g,''));
   await setDoc(doc(db,'alumnos',id),{id,nombre,rut,correo,areas},{merge:true});
   cerrarModalAlumno();
   cargarAlumnos();
@@ -2159,13 +2984,12 @@ window.buscarAlumnoPorRUT = function(val){
   clearTimeout(_rutTimer);
   const nInput = document.getElementById('al-n');
   const manualWrap = document.getElementById('al-n-manual-wrap');
-  const rut = val.replace(/\./g,'').toLowerCase().trim();
-  if(rut.length < 7){ nInput.value=''; return; }
+  const rutNorm = normalizarRut(val);
+  if(rutNorm.replace(/[^0-9k]/g,'').length < 7){ nInput.value=''; return; }
   _rutTimer = setTimeout(async()=>{
     // 1. Buscar en array estático (sin red, instantáneo)
     const todos = Object.values(ALUMNOS).flat();
-    const norm = s => s.replace(/\./g,'').toLowerCase().trim();
-    const found = todos.find(a => norm(a.rut||'') === rut);
+    const found = todos.find(a => normalizarRut(a.rut||'') === rutNorm);
     if(found){
       nInput.value = found.nombre;
       nInput.style.color = 'var(--vd)'; nInput.style.fontWeight = '600';
@@ -2173,9 +2997,16 @@ window.buscarAlumnoPorRUT = function(val){
       manualWrap.style.display = 'none';
       return;
     }
-    // 2. Buscar en Firebase
+    // 2. Buscar en Firebase — intentar con el valor tal como vino y también normalizado
     try {
-      const snap = await getDocs(query(collection(db,'alumnos'), where('rut','==',val.trim())));
+      let snap = await getDocs(query(collection(db,'alumnos'), where('rut','==',val.trim())));
+      // Si no encontró, buscar por rut normalizado
+      if(!snap.docs.length && rutNorm !== val.trim()){
+        // Buscar todos y comparar normalizados (Firebase no soporta funciones en query)
+        const snapAll = await getDocs(collection(db,'alumnos'));
+        const match = snapAll.docs.find(d => normalizarRut(d.data().rut||'') === rutNorm);
+        if(match) snap = { docs: [match] };
+      }
       if(snap.docs.length){
         const d = snap.docs[0].data();
         nInput.value = d.nombre;
@@ -2202,7 +3033,7 @@ window.marcarAsistencia=async()=>{
   if(!n||!r||!c){err.style.display='block';err.textContent='Completa todos los campos.';return;}
   if(!s){err.style.display='block';err.textContent='Sesión no válida.';return;}
   if((Date.now()-s.inicio)/60000>s.min){err.style.display='block';err.textContent='QR expirado.';return;}
-  const regId=s.id+'_'+r.replace(/[^0-9kK]/g,'');
+  const regId=s.id+'_'+normalizarRut(r).replace(/[^0-9k]/g,'');
   const ex=await getDoc(doc(db,'registros',regId));
   if(ex.exists()&&ex.data().estado==='1'){err.style.display='block';err.textContent='Ya registraste asistencia.';return;}
   const btn=document.getElementById('al-btn');btn.disabled=true;btn.textContent='Registrando...';
