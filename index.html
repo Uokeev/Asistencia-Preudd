@@ -491,6 +491,8 @@ tr[style*="am-l"] strong { color: var(--amber) !important; }
     <div class="ch">
       <div class="ct">Nómina (<span id="alu-count">0</span> alumnos)</div>
       <div class="flex" style="gap:6px;">
+        <!-- Botón recargar (manual, para no desperdiciar lecturas Firebase) -->
+        <button class="btn bsm" style="font-size:11px;color:var(--tx2);" onclick="cargarAlumnos(true)" title="Recargar desde Firebase">↺ Actualizar</button>
         <!-- Botón agregar -->
         <button class="btn bp bsm" id="btn-nuevo-alu">+ Agregar alumno</button>
         <!-- Menú importar desplegable -->
@@ -1011,7 +1013,7 @@ function onSnapshot(queryRef, callback) {
     } catch(e) {}
   }
   poll();
-  const id = setInterval(poll, 4000);
+  const id = setInterval(poll, 30000); // 30s en vez de 4s — ahorra ~86% de lecturas del live counter
   return () => clearInterval(id);
 }
 
@@ -1187,7 +1189,13 @@ window.abrirVerif=async()=>{
       ? (sesion.matNom?.toLowerCase().includes('quim')?'Química':'Biología')
       : sesion.matArea;
     let snapAlu;
-    if(area){
+    // Usar datos en memoria si están disponibles — evita lectura a Firebase
+    if(todosAlumnos.length){
+      const filtrados = area
+        ? todosAlumnos.filter(a=>(a.areas||[]).includes(area))
+        : todosAlumnos;
+      snapAlu = { docs: filtrados.map(d=>({ data:()=>d })) };
+    } else if(area){
       snapAlu=await getDocs(query(collection(db,'alumnos'),where('areas','array-contains',area)));
     } else {
       snapAlu=await getDocs(collection(db,'alumnos'));
@@ -1873,8 +1881,16 @@ async function initRegistros() {
   const btnFus = document.getElementById('btn-fusionar-duplicados');
   if(btnFus && !btnFus._bound){ btnFus._bound=true; btnFus.addEventListener('click', ()=>fusionarDuplicados()); }
 
-  // Limpieza automática silenciosa
-  try { await limpiarRegistrosAuto(); } catch(e) { console.error('Error en limpieza:', e); }
+  // Limpieza automática: máximo 1 vez cada 24 horas para no agotar cuota Firebase
+  try {
+    const KEY = 'preu_limpieza_ts';
+    const ultima = parseInt(localStorage.getItem(KEY) || '0');
+    const hace24h = Date.now() - 24 * 60 * 60 * 1000;
+    if (ultima < hace24h) {
+      await limpiarRegistrosAuto();
+      localStorage.setItem(KEY, Date.now().toString());
+    }
+  } catch(e) { console.error('Error en limpieza:', e); }
 
   // Traer registros ya limpios
   const snap = await getDocs(collection(db, 'registros'));
@@ -2916,7 +2932,12 @@ function renderTablaAlumnos(lista){
   </table></div>`;
 }
 
-async function cargarAlumnos(){
+async function cargarAlumnos(forzar=false){
+  // Si ya tenemos los alumnos en memoria, no volver a leer Firebase
+  if(!forzar && todosAlumnos.length){
+    renderTablaAlumnos(todosAlumnos);
+    return;
+  }
   document.getElementById('t-alu').innerHTML='<div class="loading" style="padding:28px;"><span class="sp"></span>Cargando...</div>';
   const snap=await getDocs(collection(db,'alumnos'));
   todosAlumnos=snap.docs.map(d=>d.data()).sort((a,b)=>a.nombre?.localeCompare(b.nombre)||0);
@@ -2962,13 +2983,24 @@ window.buscarAlumnoPorRUT = function(val){
       manualWrap.style.display = 'none';
       return;
     }
-    // 2. Buscar en Firebase — intentar con el valor tal como vino y también normalizado
+    // 2. Buscar en Firebase solo si todosAlumnos no está en memoria
+    // (evita lecturas innecesarias si ya se cargó la pestaña de alumnos)
     try {
+      // Primero intentar desde memoria
+      const enMemoria = todosAlumnos.find(a => normalizarRut(a.rut||'') === rutNorm);
+      if(enMemoria){
+        nInput.value = enMemoria.nombre;
+        nInput.style.color = 'var(--vd)'; nInput.style.fontWeight = '600';
+        if(enMemoria.correo) document.getElementById('al-c').value = enMemoria.correo;
+        manualWrap.style.display = 'none';
+        return;
+      }
+      // Solo ir a Firebase si no está en memoria
       let snap = await getDocs(query(collection(db,'alumnos'), where('rut','==',val.trim())));
-      // Si no encontró, buscar por rut normalizado
       if(!snap.docs.length && rutNorm !== val.trim()){
-        // Buscar todos y comparar normalizados (Firebase no soporta funciones en query)
         const snapAll = await getDocs(collection(db,'alumnos'));
+        // Guardar en memoria para futuras búsquedas
+        if(!todosAlumnos.length) todosAlumnos = snapAll.docs.map(d=>d.data());
         const match = snapAll.docs.find(d => normalizarRut(d.data().rut||'') === rutNorm);
         if(match) snap = { docs: [match] };
       }
