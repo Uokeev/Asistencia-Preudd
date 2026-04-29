@@ -365,10 +365,14 @@ tr[style*="am-l"] strong { color: var(--amber) !important; }
       </div>
       <div class="field">
         <label>Validez QR (minutos)</label>
-        <input id="ses-min" type="number" value="5" min="1" max="120"/>
+        <input id="ses-min" type="number" value="5" min="1" max="10" title="Máximo 10 minutos"/>
       </div>
-      <div class="flex mt">
+      <div class="flex mt" style="flex-wrap:wrap;gap:6px;">
         <button class="btn bp" id="btn-act" onclick="iniciarSesion()" disabled>Activar sesión</button>
+        <button class="btn" id="btn-act-pasada" onclick="iniciarSesionPasada()" disabled
+          style="display:none;background:var(--am);color:#fff;border-color:var(--am);">
+          📋 Pasar lista retroactiva
+        </button>
         <button class="btn br bsm" onclick="pedirCierre()">Finalizar sesión</button>
       </div>
     </div>
@@ -1019,6 +1023,45 @@ function onSnapshot(queryRef, callback) {
 
 
 const MATERIAS = {"M1": {"nombre": "Matemáticas M1", "area": "Matemáticas", "fechas": [{"col": 3, "fecha": "2026-04-06", "label": "6 Abr (L)"}, {"col": 4, "fecha": "2026-04-07", "label": "7 Abr (M)"}, {"col": 5, "fecha": "2026-04-13", "label": "13 Abr (L)"}, {"col": 6, "fecha": "2026-04-14", "label": "14 Abr (M)"}, {"col": 7, "fecha": "2026-04-20", "label": "20 Abr (L)"}, {"col": 8, "fecha": "2026-04-21", "label": "21 Abr (M)"}, {"col": 9, "fecha": "2026-04-27", "label": "27 Abr (L)"}, {"col": 10, "fecha": "2026-04-28", "label": "28 Abr (M)"}, {"col": 11, "fecha": "2026-05-04", "label": "4 May (L)"}, {"col": 12, "fecha": "2026-05-05", "label": "5 May (M)"}, {"col": 13, "fecha": "2026-05-11", "label": "11 May (L)"}, {"col": 14, "fecha": "2026-05-12", "label": "12 May (M)"}, {"col": 15, "fecha": "2026-05-18", "label": "18 May (L)"}, {"col": 16, "fecha": "2026-05-19", "label": "19 May (M)"}, {"col": 17, "fecha": "2026-05-25", "label": "25 May (L)"}, {"col": 18, "fecha": "2026-05-26", "label": "26 May (M)"}, {"col": 19, "fecha": "2026-06-01", "label": "1 Jun (L)"}, {"col": 20, "fecha": "2026-06-02", "label": "2 Jun (M)"}, {"col": 21, "fecha": "2026-06-08", "label": "8 Jun (L)"}, {"col": 22, "fecha": "2026-06-09", "label": "9 Jun (M)"}, {"col": 23, "fecha": "2026-06-15", "label": "15 Jun (L)"}, {"col": 24, "fecha": "2026-06-16", "label": "16 Jun (M)"}, {"col": 25, "fecha": "2026-06-22", "label": "22 Jun (L)"}, {"col": 26, "fecha": "2026-06-23", "label": "23 Jun (M)"}, {"col": 27, "fecha": "2026-06-30", "label": "30 Jun (M)"}, {"col": 28, "fecha": "2026-08-03", "label": "3 Ago (L)"}, {"col": 29, "fecha": "2026-08-04", "label": "4 Ago (M)"}, {"col": 30, "fecha": "2026-08-10", "label": "10 Ago (L)"}, {"col": 31, "fecha": "2026-08-11", "label": "11 Ago (M)"}, {"col": 32, "fecha": "2026-08-17", "label": "17 Ago (L)"}, {"col": 33, "fecha": "2026-08-18", "label": "18 Ago (M)"}, {"col": 34, "fecha": "2026-08-24", "label": "24 Ago (L)"}, {"col": 35, "fecha": "2026-08-25", "label": "25 Ago (M)"}, {"col": 36, "fecha": "2026-08-31", "label": "31 Ago (L)"}, {"col": 37, "fecha": "2026-09-01", "label": "1 Sep (M)"}, {"col": 38, "fecha": "2026-09-07", "label": "7 Sep (L)"}, {"col": 39, "fecha": "2026-09-08", "label": "8 Sep (M)"}, {"col": 40, "fecha": "2026-09-14", "label": "14 Sep (L)"}, {"col": 41, "fecha": "2026-09-15", "label": "15 Sep (M)"}, {"col": 42, "fecha": "2026-09-21", "label": "21 Sep (L)"}, {"col": 43, "fecha": "2026-09-22", "label": "22 Sep (M)"}, {"col": 44, "fecha": "2026-09-28", "label": "28 Sep (L)"}, {"col": 45, "fecha": "2026-09-29", "label": "29 Sep (M)"}, {"col": 46, "fecha": "2026-10-05", "label": "5 Oct (L)"}, {"col": 47, "fecha": "2026-10-06", "label": "6 Oct (M)"}, {"col": 48, "fecha": "2026-10-13", "label": "13 Oct (M)"}, {"col": 49, "fecha": "2026-10-19", "label": "19 Oct (L)"}, {"col": 50, "fecha": "2026-10-20", "label": "20 Oct (M)"}, {"col": 51, "fecha": "2026-10-26", "label": "26 Oct (L)"}, {"col": 52, "fecha": "2026-10-27", "label": "27 Oct (M)"}, {"col": 53, "fecha": "2026-11-02", "label": "2 Nov (L)"}, {"col": 54, "fecha": "2026-11-03", "label": "3 Nov (M)"}, {"col": 55, "fecha": "2026-11-09", "label": "9 Nov (L)"}, {"col": 56, "fecha": "2026-11-10", "label": "10 Nov (M)"}, {"col": 57, "fecha": "2026-11-16", "label": "16 Nov (L)"}, {"col": 58, "fecha": "2026-11-17", "label": "17 Nov (M)"}, {"col": 59, "fecha": "2026-11-23", "label": "23 Nov (L)"}, {"col": 60, "fecha": "2026-11-24", "label": "24 Nov (M)"}, {"col": 61, "fecha": "2026-11-30", "label": "30 Nov (L)"}]}, "M2": {"nombre": "Matemáticas M2", "area": "Matemáticas", "fechas": [{"col": 3, "fecha": "2026-08-05", "label": "5 Ago (X)"}, {"col": 4, "fecha": "2026-08-12", "label": "12 Ago (X)"}, {"col": 5, "fecha": "2026-08-19", "label": "19 Ago (X)"}, {"col": 6, "fecha": "2026-08-26", "label": "26 Ago (X)"}, {"col": 7, "fecha": "2026-09-02", "label": "2 Sep (X)"}, {"col": 8, "fecha": "2026-09-09", "label": "9 Sep (X)"}, {"col": 9, "fecha": "2026-09-16", "label": "16 Sep (X)"}, {"col": 10, "fecha": "2026-09-23", "label": "23 Sep (X)"}, {"col": 11, "fecha": "2026-09-30", "label": "30 Sep (X)"}, {"col": 12, "fecha": "2026-10-07", "label": "7 Oct (X)"}, {"col": 13, "fecha": "2026-10-14", "label": "14 Oct (X)"}, {"col": 14, "fecha": "2026-10-21", "label": "21 Oct (X)"}, {"col": 15, "fecha": "2026-10-28", "label": "28 Oct (X)"}, {"col": 16, "fecha": "2026-11-04", "label": "4 Nov (X)"}, {"col": 17, "fecha": "2026-11-11", "label": "11 Nov (X)"}, {"col": 18, "fecha": "2026-11-18", "label": "18 Nov (X)"}, {"col": 19, "fecha": "2026-11-25", "label": "25 Nov (X)"}]}, "Lenguaje": {"nombre": "Comprensión Lectora", "area": "Comprensión Lectora", "fechas": [{"col": 3, "fecha": "2026-04-09", "label": "9 Abr (J)"}, {"col": 4, "fecha": "2026-04-16", "label": "16 Abr (J)"}, {"col": 5, "fecha": "2026-04-23", "label": "23 Abr (J)"}, {"col": 6, "fecha": "2026-04-30", "label": "30 Abr (J)"}, {"col": 7, "fecha": "2026-05-07", "label": "7 May (J)"}, {"col": 8, "fecha": "2026-05-14", "label": "14 May (J)"}, {"col": 9, "fecha": "2026-05-28", "label": "28 May (J)"}, {"col": 10, "fecha": "2026-06-04", "label": "4 Jun (J)"}, {"col": 11, "fecha": "2026-06-11", "label": "11 Jun (J)"}, {"col": 12, "fecha": "2026-06-18", "label": "18 Jun (J)"}, {"col": 13, "fecha": "2026-06-25", "label": "25 Jun (J)"}, {"col": 14, "fecha": "2026-08-06", "label": "6 Ago (J)"}, {"col": 15, "fecha": "2026-08-13", "label": "13 Ago (J)"}, {"col": 16, "fecha": "2026-08-20", "label": "20 Ago (J)"}, {"col": 17, "fecha": "2026-08-27", "label": "27 Ago (J)"}, {"col": 18, "fecha": "2026-09-03", "label": "3 Sep (J)"}, {"col": 19, "fecha": "2026-09-10", "label": "10 Sep (J)"}, {"col": 20, "fecha": "2026-09-17", "label": "17 Sep (J)"}, {"col": 21, "fecha": "2026-09-24", "label": "24 Sep (J)"}, {"col": 22, "fecha": "2026-10-01", "label": "1 Oct (J)"}, {"col": 23, "fecha": "2026-10-08", "label": "8 Oct (J)"}, {"col": 24, "fecha": "2026-10-15", "label": "15 Oct (J)"}, {"col": 25, "fecha": "2026-10-22", "label": "22 Oct (J)"}, {"col": 26, "fecha": "2026-10-29", "label": "29 Oct (J)"}, {"col": 27, "fecha": "2026-11-05", "label": "5 Nov (J)"}, {"col": 28, "fecha": "2026-11-12", "label": "12 Nov (J)"}, {"col": 29, "fecha": "2026-11-19", "label": "19 Nov (J)"}, {"col": 30, "fecha": "2026-11-26", "label": "26 Nov (J)"}]}, "Historia": {"nombre": "Historia", "area": "Historia", "fechas": [{"col": 3, "fecha": "2026-04-06", "label": "6 Abr (L)"}, {"col": 4, "fecha": "2026-04-13", "label": "13 Abr (L)"}, {"col": 5, "fecha": "2026-04-20", "label": "20 Abr (L)"}, {"col": 6, "fecha": "2026-04-27", "label": "27 Abr (L)"}, {"col": 7, "fecha": "2026-05-04", "label": "4 May (L)"}, {"col": 8, "fecha": "2026-05-11", "label": "11 May (L)"}, {"col": 9, "fecha": "2026-05-18", "label": "18 May (L)"}, {"col": 10, "fecha": "2026-05-25", "label": "25 May (L)"}, {"col": 11, "fecha": "2026-06-01", "label": "1 Jun (L)"}, {"col": 12, "fecha": "2026-06-08", "label": "8 Jun (L)"}, {"col": 13, "fecha": "2026-06-15", "label": "15 Jun (L)"}, {"col": 14, "fecha": "2026-06-22", "label": "22 Jun (L)"}, {"col": 15, "fecha": "2026-08-03", "label": "3 Ago (L)"}, {"col": 16, "fecha": "2026-08-10", "label": "10 Ago (L)"}, {"col": 17, "fecha": "2026-08-17", "label": "17 Ago (L)"}, {"col": 18, "fecha": "2026-08-24", "label": "24 Ago (L)"}, {"col": 19, "fecha": "2026-08-31", "label": "31 Ago (L)"}, {"col": 20, "fecha": "2026-09-07", "label": "7 Sep (L)"}, {"col": 21, "fecha": "2026-09-14", "label": "14 Sep (L)"}, {"col": 22, "fecha": "2026-09-21", "label": "21 Sep (L)"}, {"col": 23, "fecha": "2026-09-28", "label": "28 Sep (L)"}, {"col": 24, "fecha": "2026-10-05", "label": "5 Oct (L)"}, {"col": 25, "fecha": "2026-10-19", "label": "19 Oct (L)"}, {"col": 26, "fecha": "2026-10-26", "label": "26 Oct (L)"}, {"col": 27, "fecha": "2026-11-02", "label": "2 Nov (L)"}, {"col": 28, "fecha": "2026-11-09", "label": "9 Nov (L)"}, {"col": 29, "fecha": "2026-11-16", "label": "16 Nov (L)"}, {"col": 30, "fecha": "2026-11-23", "label": "23 Nov (L)"}, {"col": 31, "fecha": "2026-11-30", "label": "30 Nov (L)"}]}, "Química": {"nombre": "Química", "area": "Química", "fechas": [{"col": 3, "fecha": "2026-04-08", "label": "8 Abr (X)"}, {"col": 4, "fecha": "2026-04-15", "label": "15 Abr (X)"}, {"col": 5, "fecha": "2026-04-22", "label": "22 Abr (X)"}, {"col": 6, "fecha": "2026-04-29", "label": "29 Abr (X)"}, {"col": 7, "fecha": "2026-05-06", "label": "6 May (X)"}, {"col": 8, "fecha": "2026-05-13", "label": "13 May (X)"}, {"col": 9, "fecha": "2026-05-20", "label": "20 May (X)"}, {"col": 10, "fecha": "2026-05-27", "label": "27 May (X)"}, {"col": 11, "fecha": "2026-06-03", "label": "3 Jun (X)"}, {"col": 12, "fecha": "2026-06-10", "label": "10 Jun (X)"}, {"col": 13, "fecha": "2026-06-17", "label": "17 Jun (X)"}, {"col": 14, "fecha": "2026-06-24", "label": "24 Jun (X)"}, {"col": 15, "fecha": "2026-08-05", "label": "5 Ago (X)"}, {"col": 16, "fecha": "2026-08-12", "label": "12 Ago (X)"}, {"col": 17, "fecha": "2026-08-19", "label": "19 Ago (X)"}, {"col": 18, "fecha": "2026-08-26", "label": "26 Ago (X)"}, {"col": 19, "fecha": "2026-09-02", "label": "2 Sep (X)"}, {"col": 20, "fecha": "2026-09-09", "label": "9 Sep (X)"}, {"col": 21, "fecha": "2026-09-16", "label": "16 Sep (X)"}, {"col": 22, "fecha": "2026-09-23", "label": "23 Sep (X)"}, {"col": 23, "fecha": "2026-09-30", "label": "30 Sep (X)"}, {"col": 24, "fecha": "2026-10-07", "label": "7 Oct (X)"}, {"col": 25, "fecha": "2026-10-14", "label": "14 Oct (X)"}, {"col": 26, "fecha": "2026-10-21", "label": "21 Oct (X)"}, {"col": 27, "fecha": "2026-10-28", "label": "28 Oct (X)"}, {"col": 28, "fecha": "2026-11-04", "label": "4 Nov (X)"}, {"col": 29, "fecha": "2026-11-11", "label": "11 Nov (X)"}, {"col": 30, "fecha": "2026-11-18", "label": "18 Nov (X)"}, {"col": 31, "fecha": "2026-11-25", "label": "25 Nov (X)"}]}, "Biología": {"nombre": "Biología", "area": "Biología", "fechas": [{"col": 3, "fecha": "2026-04-08", "label": "8 Abr (X)"}, {"col": 4, "fecha": "2026-04-15", "label": "15 Abr (X)"}, {"col": 5, "fecha": "2026-04-22", "label": "22 Abr (X)"}, {"col": 6, "fecha": "2026-04-29", "label": "29 Abr (X)"}, {"col": 7, "fecha": "2026-05-06", "label": "6 May (X)"}, {"col": 8, "fecha": "2026-05-13", "label": "13 May (X)"}, {"col": 9, "fecha": "2026-05-20", "label": "20 May (X)"}, {"col": 10, "fecha": "2026-05-27", "label": "27 May (X)"}, {"col": 11, "fecha": "2026-06-03", "label": "3 Jun (X)"}, {"col": 12, "fecha": "2026-06-10", "label": "10 Jun (X)"}, {"col": 13, "fecha": "2026-06-17", "label": "17 Jun (X)"}, {"col": 14, "fecha": "2026-06-24", "label": "24 Jun (X)"}, {"col": 15, "fecha": "2026-08-05", "label": "5 Ago (X)"}, {"col": 16, "fecha": "2026-08-12", "label": "12 Ago (X)"}, {"col": 17, "fecha": "2026-08-19", "label": "19 Ago (X)"}, {"col": 18, "fecha": "2026-08-26", "label": "26 Ago (X)"}, {"col": 19, "fecha": "2026-09-02", "label": "2 Sep (X)"}, {"col": 20, "fecha": "2026-09-09", "label": "9 Sep (X)"}, {"col": 21, "fecha": "2026-09-16", "label": "16 Sep (X)"}, {"col": 22, "fecha": "2026-09-23", "label": "23 Sep (X)"}, {"col": 23, "fecha": "2026-09-30", "label": "30 Sep (X)"}, {"col": 24, "fecha": "2026-10-07", "label": "7 Oct (X)"}, {"col": 25, "fecha": "2026-10-14", "label": "14 Oct (X)"}, {"col": 26, "fecha": "2026-10-21", "label": "21 Oct (X)"}, {"col": 27, "fecha": "2026-10-28", "label": "28 Oct (X)"}, {"col": 28, "fecha": "2026-11-04", "label": "4 Nov (X)"}, {"col": 29, "fecha": "2026-11-11", "label": "11 Nov (X)"}, {"col": 30, "fecha": "2026-11-18", "label": "18 Nov (X)"}, {"col": 31, "fecha": "2026-11-25", "label": "25 Nov (X)"}]}, "Física": {"nombre": "Física", "area": "Física", "fechas": [{"col": 3, "fecha": "2026-04-07", "label": "7 Abr (M)"}, {"col": 4, "fecha": "2026-04-14", "label": "14 Abr (M)"}, {"col": 5, "fecha": "2026-04-21", "label": "21 Abr (M)"}, {"col": 6, "fecha": "2026-04-28", "label": "28 Abr (M)"}, {"col": 7, "fecha": "2026-05-05", "label": "5 May (M)"}, {"col": 8, "fecha": "2026-05-12", "label": "12 May (M)"}, {"col": 9, "fecha": "2026-05-19", "label": "19 May (M)"}, {"col": 10, "fecha": "2026-05-26", "label": "26 May (M)"}, {"col": 11, "fecha": "2026-06-02", "label": "2 Jun (M)"}, {"col": 12, "fecha": "2026-06-09", "label": "9 Jun (M)"}, {"col": 13, "fecha": "2026-06-16", "label": "16 Jun (M)"}, {"col": 14, "fecha": "2026-06-23", "label": "23 Jun (M)"}, {"col": 15, "fecha": "2026-06-30", "label": "30 Jun (M)"}, {"col": 16, "fecha": "2026-08-04", "label": "4 Ago (M)"}, {"col": 17, "fecha": "2026-08-11", "label": "11 Ago (M)"}, {"col": 18, "fecha": "2026-08-18", "label": "18 Ago (M)"}, {"col": 19, "fecha": "2026-08-25", "label": "25 Ago (M)"}, {"col": 20, "fecha": "2026-09-01", "label": "1 Sep (M)"}, {"col": 21, "fecha": "2026-09-08", "label": "8 Sep (M)"}, {"col": 22, "fecha": "2026-09-15", "label": "15 Sep (M)"}, {"col": 23, "fecha": "2026-09-22", "label": "22 Sep (M)"}, {"col": 24, "fecha": "2026-09-29", "label": "29 Sep (M)"}, {"col": 25, "fecha": "2026-10-06", "label": "6 Oct (M)"}, {"col": 26, "fecha": "2026-10-13", "label": "13 Oct (M)"}, {"col": 27, "fecha": "2026-10-20", "label": "20 Oct (M)"}, {"col": 28, "fecha": "2026-10-27", "label": "27 Oct (M)"}, {"col": 29, "fecha": "2026-11-03", "label": "3 Nov (M)"}, {"col": 30, "fecha": "2026-11-10", "label": "10 Nov (M)"}, {"col": 31, "fecha": "2026-11-17", "label": "17 Nov (M)"}, {"col": 32, "fecha": "2026-11-24", "label": "24 Nov (M)"}]}, "Orientación": {"nombre": "Orientación", "area": null, "fechas": [{"col": 3, "fecha": "2026-04-10", "label": "10 Abr (V)"}, {"col": 4, "fecha": "2026-04-17", "label": "17 Abr (V)"}, {"col": 5, "fecha": "2026-04-24", "label": "24 Abr (V)"}, {"col": 6, "fecha": "2026-05-08", "label": "8 May (V)"}, {"col": 7, "fecha": "2026-05-15", "label": "15 May (V)"}, {"col": 8, "fecha": "2026-05-22", "label": "22 May (V)"}, {"col": 9, "fecha": "2026-05-29", "label": "29 May (V)"}, {"col": 10, "fecha": "2026-06-05", "label": "5 Jun (V)"}, {"col": 11, "fecha": "2026-06-12", "label": "12 Jun (V)"}, {"col": 12, "fecha": "2026-06-19", "label": "19 Jun (V)"}, {"col": 13, "fecha": "2026-06-26", "label": "26 Jun (V)"}, {"col": 14, "fecha": "2026-08-07", "label": "7 Ago (V)"}, {"col": 15, "fecha": "2026-08-14", "label": "14 Ago (V)"}, {"col": 16, "fecha": "2026-08-21", "label": "21 Ago (V)"}, {"col": 17, "fecha": "2026-08-28", "label": "28 Ago (V)"}, {"col": 18, "fecha": "2026-09-04", "label": "4 Sep (V)"}, {"col": 19, "fecha": "2026-09-11", "label": "11 Sep (V)"}, {"col": 20, "fecha": "2026-09-25", "label": "25 Sep (V)"}, {"col": 21, "fecha": "2026-10-02", "label": "2 Oct (V)"}, {"col": 22, "fecha": "2026-10-09", "label": "9 Oct (V)"}, {"col": 23, "fecha": "2026-10-16", "label": "16 Oct (V)"}, {"col": 24, "fecha": "2026-10-23", "label": "23 Oct (V)"}, {"col": 25, "fecha": "2026-10-30", "label": "30 Oct (V)"}, {"col": 26, "fecha": "2026-11-06", "label": "6 Nov (V)"}, {"col": 27, "fecha": "2026-11-13", "label": "13 Nov (V)"}, {"col": 28, "fecha": "2026-11-20", "label": "20 Nov (V)"}, {"col": 29, "fecha": "2026-11-27", "label": "27 Nov (V)"}]}};
+
+// ── HORARIOS POR MATERIA ──────────────────────────────────────
+// Día (0=Dom,1=Lun,2=Mar,3=Mié,4=Jue,5=Vie,6=Sáb) → [{ matKey, horaFin }]
+// horaFin en formato "HH:MM" — si la hora actual supera esto, la clase ya terminó
+const HORARIOS_DIA = {
+  1: [ // Lunes
+    { matKey:'M1',        horaFin:'19:00' },
+    { matKey:'Historia',  horaFin:'20:20' },
+  ],
+  2: [ // Martes
+    { matKey:'M1',        horaFin:'19:00' }, // M1 también martes
+    { matKey:'Física',    horaFin:'20:20' },
+  ],
+  3: [ // Miércoles
+    { matKey:'Química',   horaFin:'19:00' },
+    { matKey:'Biología',  horaFin:'20:20' },
+  ],
+  4: [ // Jueves
+    { matKey:'Lenguaje',  horaFin:'20:20' }, // Lenguaje ocupa ambos bloques
+  ],
+  5: [ // Viernes
+    { matKey:'Orientación', horaFin:'20:20' }, // Orientación ocupa ambos bloques
+  ],
+};
+
+// Devuelve true si la clase de esa matKey ya terminó hoy
+function claseYaTerminoHoy(matKey, fechaSeleccionada){
+  const hoy = new Date().toISOString().slice(0,10);
+  if(fechaSeleccionada !== hoy) return false; // no es hoy
+  const diaSemana = new Date().getDay();
+  const clasesHoy = HORARIOS_DIA[diaSemana] || [];
+  const clase = clasesHoy.find(c => c.matKey === matKey);
+  if(!clase) return false;
+  const [h,m] = clase.horaFin.split(':').map(Number);
+  const ahora = new Date();
+  const horaFinMin = h*60+m;
+  const ahoraMin = ahora.getHours()*60+ahora.getMinutes();
+  return ahoraMin > horaFinMin;
+}
 const ALUMNOS  = {"M1": [{"correo": "malarconveloso@gmail.com", "nombre": "Matilda Antonia Alarcon Veloso", "rut": "22849985-4"}, {"correo": "valeriapaolaalvarezfernandez@gmail.com", "nombre": "Valeria Paola Alvarez Fernández", "rut": "27358799-3"}, {"correo": "astualonso123@gmail.com", "nombre": "Alonso Agustin Astudillo Fernandez", "rut": "23002266-6"}, {"correo": "gacituamimi99@gmail.com", "nombre": "Evolet Naybth Isidora Benitez Gacitua", "rut": "23239474-9"}, {"correo": "florencia.caceres.donoso24@gmail.com", "nombre": "Florencia Paloma Cáceres Donoso", "rut": "23006455-5"}, {"correo": "mcaceresv2020@ihcass.cl", "nombre": "Martina Caceres Vergara", "rut": "23241569-k"}, {"correo": "javieracatalan2022@gmail.com", "nombre": "Javiera Yubitza Catalan Mendoza", "rut": "22887105-2"}, {"correo": "aconstanzochamorro@gmail.com", "nombre": "Amanda Alejandra Chamorro Constanzo", "rut": "23205129-9"}, {"correo": "valesca.anahis28@gmail.com", "nombre": "Valesca Anahis Cid Muñoz", "rut": "23038236-0"}, {"correo": "elvzabetthsalamanca@gmail.com", "nombre": "Elizabeth Dayana Cuevas Salamanca", "rut": "23239814-0"}, {"correo": "pipedlc18@gmail.com", "nombre": "Felipe Alonso Diaz Torres", "rut": "22975434-3"}, {"correo": "sara_fuentes_82@yahoo.cl", "nombre": "Alonso Durán Fuentes", "rut": "23337342-7"}, {"correo": "sescalonasaavedra@gmail.com", "nombre": "Stephanie Andrea Escalona Saavedra", "rut": "23345673-k"}, {"correo": "polethferrari@gmail.com", "nombre": "Poleth Mikaela Ferrari Fuetes", "rut": "22.693.316-6"}, {"correo": "figueroamartinezchelsea@gmail.com", "nombre": "Chelsea Mabel Figueroa Martínez", "rut": "22271501-6"}, {"correo": "angelineb.colegioedwardccp@gmail.com", "nombre": "Javier Alonso Gajardo Basualto", "rut": "22974574-3"}, {"correo": "pamerodriguezf@gmail.com", "nombre": "Carol Esperanza García Rodríguez", "rut": "23004821-5"}, {"correo": "benjamingonzalezchamorro2006@gmail.com", "nombre": "Benjamin Gonzalez Chamorro", "rut": "22265232-4"}, {"correo": "fernandagonzalez020908@gmail.com", "nombre": "Fernanda Ignacia González Flores", "rut": "22809749-7"}, {"correo": "benjaguerrero581@gmail.com", "nombre": "Benjamín Ignacio Guerrero Quiroga", "rut": "22696731-1"}, {"correo": "francisca.igd.12@gmail.com", "nombre": "Francisca Guzmán Díaz", "rut": "23351472-1"}, {"correo": "chormaz.dickinson@gmail.com", "nombre": "Christian Hormazabal Dickinson", "rut": "22423736-7"}, {"correo": "angelinneinzunzap09@gmail.com", "nombre": "Angelinne Millaray Inzunza Peña", "rut": "22764459-1"}, {"correo": "bbarbarajerez.tapia@gmail.com", "nombre": "Barbara Jerez", "rut": "22765962-8"}, {"correo": "samartinh@almondale.cl", "nombre": "Sofía Antonia Martin Hurst", "rut": "22971901-7"}, {"correo": "camilabelen2277@gmail.com", "nombre": "Camila Belén Matus Creixell", "rut": "22425298-6"}, {"correo": "mellab.valentina@gmail.com", "nombre": "Valentina Paz Mella Bobadilla", "rut": "22535139-2"}, {"correo": "elisamillar7@gmail.com", "nombre": "Elisa Millar Faúndez", "rut": "22856241-6"}, {"correo": "fernamorag22@gmail.com", "nombre": "Fernanda Alejandra Mora González", "rut": "23011609-1"}, {"correo": "maurolavet@gmail.com", "nombre": "Mauro Nicolás Olave Torres", "rut": "23276213-6"}, {"correo": "antonella25.olivares.02@gmail.com", "nombre": "Antonella Paz Olivares Vera", "rut": "22652824-5"}, {"correo": "parrasofia1148@gmail.com", "nombre": "Sofía Antonia Parra Barrientos", "rut": "22877452-9"}, {"correo": "penadiannelys01@gmail.com", "nombre": "Diannelys Sofía Peña Rossodivita", "rut": "26287360-9"}, {"correo": "cota.ramirez.coddou@gmail.com", "nombre": "Constanza Beatriz Ramírez Coddou", "rut": "23112415-2"}, {"correo": "agu.escobar1908@gmail.com", "nombre": "Agustina Del Pilar Riquelme Escobar", "rut": "22777429-0"}, {"correo": "seba26andres@gmail.com", "nombre": "Sebastián Andrés Riquelme Oñate", "rut": "22730058-2"}, {"correo": "keilayazminrobles@gmail.com", "nombre": "Keila Yazmin Robles Espinoza", "rut": "22608509-2"}, {"correo": "luciorodriguez10000@gmail.com", "nombre": "Lucio Alejandro Rodriguez Aguilera", "rut": "22782577-4"}, {"correo": "fersaez1002@gmail.com", "nombre": "Fernanda Dannae Sáez Rodriguez", "rut": "23247015-1"}, {"correo": "elena.san1608@gmail.com", "nombre": "Elena Victoria San Martín Olate", "rut": "22795719-0"}, {"correo": "cristobal.silva.medina.30@gmail.com", "nombre": "Cristóbal Ignacio Silva Medina", "rut": "22967956-2"}, {"correo": "amandat.onate@gmail.com", "nombre": "Amanda Isabel Tapia Oñate", "rut": "22819295-3"}, {"correo": "ampyvallejosv@gmail.com", "nombre": "Amparo Isabella Vallejos Valenzuela", "rut": "22784926-6"}, {"correo": "victoriawega17@gmail.com", "nombre": "Victoria Monserrat Vega Lucero", "rut": "22617442-7"}, {"correo": "lvega@santasabina.cl", "nombre": "Luis Felipe Vega Salazar", "rut": "22916054-0"}, {"correo": "valppetitbrenilh@gmail.com", "nombre": "Mateo Alonso Sebastián Zúñiga Petit-Brenilh", "rut": "22741483-9"}, {"correo": "alexlabra66@gmail.com", "nombre": "Alex Antonio Labra Villegas", "rut": "22377947-6"}, {"correo": "patriciiovasros@gmail.com", "nombre": "Patricio Vásquez Rosales", "rut": "22863079-9"}, {"correo": "valentinaabelenp@gmail.com", "nombre": "Valentina Portiño Cabezas", "rut": "22820638-5"}, {"correo": "sofiaparis0808@gmail.com", "nombre": "Sofia Catalina Paris Lazcano", "rut": "22790587-5"}, {"correo": "anais2009.av@gmail.com", "nombre": "Anais Patricia Villegas Aarcón", "rut": "23011347-5"}, {"correo": "fernandabelensalgadoflores758@gmail.com", "nombre": "Fernanda Salgado Flores", "rut": "22732244-6"}, {"correo": "stefania.zorritolover@gmail.com", "nombre": "Estefania Muñoz Villanueva", "rut": "22763181-3"}, {"correo": "carmengloria3105@gmail.com", "nombre": "Carmen Gloria Silva Bravo", "rut": "23034663-1"}, {"correo": "catalinapedrero73@gmail.com", "nombre": "Catalina Pedreros Aguayo", "rut": "22495082-9"}, {"correo": "mm4293676@gmail.com", "nombre": "Matías Alonso Muñoz Soto", "rut": "22489792-8"}], "M2": [{"correo": "malarconveloso@gmail.com", "nombre": "Matilda Antonia Alarcon Veloso", "rut": "22849985-4"}, {"correo": "valeriapaolaalvarezfernandez@gmail.com", "nombre": "Valeria Paola Alvarez Fernández", "rut": "27358799-3"}, {"correo": "astualonso123@gmail.com", "nombre": "Alonso Agustin Astudillo Fernandez", "rut": "23002266-6"}, {"correo": "gacituamimi99@gmail.com", "nombre": "Evolet Naybth Isidora Benitez Gacitua", "rut": "23239474-9"}, {"correo": "florencia.caceres.donoso24@gmail.com", "nombre": "Florencia Paloma Cáceres Donoso", "rut": "23006455-5"}, {"correo": "mcaceresv2020@ihcass.cl", "nombre": "Martina Caceres Vergara", "rut": "23241569-k"}, {"correo": "javieracatalan2022@gmail.com", "nombre": "Javiera Yubitza Catalan Mendoza", "rut": "22887105-2"}, {"correo": "aconstanzochamorro@gmail.com", "nombre": "Amanda Alejandra Chamorro Constanzo", "rut": "23205129-9"}, {"correo": "valesca.anahis28@gmail.com", "nombre": "Valesca Anahis Cid Muñoz", "rut": "23038236-0"}, {"correo": "elvzabetthsalamanca@gmail.com", "nombre": "Elizabeth Dayana Cuevas Salamanca", "rut": "23239814-0"}, {"correo": "pipedlc18@gmail.com", "nombre": "Felipe Alonso Diaz Torres", "rut": "22975434-3"}, {"correo": "sara_fuentes_82@yahoo.cl", "nombre": "Alonso Durán Fuentes", "rut": "23337342-7"}, {"correo": "sescalonasaavedra@gmail.com", "nombre": "Stephanie Andrea Escalona Saavedra", "rut": "23345673-k"}, {"correo": "polethferrari@gmail.com", "nombre": "Poleth Mikaela Ferrari Fuetes", "rut": "22.693.316-6"}, {"correo": "figueroamartinezchelsea@gmail.com", "nombre": "Chelsea Mabel Figueroa Martínez", "rut": "22271501-6"}, {"correo": "angelineb.colegioedwardccp@gmail.com", "nombre": "Javier Alonso Gajardo Basualto", "rut": "22974574-3"}, {"correo": "pamerodriguezf@gmail.com", "nombre": "Carol Esperanza García Rodríguez", "rut": "23004821-5"}, {"correo": "benjamingonzalezchamorro2006@gmail.com", "nombre": "Benjamin Gonzalez Chamorro", "rut": "22265232-4"}, {"correo": "fernandagonzalez020908@gmail.com", "nombre": "Fernanda Ignacia González Flores", "rut": "22809749-7"}, {"correo": "benjaguerrero581@gmail.com", "nombre": "Benjamín Ignacio Guerrero Quiroga", "rut": "22696731-1"}, {"correo": "francisca.igd.12@gmail.com", "nombre": "Francisca Guzmán Díaz", "rut": "23351472-1"}, {"correo": "chormaz.dickinson@gmail.com", "nombre": "Christian Hormazabal Dickinson", "rut": "22423736-7"}, {"correo": "angelinneinzunzap09@gmail.com", "nombre": "Angelinne Millaray Inzunza Peña", "rut": "22764459-1"}, {"correo": "bbarbarajerez.tapia@gmail.com", "nombre": "Barbara Jerez", "rut": "22765962-8"}, {"correo": "samartinh@almondale.cl", "nombre": "Sofía Antonia Martin Hurst", "rut": "22971901-7"}, {"correo": "camilabelen2277@gmail.com", "nombre": "Camila Belén Matus Creixell", "rut": "22425298-6"}, {"correo": "mellab.valentina@gmail.com", "nombre": "Valentina Paz Mella Bobadilla", "rut": "22535139-2"}, {"correo": "elisamillar7@gmail.com", "nombre": "Elisa Millar Faúndez", "rut": "22856241-6"}, {"correo": "fernamorag22@gmail.com", "nombre": "Fernanda Alejandra Mora González", "rut": "23011609-1"}, {"correo": "maurolavet@gmail.com", "nombre": "Mauro Nicolás Olave Torres", "rut": "23276213-6"}, {"correo": "antonella25.olivares.02@gmail.com", "nombre": "Antonella Paz Olivares Vera", "rut": "22652824-5"}, {"correo": "parrasofia1148@gmail.com", "nombre": "Sofía Antonia Parra Barrientos", "rut": "22877452-9"}, {"correo": "penadiannelys01@gmail.com", "nombre": "Diannelys Sofía Peña Rossodivita", "rut": "26287360-9"}, {"correo": "cota.ramirez.coddou@gmail.com", "nombre": "Constanza Beatriz Ramírez Coddou", "rut": "23112415-2"}, {"correo": "agu.escobar1908@gmail.com", "nombre": "Agustina Del Pilar Riquelme Escobar", "rut": "22777429-0"}, {"correo": "seba26andres@gmail.com", "nombre": "Sebastián Andrés Riquelme Oñate", "rut": "22730058-2"}, {"correo": "keilayazminrobles@gmail.com", "nombre": "Keila Yazmin Robles Espinoza", "rut": "22608509-2"}, {"correo": "luciorodriguez10000@gmail.com", "nombre": "Lucio Alejandro Rodriguez Aguilera", "rut": "22782577-4"}, {"correo": "fersaez1002@gmail.com", "nombre": "Fernanda Dannae Sáez Rodriguez", "rut": "23247015-1"}, {"correo": "elena.san1608@gmail.com", "nombre": "Elena Victoria San Martín Olate", "rut": "22795719-0"}, {"correo": "cristobal.silva.medina.30@gmail.com", "nombre": "Cristóbal Ignacio Silva Medina", "rut": "22967956-2"}, {"correo": "amandat.onate@gmail.com", "nombre": "Amanda Isabel Tapia Oñate", "rut": "22819295-3"}, {"correo": "ampyvallejosv@gmail.com", "nombre": "Amparo Isabella Vallejos Valenzuela", "rut": "22784926-6"}, {"correo": "victoriawega17@gmail.com", "nombre": "Victoria Monserrat Vega Lucero", "rut": "22617442-7"}, {"correo": "lvega@santasabina.cl", "nombre": "Luis Felipe Vega Salazar", "rut": "22916054-0"}, {"correo": "valppetitbrenilh@gmail.com", "nombre": "Mateo Alonso Sebastián Zúñiga Petit-Brenilh", "rut": "22741483-9"}, {"correo": "alexlabra66@gmail.com", "nombre": "Alex Antonio Labra Villegas", "rut": "22377947-6"}, {"correo": "patriciiovasros@gmail.com", "nombre": "Patricio Vásquez Rosales", "rut": "22863079-9"}, {"correo": "valentinaabelenp@gmail.com", "nombre": "Valentina Portiño Cabezas", "rut": "22820638-5"}, {"correo": "sofiaparis0808@gmail.com", "nombre": "Sofia Catalina Paris Lazcano", "rut": "22790587-5"}, {"correo": "anais2009.av@gmail.com", "nombre": "Anais Patricia Villegas Aarcón", "rut": "23011347-5"}, {"correo": "fernandabelensalgadoflores758@gmail.com", "nombre": "Fernanda Salgado Flores", "rut": "22732244-6"}, {"correo": "stefania.zorritolover@gmail.com", "nombre": "Estefania Muñoz Villanueva", "rut": "22763181-3"}, {"correo": "carmengloria3105@gmail.com", "nombre": "Carmen Gloria Silva Bravo", "rut": "23034663-1"}, {"correo": "catalinapedrero73@gmail.com", "nombre": "Catalina Pedreros Aguayo", "rut": "22495082-9"}, {"correo": "mm4293676@gmail.com", "nombre": "Matías Alonso Muñoz Soto", "rut": "22489792-8"}], "Lenguaje": [{"correo": "malarconveloso@gmail.com", "nombre": "Matilda Antonia Alarcon Veloso", "rut": "22849985-4"}, {"correo": "valeriapaolaalvarezfernandez@gmail.com", "nombre": "Valeria Paola Alvarez Fernández", "rut": "27358799-3"}, {"correo": "florencia.caceres.donoso24@gmail.com", "nombre": "Florencia Paloma Cáceres Donoso", "rut": "23006455-5"}, {"correo": "mcaceresv2020@ihcass.cl", "nombre": "Martina Caceres Vergara", "rut": "23241569-k"}, {"correo": "javieracatalan2022@gmail.com", "nombre": "Javiera Yubitza Catalan Mendoza", "rut": "22887105-2"}, {"correo": "aconstanzochamorro@gmail.com", "nombre": "Amanda Alejandra Chamorro Constanzo", "rut": "23205129-9"}, {"correo": "valesca.anahis28@gmail.com", "nombre": "Valesca Anahis Cid Muñoz", "rut": "23038236-0"}, {"correo": "elvzabetthsalamanca@gmail.com", "nombre": "Elizabeth Dayana Cuevas Salamanca", "rut": "23239814-0"}, {"correo": "pipedlc18@gmail.com", "nombre": "Felipe Alonso Diaz Torres", "rut": "22975434-3"}, {"correo": "sara_fuentes_82@yahoo.cl", "nombre": "Alonso Durán Fuentes", "rut": "23337342-7"}, {"correo": "sescalonasaavedra@gmail.com", "nombre": "Stephanie Andrea Escalona Saavedra", "rut": "23345673-k"}, {"correo": "angelineb.colegioedwardccp@gmail.com", "nombre": "Javier Alonso Gajardo Basualto", "rut": "22974574-3"}, {"correo": "pamerodriguezf@gmail.com", "nombre": "Carol Esperanza García Rodríguez", "rut": "23004821-5"}, {"correo": "benjamingatica.bgz@gmail.com", "nombre": "Benjamin Vicente Gatica Zapata", "rut": "22788738-9"}, {"correo": "benjamingonzalezchamorro2006@gmail.com", "nombre": "Benjamin Gonzalez Chamorro", "rut": "22265232-4"}, {"correo": "fernandagonzalez020908@gmail.com", "nombre": "Fernanda Ignacia González Flores", "rut": "22809749-7"}, {"correo": "benjaguerrero581@gmail.com", "nombre": "Benjamín Ignacio Guerrero Quiroga", "rut": "22696731-1"}, {"correo": "francisca.igd.12@gmail.com", "nombre": "Francisca Guzmán Díaz", "rut": "23351472-1"}, {"correo": "chormaz.dickinson@gmail.com", "nombre": "Christian Hormazabal Dickinson", "rut": "22423736-7"}, {"correo": "bbarbarajerez.tapia@gmail.com", "nombre": "Barbara Jerez", "rut": "22765962-8"}, {"correo": "samartinh@almondale.cl", "nombre": "Sofía Antonia Martin Hurst", "rut": "22971901-7"}, {"correo": "camilabelen2277@gmail.com", "nombre": "Camila Belén Matus Creixell", "rut": "22425298-6"}, {"correo": "mellab.valentina@gmail.com", "nombre": "Valentina Paz Mella Bobadilla", "rut": "22535139-2"}, {"correo": "elisamillar7@gmail.com", "nombre": "Elisa Millar Faúndez", "rut": "22856241-6"}, {"correo": "maurolavet@gmail.com", "nombre": "Mauro Nicolás Olave Torres", "rut": "23276213-6"}, {"correo": "antonella25.olivares.02@gmail.com", "nombre": "Antonella Paz Olivares Vera", "rut": "22652824-5"}, {"correo": "penadiannelys01@gmail.com", "nombre": "Diannelys Sofía Peña Rossodivita", "rut": "26287360-9"}, {"correo": "trinidadreyesrecabal@icloud.com", "nombre": "Florencia Reyes", "rut": "23057548-7"}, {"correo": "agu.escobar1908@gmail.com", "nombre": "Agustina Del Pilar Riquelme Escobar", "rut": "22777429-0"}, {"correo": "seba26andres@gmail.com", "nombre": "Sebastián Andrés Riquelme Oñate", "rut": "22730058-2"}, {"correo": "keilayazminrobles@gmail.com", "nombre": "Keila Yazmin Robles Espinoza", "rut": "22608509-2"}, {"correo": "luciorodriguez10000@gmail.com", "nombre": "Lucio Alejandro Rodriguez Aguilera", "rut": "22782577-4"}, {"correo": "fersaez1002@gmail.com", "nombre": "Fernanda Dannae Sáez Rodriguez", "rut": "23247015-1"}, {"correo": "elena.san1608@gmail.com", "nombre": "Elena Victoria San Martín Olate", "rut": "22795719-0"}, {"correo": "cristobal.silva.medina.30@gmail.com", "nombre": "Cristóbal Ignacio Silva Medina", "rut": "22967956-2"}, {"correo": "amandat.onate@gmail.com", "nombre": "Amanda Isabel Tapia Oñate", "rut": "22819295-3"}, {"correo": "ampyvallejosv@gmail.com", "nombre": "Amparo Isabella Vallejos Valenzuela", "rut": "22784926-6"}, {"correo": "victoriawega17@gmail.com", "nombre": "Victoria Monserrat Vega Lucero", "rut": "22617442-7"}, {"correo": "lvega@santasabina.cl", "nombre": "Luis Felipe Vega Salazar", "rut": "22916054-0"}, {"correo": "valppetitbrenilh@gmail.com", "nombre": "Mateo Alonso Sebastián Zúñiga Petit-Brenilh", "rut": "22741483-9"}, {"correo": "alexlabra66@gmail.com", "nombre": "Alex Antonio Labra Villegas", "rut": "22377947-6"}, {"correo": "patriciiovasros@gmail.com", "nombre": "Patricio Vásquez Rosales", "rut": "22863079-9"}, {"correo": "valentinaabelenp@gmail.com", "nombre": "Valentina Portiño Cabezas", "rut": "22820638-5"}, {"correo": "sofiaparis0808@gmail.com", "nombre": "Sofia Catalina Paris Lazcano", "rut": "22790587-5"}, {"correo": "anais2009.av@gmail.com", "nombre": "Anais Patricia Villegas Aarcón", "rut": "23011347-5"}, {"correo": "fernandabelensalgadoflores758@gmail.com", "nombre": "Fernanda Salgado Flores", "rut": "22732244-6"}, {"correo": "stefania.zorritolover@gmail.com", "nombre": "Estefania Muñoz Villanueva", "rut": "22763181-3"}, {"correo": "carmengloria3105@gmail.com", "nombre": "Carmen Gloria Silva Bravo", "rut": "23034663-1"}, {"correo": "catalinapedrero73@gmail.com", "nombre": "Catalina Pedreros Aguayo", "rut": "22495082-9"}, {"correo": "mm4293676@gmail.com", "nombre": "Matías Alonso Muñoz Soto", "rut": "22489792-8"}], "Historia": [{"correo": "valeriapaolaalvarezfernandez@gmail.com", "nombre": "Valeria Paola Alvarez Fernández", "rut": "27358799-3"}, {"correo": "florencia.caceres.donoso24@gmail.com", "nombre": "Florencia Paloma Cáceres Donoso", "rut": "23006455-5"}, {"correo": "mcaceresv2020@ihcass.cl", "nombre": "Martina Caceres Vergara", "rut": "23241569-k"}, {"correo": "valesca.anahis28@gmail.com", "nombre": "Valesca Anahis Cid Muñoz", "rut": "23038236-0"}, {"correo": "sara_fuentes_82@yahoo.cl", "nombre": "Alonso Durán Fuentes", "rut": "23337342-7"}, {"correo": "sescalonasaavedra@gmail.com", "nombre": "Stephanie Andrea Escalona Saavedra", "rut": "23345673-k"}, {"correo": "angelineb.colegioedwardccp@gmail.com", "nombre": "Javier Alonso Gajardo Basualto", "rut": "22974574-3"}, {"correo": "pamerodriguezf@gmail.com", "nombre": "Carol Esperanza García Rodríguez", "rut": "23004821-5"}, {"correo": "benjamingatica.bgz@gmail.com", "nombre": "Benjamin Vicente Gatica Zapata", "rut": "22788738-9"}, {"correo": "benjaguerrero581@gmail.com", "nombre": "Benjamín Ignacio Guerrero Quiroga", "rut": "22696731-1"}, {"correo": "samartinh@almondale.cl", "nombre": "Sofía Antonia Martin Hurst", "rut": "22971901-7"}, {"correo": "camilabelen2277@gmail.com", "nombre": "Camila Belén Matus Creixell", "rut": "22425298-6"}, {"correo": "elisamillar7@gmail.com", "nombre": "Elisa Millar Faúndez", "rut": "22856241-6"}, {"correo": "elena.san1608@gmail.com", "nombre": "Elena Victoria San Martín Olate", "rut": "22795719-0"}, {"correo": "victoriawega17@gmail.com", "nombre": "Victoria Monserrat Vega Lucero", "rut": "22617442-7"}, {"correo": "sofiaparis0808@gmail.com", "nombre": "Sofia Catalina Paris Lazcano", "rut": "22790587-5"}, {"correo": "fernandabelensalgadoflores758@gmail.com", "nombre": "Fernanda Salgado Flores", "rut": "22732244-6"}, {"correo": "mm4293676@gmail.com", "nombre": "Matías Alonso Muñoz Soto", "rut": "22489792-8"}], "Física": [{"correo": "figueroamartinezchelsea@gmail.com", "nombre": "Chelsea Mabel Figueroa Martínez", "rut": "22271501-6"}, {"correo": "benjamingonzalezchamorro2006@gmail.com", "nombre": "Benjamin Gonzalez Chamorro", "rut": "22265232-4"}, {"correo": "mellab.valentina@gmail.com", "nombre": "Valentina Paz Mella Bobadilla", "rut": "22535139-2"}, {"correo": "fernamorag22@gmail.com", "nombre": "Fernanda Alejandra Mora González", "rut": "23011609-1"}, {"correo": "maurolavet@gmail.com", "nombre": "Mauro Nicolás Olave Torres", "rut": "23276213-6"}], "Orientación": [{"correo": "malarconveloso@gmail.com", "nombre": "Matilda Antonia Alarcon Veloso", "rut": "22849985-4"}, {"correo": "valeriapaolaalvarezfernandez@gmail.com", "nombre": "Valeria Paola Alvarez Fernández", "rut": "27358799-3"}, {"correo": "astualonso123@gmail.com", "nombre": "Alonso Agustin Astudillo Fernandez", "rut": "23002266-6"}, {"correo": "gacituamimi99@gmail.com", "nombre": "Evolet Naybth Isidora Benitez Gacitua", "rut": "23239474-9"}, {"correo": "florencia.caceres.donoso24@gmail.com", "nombre": "Florencia Paloma Cáceres Donoso", "rut": "23006455-5"}, {"correo": "mcaceresv2020@ihcass.cl", "nombre": "Martina Caceres Vergara", "rut": "23241569-k"}, {"correo": "javieracatalan2022@gmail.com", "nombre": "Javiera Yubitza Catalan Mendoza", "rut": "22887105-2"}, {"correo": "aconstanzochamorro@gmail.com", "nombre": "Amanda Alejandra Chamorro Constanzo", "rut": "23205129-9"}, {"correo": "valesca.anahis28@gmail.com", "nombre": "Valesca Anahis Cid Muñoz", "rut": "23038236-0"}, {"correo": "elvzabetthsalamanca@gmail.com", "nombre": "Elizabeth Dayana Cuevas Salamanca", "rut": "23239814-0"}, {"correo": "pipedlc18@gmail.com", "nombre": "Felipe Alonso Diaz Torres", "rut": "22975434-3"}, {"correo": "sara_fuentes_82@yahoo.cl", "nombre": "Alonso Durán Fuentes", "rut": "23337342-7"}, {"correo": "sescalonasaavedra@gmail.com", "nombre": "Stephanie Andrea Escalona Saavedra", "rut": "23345673-k"}, {"correo": "polethferrari@gmail.com", "nombre": "Poleth Mikaela Ferrari Fuetes", "rut": "22.693.316-6"}, {"correo": "figueroamartinezchelsea@gmail.com", "nombre": "Chelsea Mabel Figueroa Martínez", "rut": "22271501-6"}, {"correo": "angelineb.colegioedwardccp@gmail.com", "nombre": "Javier Alonso Gajardo Basualto", "rut": "22974574-3"}, {"correo": "pamerodriguezf@gmail.com", "nombre": "Carol Esperanza García Rodríguez", "rut": "23004821-5"}, {"correo": "benjamingonzalezchamorro2006@gmail.com", "nombre": "Benjamin Gonzalez Chamorro", "rut": "22265232-4"}, {"correo": "fernandagonzalez020908@gmail.com", "nombre": "Fernanda Ignacia González Flores", "rut": "22809749-7"}, {"correo": "benjaguerrero581@gmail.com", "nombre": "Benjamín Ignacio Guerrero Quiroga", "rut": "22696731-1"}, {"correo": "francisca.igd.12@gmail.com", "nombre": "Francisca Guzmán Díaz", "rut": "23351472-1"}, {"correo": "chormaz.dickinson@gmail.com", "nombre": "Christian Hormazabal Dickinson", "rut": "22423736-7"}, {"correo": "angelinneinzunzap09@gmail.com", "nombre": "Angelinne Millaray Inzunza Peña", "rut": "22764459-1"}, {"correo": "bbarbarajerez.tapia@gmail.com", "nombre": "Barbara Jerez", "rut": "22765962-8"}, {"correo": "samartinh@almondale.cl", "nombre": "Sofía Antonia Martin Hurst", "rut": "22971901-7"}, {"correo": "camilabelen2277@gmail.com", "nombre": "Camila Belén Matus Creixell", "rut": "22425298-6"}, {"correo": "mellab.valentina@gmail.com", "nombre": "Valentina Paz Mella Bobadilla", "rut": "22535139-2"}, {"correo": "elisamillar7@gmail.com", "nombre": "Elisa Millar Faúndez", "rut": "22856241-6"}, {"correo": "fernamorag22@gmail.com", "nombre": "Fernanda Alejandra Mora González", "rut": "23011609-1"}, {"correo": "maurolavet@gmail.com", "nombre": "Mauro Nicolás Olave Torres", "rut": "23276213-6"}, {"correo": "antonella25.olivares.02@gmail.com", "nombre": "Antonella Paz Olivares Vera", "rut": "22652824-5"}, {"correo": "parrasofia1148@gmail.com", "nombre": "Sofía Antonia Parra Barrientos", "rut": "22877452-9"}, {"correo": "penadiannelys01@gmail.com", "nombre": "Diannelys Sofía Peña Rossodivita", "rut": "26287360-9"}, {"correo": "cota.ramirez.coddou@gmail.com", "nombre": "Constanza Beatriz Ramírez Coddou", "rut": "23112415-2"}, {"correo": "agu.escobar1908@gmail.com", "nombre": "Agustina Del Pilar Riquelme Escobar", "rut": "22777429-0"}, {"correo": "seba26andres@gmail.com", "nombre": "Sebastián Andrés Riquelme Oñate", "rut": "22730058-2"}, {"correo": "keilayazminrobles@gmail.com", "nombre": "Keila Yazmin Robles Espinoza", "rut": "22608509-2"}, {"correo": "luciorodriguez10000@gmail.com", "nombre": "Lucio Alejandro Rodriguez Aguilera", "rut": "22782577-4"}, {"correo": "fersaez1002@gmail.com", "nombre": "Fernanda Dannae Sáez Rodriguez", "rut": "23247015-1"}, {"correo": "elena.san1608@gmail.com", "nombre": "Elena Victoria San Martín Olate", "rut": "22795719-0"}, {"correo": "cristobal.silva.medina.30@gmail.com", "nombre": "Cristóbal Ignacio Silva Medina", "rut": "22967956-2"}, {"correo": "amandat.onate@gmail.com", "nombre": "Amanda Isabel Tapia Oñate", "rut": "22819295-3"}, {"correo": "ampyvallejosv@gmail.com", "nombre": "Amparo Isabella Vallejos Valenzuela", "rut": "22784926-6"}, {"correo": "victoriawega17@gmail.com", "nombre": "Victoria Monserrat Vega Lucero", "rut": "22617442-7"}, {"correo": "lvega@santasabina.cl", "nombre": "Luis Felipe Vega Salazar", "rut": "22916054-0"}, {"correo": "valppetitbrenilh@gmail.com", "nombre": "Mateo Alonso Sebastián Zúñiga Petit-Brenilh", "rut": "22741483-9"}, {"correo": "alexlabra66@gmail.com", "nombre": "Alex Antonio Labra Villegas", "rut": "22377947-6"}, {"correo": "patriciiovasros@gmail.com", "nombre": "Patricio Vásquez Rosales", "rut": "22863079-9"}, {"correo": "valentinaabelenp@gmail.com", "nombre": "Valentina Portiño Cabezas", "rut": "22820638-5"}, {"correo": "sofiaparis0808@gmail.com", "nombre": "Sofia Catalina Paris Lazcano", "rut": "22790587-5"}, {"correo": "anais2009.av@gmail.com", "nombre": "Anais Patricia Villegas Aarcón", "rut": "23011347-5"}, {"correo": "fernandabelensalgadoflores758@gmail.com", "nombre": "Fernanda Salgado Flores", "rut": "22732244-6"}, {"correo": "stefania.zorritolover@gmail.com", "nombre": "Estefania Muñoz Villanueva", "rut": "22763181-3"}, {"correo": "carmengloria3105@gmail.com", "nombre": "Carmen Gloria Silva Bravo", "rut": "23034663-1"}, {"correo": "catalinapedrero73@gmail.com", "nombre": "Catalina Pedreros Aguayo", "rut": "22495082-9"}, {"correo": "mm4293676@gmail.com", "nombre": "Matías Alonso Muñoz Soto", "rut": "22489792-8"}, {"correo": "benjamingatica.bgz@gmail.com", "nombre": "Benjamin Vicente Gatica Zapata", "rut": "22788738-9"}, {"correo": "trinidadreyesrecabal@icloud.com", "nombre": "Florencia Reyes", "rut": "23057548-7"}, {"correo": "reyescanoagustin@gmail.com", "nombre": "Jorge Agustin Cano Reyes", "rut": "22452097-2"}, {"correo": "echeverriacris2009@gmail.com", "nombre": "Cristóbal Vicente Echeverría Oliva", "rut": "23159815-4"}], "Química": [{"correo": "elvzabetthsalamanca@gmail.com", "nombre": "Elizabeth Dayana Cuevas Salamanca", "rut": "23239814-0"}, {"correo": "sescalonasaavedra@gmail.com", "nombre": "Stephanie Andrea Escalona Saavedra", "rut": "23345673-k"}, {"correo": "fernandagonzalez020908@gmail.com", "nombre": "Fernanda Ignacia González Flores", "rut": "22809749-7"}, {"correo": "chormaz.dickinson@gmail.com", "nombre": "Christian Hormazabal Dickinson", "rut": "22423736-7"}, {"correo": "parrasofia1148@gmail.com", "nombre": "Sofía Antonia Parra Barrientos", "rut": "22877452-9"}, {"correo": "penadiannelys01@gmail.com", "nombre": "Diannelys Sofía Peña Rossodivita", "rut": "26287360-9"}, {"correo": "luciorodriguez10000@gmail.com", "nombre": "Lucio Alejandro Rodriguez Aguilera", "rut": "22782577-4"}, {"correo": "elena.san1608@gmail.com", "nombre": "Elena Victoria San Martín Olate", "rut": "22795719-0"}, {"correo": "amandat.onate@gmail.com", "nombre": "Amanda Isabel Tapia Oñate", "rut": "22819295-3"}, {"correo": "lvega@santasabina.cl", "nombre": "Luis Felipe Vega Salazar", "rut": "22916054-0"}], "Biología": [{"correo": "malarconveloso@gmail.com", "nombre": "Matilda Antonia Alarcon Veloso", "rut": "22849985-4"}, {"correo": "gacituamimi99@gmail.com", "nombre": "Evolet Naybth Isidora Benitez Gacitua", "rut": "23239474-9"}, {"correo": "reyescanoagustin@gmail.com", "nombre": "Jorge Agustin Cano Reyes", "rut": "22452097-2"}, {"correo": "echeverriacris2009@gmail.com", "nombre": "Cristóbal Vicente Echeverría Oliva", "rut": "23159815-4"}, {"correo": "polethferrari@gmail.com", "nombre": "Poleth Mikaela Ferrari Fuetes", "rut": "22.693.316-6"}, {"correo": "benjaguerrero581@gmail.com", "nombre": "Benjamín Ignacio Guerrero Quiroga", "rut": "22696731-1"}, {"correo": "francisca.igd.12@gmail.com", "nombre": "Francisca Guzmán Díaz", "rut": "23351472-1"}, {"correo": "angelinneinzunzap09@gmail.com", "nombre": "Angelinne Millaray Inzunza Peña", "rut": "22764459-1"}, {"correo": "bbarbarajerez.tapia@gmail.com", "nombre": "Barbara Jerez", "rut": "22765962-8"}, {"correo": "elisamillar7@gmail.com", "nombre": "Elisa Millar Faúndez", "rut": "22856241-6"}, {"correo": "antonella25.olivares.02@gmail.com", "nombre": "Antonella Paz Olivares Vera", "rut": "22652824-5"}, {"correo": "trinidadreyesrecabal@icloud.com", "nombre": "Florencia Reyes", "rut": "23057548-7"}, {"correo": "agu.escobar1908@gmail.com", "nombre": "Agustina Del Pilar Riquelme Escobar", "rut": "22777429-0"}, {"correo": "seba26andres@gmail.com", "nombre": "Sebastián Andrés Riquelme Oñate", "rut": "22730058-2"}, {"correo": "keilayazminrobles@gmail.com", "nombre": "Keila Yazmin Robles Espinoza", "rut": "22608509-2"}, {"correo": "fersaez1002@gmail.com", "nombre": "Fernanda Dannae Sáez Rodriguez", "rut": "23247015-1"}, {"correo": "cristobal.silva.medina.30@gmail.com", "nombre": "Cristóbal Ignacio Silva Medina", "rut": "22967956-2"}, {"correo": "victoriawega17@gmail.com", "nombre": "Victoria Monserrat Vega Lucero", "rut": "22617442-7"}, {"correo": "valppetitbrenilh@gmail.com", "nombre": "Mateo Alonso Sebastián Zúñiga Petit-Brenilh", "rut": "22741483-9"}, {"correo": "figueroamartinezchelsea@gmail.com", "nombre": "Chelsea Mabel Figueroa Martínez", "rut": "22271501-6"}, {"correo": "benjamingonzalezchamorro2006@gmail.com", "nombre": "Benjamin Gonzalez Chamorro", "rut": "22265232-4"}, {"correo": "mellab.valentina@gmail.com", "nombre": "Valentina Paz Mella Bobadilla", "rut": "22535139-2"}, {"correo": "fernamorag22@gmail.com", "nombre": "Fernanda Alejandra Mora González", "rut": "23011609-1"}, {"correo": "maurolavet@gmail.com", "nombre": "Mauro Nicolás Olave Torres", "rut": "23276213-6"}]};
 
 let sesion=null, timerIv=null, timerTotal=0, liveUnsub=null;
@@ -1090,10 +1133,42 @@ window.selMat=k=>{
   document.querySelectorAll('.mb2').forEach(b=>b.classList.toggle('sel',b.dataset.k===k));
   const sel=document.getElementById('sel-fecha');
   sel.disabled=false;
-  sel.innerHTML='<option value="">— elige una fecha —</option>'+
-    MATERIAS[k].fechas.map(f=>`<option value="${f.fecha}" data-col="${f.col}">${f.label}</option>`).join('');
+  // Separar fechas pasadas y futuras/hoy
+  const hoy=new Date().toISOString().slice(0,10);
+  const fechasPasadas=MATERIAS[k].fechas.filter(f=>f.fecha<hoy);
+  const fechasHoyFuturo=MATERIAS[k].fechas.filter(f=>f.fecha>=hoy);
+  let opts='<option value="">— elige una fecha —</option>';
+  if(fechasHoyFuturo.length){
+    opts+=`<optgroup label="Hoy / próximas">`;
+    opts+=fechasHoyFuturo.map(f=>`<option value="${f.fecha}" data-col="${f.col}" data-pasada="0">${f.label}</option>`).join('');
+    opts+=`</optgroup>`;
+  }
+  if(fechasPasadas.length){
+    opts+=`<optgroup label="Clases pasadas">`;
+    opts+=fechasPasadas.slice().reverse().map(f=>`<option value="${f.fecha}" data-col="${f.col}" data-pasada="1">${f.label} ↩</option>`).join('');
+    opts+=`</optgroup>`;
+  }
+  sel.innerHTML=opts;
   document.getElementById('btn-act').disabled=true;
-  sel.onchange=()=>document.getElementById('btn-act').disabled=!sel.value;
+  document.getElementById('btn-act-pasada').style.display='none';
+  document.getElementById('btn-act-pasada').disabled=true;
+  sel.onchange=()=>{
+    const opt=sel.selectedOptions[0];
+    const fechaSel=sel.value;
+    const esPasada=opt?.dataset.pasada==='1';
+    // También es "pasada" si es hoy pero la clase ya terminó según el horario
+    const esHoyTerminada=!esPasada && fechaSel && claseYaTerminoHoy(k, fechaSel);
+    const esRetroactiva=esPasada||esHoyTerminada;
+    const hayFecha=!!fechaSel;
+    // Botón normal: solo para clases de hoy en horario o futuras
+    document.getElementById('btn-act').disabled=!hayFecha||esRetroactiva;
+    // Botón retroactivo: para clases pasadas o de hoy que ya terminaron
+    document.getElementById('btn-act-pasada').style.display=esRetroactiva&&hayFecha?'':'none';
+    document.getElementById('btn-act-pasada').disabled=!esRetroactiva||!hayFecha;
+    // Ocultar input de minutos si es retroactiva
+    const fieldMin=document.querySelector('.field:has(#ses-min)');
+    if(fieldMin) fieldMin.style.display=esRetroactiva?'none':'';
+  };
 };
 
 // ── SESIÓN ──────────────────────────────────────────────────
@@ -1103,28 +1178,98 @@ window.iniciarSesion=async()=>{
   const min=parseInt(document.getElementById('ses-min').value)||5;
   if(!matSel||!fecha){alert('Elige materia y fecha.');return;}
   const m=MATERIAS[matSel];
-  const id=Date.now().toString(36)+Math.random().toString(36).slice(2,5);
-  const tok=Math.random().toString(36).slice(2)+Date.now().toString(36);
-  sesion={id,tok,token:tok,min,inicio:Date.now(),matKey:matSel,matNom:m.nombre,matArea:m.area,fecha,fechaLabel:label,colIdx:col,activa:true};
-  // Resetear estado de verificación para la nueva sesión
-  estadoVerif={}; window._vlist=null; window._vpmap=null;
-  await setDoc(doc(db,'sesiones',id),sesion);
-  localStorage.setItem('preu_sid',id);
-  mostrarQR(); suscribirLive(id); setHeader(m.nombre,label);
+
+  // Buscar si ya existe una sesión para esta materia+fecha hoy
+  // (evita crear sesiones duplicadas si el profe activa dos veces)
+  const hoy = fecha; // formato YYYY-MM-DD
+  const snapExist = await getDocs(query(
+    collection(db,'sesiones'),
+    where('matKey','==',matSel),
+    where('fecha','==',hoy),
+    where('activa','==',true)
+  ));
+
+  if(snapExist.docs.length > 0){
+    // Reutilizar sesión existente
+    const existente = snapExist.docs[0].data();
+    const confirmar = confirm(`Ya existe una sesión activa de ${m.nombre} para hoy (${label}).\n¿Quieres continuar esa sesión en vez de crear una nueva?`);
+    if(!confirmar) return;
+    sesion = existente;
+    estadoVerif={}; window._vlist=null; window._vpmap=null;
+    // Regenerar QR con nuevo token para reactivar
+    sesion.tok=sesion.token=Math.random().toString(36).slice(2)+Date.now().toString(36);
+    sesion.inicio=Date.now();
+    sesion.min=min;
+    await setDoc(doc(db,'sesiones',sesion.id),{tok:sesion.tok,token:sesion.tok,inicio:sesion.inicio,qrActivo:true},{merge:true});
+  } else {
+    // Crear sesión nueva
+    const id=Date.now().toString(36)+Math.random().toString(36).slice(2,5);
+    const tok=Math.random().toString(36).slice(2)+Date.now().toString(36);
+    sesion={id,tok,token:tok,min,inicio:Date.now(),matKey:matSel,matNom:m.nombre,matArea:m.area,fecha,fechaLabel:label,colIdx:col,activa:true,qrActivo:true};
+    estadoVerif={}; window._vlist=null; window._vpmap=null;
+    await setDoc(doc(db,'sesiones',id),sesion);
+  }
+
+  localStorage.setItem('preu_sid',sesion.id);
+  mostrarQR(); suscribirLive(sesion.id); setHeader(m.nombre,label);
   document.getElementById('livebar').classList.add('on');
   document.getElementById('live-mat').textContent=m.nombre;
   document.getElementById('live-fec').textContent=label;
   document.getElementById('btn-regen').style.display='';
 };
 
-window.pedirCierre=()=>{ if(!sesion){alert('No hay sesión activa.');return;} abrirVerif(); };
+// ── ASISTENCIA RETROACTIVA (clase pasada, sin QR) ────────────
+window.iniciarSesionPasada=async()=>{
+  const sel=document.getElementById('sel-fecha');
+  const fecha=sel.value;
+  const opt=sel.selectedOptions[0];
+  const col=parseInt(opt?.dataset.col);
+  const label=opt?.text?.replace(' ↩','');
+  if(!matSel||!fecha){alert('Elige materia y fecha.');return;}
+  const m=MATERIAS[matSel];
+
+  // Buscar si ya existe sesión para esta materia+fecha
+  const snapExist=await getDocs(query(
+    collection(db,'sesiones'),
+    where('matKey','==',matSel),
+    where('fecha','==',fecha)
+  ));
+
+  let sesionId, sesionData;
+  if(snapExist.docs.length>0){
+    // Usar la sesión existente
+    sesionData=snapExist.docs[0].data();
+    sesionId=sesionData.id||snapExist.docs[0].id;
+  } else {
+    // Crear sesión nueva (sin QR, marcada como retroactiva)
+    sesionId=Date.now().toString(36)+Math.random().toString(36).slice(2,5);
+    sesionData={
+      id:sesionId, tok:'retroactiva', token:'retroactiva',
+      min:0, inicio:Date.now(),
+      matKey:matSel, matNom:m.nombre, matArea:m.area,
+      fecha, fechaLabel:label, colIdx:col,
+      activa:false, qrActivo:false, retroactiva:true
+    };
+    await setDoc(doc(db,'sesiones',sesionId),sesionData);
+  }
+
+  // Cargar sesión en memoria y abrir directamente verificación
+  sesion=sesionData;
+  sesion.id=sesionId;
+  estadoVerif={}; window._vlist=null; window._vpmap=null;
+
+  // No activar QR ni polling — ir directo al modal de lista
+  abrirVerif();
+};
 
 window.regenQR=async()=>{
   if(!sesion)return;
   sesion.tok=sesion.token=Math.random().toString(36).slice(2)+Date.now().toString(36);
   sesion.inicio=Date.now();
-  await setDoc(doc(db,'sesiones',sesion.id),{tok:sesion.tok,token:sesion.tok,inicio:sesion.inicio},{merge:true});
+  await setDoc(doc(db,'sesiones',sesion.id),{tok:sesion.tok,token:sesion.tok,inicio:sesion.inicio,qrActivo:true},{merge:true});
   mostrarQR();
+  // Reactivar polling si se había detenido al expirar el QR
+  if(!liveUnsub) suscribirLive(sesion.id);
 };
 
 function mostrarQR(){
@@ -1139,15 +1284,40 @@ function mostrarQR(){
   timerTotal=sesion.min*60;
   if(timerIv)clearInterval(timerIv);
   timerIv=setInterval(tickTimer,1000); tickTimer();
+
+  // Auto-cerrar sesión después de 4 horas (evita polling infinito si dejan la pestaña abierta)
+  if(window._autoCloseTimeout) clearTimeout(window._autoCloseTimeout);
+  window._autoCloseTimeout = setTimeout(async()=>{
+    if(sesion){
+      console.log('Auto-cierre: sesión activa por más de 4 horas');
+      await setDoc(doc(db,'sesiones',sesion.id),{activa:false},{merge:true});
+      sesion=null; if(liveUnsub){ liveUnsub(); liveUnsub=null; }
+      if(timerIv) clearInterval(timerIv);
+      localStorage.removeItem('preu_sid');
+      document.getElementById('livebar').classList.remove('on');
+      document.getElementById('qr-panel').style.display='none';
+      document.getElementById('qr-ph').style.display='';
+      setHeader(null);
+      alert('La sesión se cerró automáticamente después de 4 horas. Si la clase sigue, abre una nueva sesión.');
+    }
+  }, 4 * 60 * 60 * 1000); // 4 horas
 }
 
 function tickTimer(){
   if(!sesion)return;
   const rest=Math.max(0,timerTotal-Math.floor((Date.now()-sesion.inicio)/1000));
   const m=Math.floor(rest/60),s=rest%60;
-  document.getElementById('timer-txt').textContent=rest>0?`Válido por ${m}:${String(s).padStart(2,'0')} min`:'QR expirado — regenera';
+  document.getElementById('timer-txt').textContent=rest>0?`QR válido ${m}:${String(s).padStart(2,'0')} min`:'QR expirado — pulsa Regenerar para aceptar más alumnos';
   document.getElementById('timer-bar').style.width=(rest/timerTotal*100)+'%';
   document.getElementById('timer-bar').style.background=rest===0?'var(--rj)':'var(--cal)';
+
+  // Cuando el QR expira: detener polling (sesión sigue activa, solo deja de aceptar escaneos)
+  if(rest===0 && liveUnsub){
+    liveUnsub(); liveUnsub=null;
+    clearInterval(timerIv); timerIv=null;
+    // Marcar QR como inválido en Firebase para que el alumno que intente escanear vea error
+    setDoc(doc(db,'sesiones',sesion.id),{activa:true,qrActivo:false},{merge:true}).catch(()=>{});
+  }
 }
 
 function suscribirLive(sid){
@@ -1299,8 +1469,9 @@ window.filtrarVerif=()=>renderVerif(document.getElementById('v-buscar').value);
 window.confirmarCierre=async()=>{
   if(!sesion)return;
   const lista=window._vlist||[];
+  const esRetroactiva=!!sesion.retroactiva;
 
-  // Leer estado ACTUAL de Firebase para esta sesión (QR + manual)
+  // Leer estado ACTUAL de Firebase para esta sesión
   const snapRegs=await getDocs(query(collection(db,'registros'),where('sesion_id','==',sesion.id)));
   const rutConReg=new Set(snapRegs.docs.map(d=>normalizarRut(d.data().rut||'')));
   const batch=writeBatch(db);
@@ -1308,7 +1479,6 @@ window.confirmarCierre=async()=>{
   for(const a of lista){
     const rn=normalizarRut(a.rut);
     const regIdCorrecto=sesion.id+'_'+rn.replace(/[^0-9k]/g,'');
-
     if(!rutConReg.has(rn)){
       // Sin registro: marcar ausente
       batch.set(doc(db,'registros',regIdCorrecto),{
@@ -1328,18 +1498,36 @@ window.confirmarCierre=async()=>{
     }
   }
   await batch.commit();
+
+  // Marcar sesión como inactiva en Firebase
   await setDoc(doc(db,'sesiones',sesion.id),{activa:false},{merge:true});
+
+  // Limpiar estado
   sesion=null; estadoVerif={}; window._vlist=null; window._vpmap=null;
   localStorage.removeItem('preu_sid');
-  if(timerIv)clearInterval(timerIv); if(liveUnsub)liveUnsub();
-  document.getElementById('qr-panel').style.display='none';
-  document.getElementById('qr-ph').style.display='';
-  document.getElementById('btn-regen').style.display='none';
-  document.getElementById('livebar').classList.remove('on');
-  document.getElementById('live-table').innerHTML='<div class="empty">Sesión finalizada — revisa los registros</div>';
-  document.getElementById('conteo-tag').textContent='0 presentes';
-  setHeader(null);
+  if(timerIv){ clearInterval(timerIv); timerIv=null; }
+  if(liveUnsub){ liveUnsub(); liveUnsub=null; }
+  if(window._autoCloseTimeout){ clearTimeout(window._autoCloseTimeout); }
+
+  // Cerrar modal de verificación
   document.getElementById('voverlay').classList.remove('show');
+
+  // Para sesión normal: limpiar UI del QR y livebar
+  if(!esRetroactiva){
+    document.getElementById('qr-panel').style.display='none';
+    document.getElementById('qr-ph').style.display='';
+    document.getElementById('btn-regen').style.display='none';
+    document.getElementById('livebar').classList.remove('on');
+    document.getElementById('live-table').innerHTML='<div class="empty">Sesión finalizada — revisa los registros</div>';
+    document.getElementById('conteo-tag').textContent='0 presentes';
+  }
+
+  // Resetear botones de sesión para que el profe pueda iniciar otra
+  document.getElementById('btn-act').disabled=true;
+  document.getElementById('btn-act-pasada').style.display='none';
+  document.getElementById('btn-act-pasada').disabled=true;
+  document.getElementById('sel-fecha').value='';
+  setHeader(null);
 };
 
 
@@ -1863,6 +2051,76 @@ async function correrDiagnostico(){
 }
 
 // ── REGISTROS (nueva lógica) ─────────────────────────────────
+// ── GENERAR AUSENCIAS PARA FECHAS PASADAS SIN REGISTRO ───────
+// Para cada materia, detecta fechas que ya pasaron y no tienen
+// ningún registro → crea registros de ausencia para todos los alumnos
+async function generarAusenciasFechasPasadas(regTodosActual) {
+  const hoy = new Date().toISOString().slice(0,10);
+
+  // Construir set de "matKey|fecha" que ya tienen al menos 1 registro
+  const fechasConRegistro = new Set(
+    regTodosActual.map(r => `${r.sesion_materia_key}|${r.sesion_fecha}`)
+  );
+
+  const ops = []; // { id, data }
+
+  for (const [matKey, materia] of Object.entries(MATERIAS)) {
+    // Obtener alumnos de esta materia (de memoria o del array estático)
+    const alumnosMat = todosAlumnos.length
+      ? todosAlumnos.filter(a => (a.areas||[]).includes(materia.area||matKey))
+      : (ALUMNOS[matKey] || []);
+    if (!alumnosMat.length) continue;
+
+    // Fechas pasadas sin registro
+    const fechasSinRegistro = (materia.fechas || []).filter(f =>
+      f.fecha < hoy && !fechasConRegistro.has(`${matKey}|${f.fecha}`)
+    );
+
+    for (const fechaObj of fechasSinRegistro) {
+      // Crear sesión virtual para esta fecha
+      const sesionId = `auto_${matKey}_${fechaObj.fecha}`.replace(/\s/g,'_');
+
+      for (const alumno of alumnosMat) {
+        const rut = normalizarRut(alumno.rut || '');
+        if (!rut) continue;
+        const regId = `${sesionId}_${rut.replace(/[^0-9k]/g,'')}`;
+        ops.push({
+          id: regId,
+          data: {
+            id: regId,
+            sesion_id: sesionId,
+            sesion_fecha: fechaObj.fecha,
+            sesion_nombre: materia.nombre,
+            sesion_materia_key: matKey,
+            rut,
+            nombre: alumno.nombre || '',
+            correo: alumno.correo || '',
+            estado: '0',  // ausente
+            timestamp: new Date(fechaObj.fecha).getTime(),
+            auto_generado: true,  // marca para distinguir de registros reales
+          }
+        });
+      }
+
+      // Marcar esta fecha como "con registro" para no duplicar
+      fechasConRegistro.add(`${matKey}|${fechaObj.fecha}`);
+    }
+  }
+
+  if (!ops.length) return;
+
+  // Escribir en batches
+  const BATCH = 400;
+  for (let i = 0; i < ops.length; i += BATCH) {
+    const batch = writeBatch(db);
+    for (const op of ops.slice(i, i + BATCH)) {
+      batch.set(doc(db, 'registros', op.id), op.data);
+    }
+    await batch.commit();
+  }
+  console.log(`Ausencias auto-generadas: ${ops.length} registros para ${new Set(ops.map(o=>o.data.sesion_fecha)).size} fechas`);
+}
+
 async function initRegistros() {
   const areaGrid = document.getElementById('area-cards');
   areaGrid.innerHTML = '<div class="loading"><span class="sp"></span>Limpiando y cargando datos...</div>';
@@ -1904,6 +2162,20 @@ async function initRegistros() {
     if(r.sesion_materia_key==='Lenguaje') return {...r, sesion_materia_key:'Lenguaje'};
     return r;
   });
+
+  // Generar ausencias para fechas pasadas sin registro (1 vez al día)
+  try {
+    const KEY2 = 'preu_ausencias_ts';
+    const ultimaAus = parseInt(localStorage.getItem(KEY2) || '0');
+    const hace24h = Date.now() - 24 * 60 * 60 * 1000;
+    if (ultimaAus < hace24h) {
+      await generarAusenciasFechasPasadas(regTodos);
+      localStorage.setItem(KEY2, Date.now().toString());
+      // Recargar regTodos con los nuevos registros de ausencia
+      const snap2 = await getDocs(collection(db, 'registros'));
+      regTodos = snap2.docs.map(d => d.data());
+    }
+  } catch(e) { console.error('Error generando ausencias:', e); }
 
   // Calcular y renderizar cards de área
   const areas = Object.entries(MATERIAS).map(([k, m]) => {
@@ -2958,7 +3230,8 @@ async function cargarAlumno(sid,tok){
   const s=snap.data();
   const tkOk=s.tok||s.token;
   if(!s.activa){info.textContent='⚠ Esta sesión ya fue cerrada.';btn.disabled=true;return;}
-  if(tkOk!==tok){info.textContent='⚠ QR inválido. Solicita uno nuevo.';btn.disabled=true;return;}
+  if(s.qrActivo===false){info.textContent='⚠ El QR expiró. Pide al profe que regenere el código.';btn.disabled=true;return;}
+  if(tkOk!==tok){info.textContent='⚠ QR inválido. Solicita uno nuevo al profesor.';btn.disabled=true;return;}
   if((Date.now()-s.inicio)/60000>s.min){info.textContent='⚠ QR expirado. Solicita uno nuevo.';btn.disabled=true;return;}
   info.textContent=(s.matNom||s.materiaNombre)+' · '+(s.fechaLabel||s.fecha);
   window._ses=s;
@@ -3042,6 +3315,36 @@ window.marcarAsistencia=async()=>{
   document.getElementById('alu-ok').style.display='block';
   document.getElementById('ok-det').textContent=n+', quedaste registrado en '+(s.matNom||s.materiaNombre)+' · '+(s.fechaLabel||s.fecha)+'.';
 };
+
+// ── PAUSAR POLLING CUANDO LA PESTAÑA ESTÁ OCULTA ─────────────
+// Registrado una sola vez globalmente — ahorra lecturas Firebase
+document.addEventListener('visibilitychange', ()=>{
+  if(!sesion) return; // sin sesión activa, nada que hacer
+  if(document.hidden){
+    // Pestaña oculta → parar polling
+    if(liveUnsub){ liveUnsub(); liveUnsub=null; }
+  } else {
+    // Pestaña visible de nuevo → reanudar polling
+    if(sesion && sesion.id) suscribirLive(sesion.id);
+  }
+});
+
+// ── PAUSAR POLLING CUANDO LA PESTAÑA ESTÁ OCULTA ─────────────
+document.addEventListener('visibilitychange', ()=>{
+  if(!sesion) return;
+  if(document.hidden){
+    if(liveUnsub){ liveUnsub(); liveUnsub=null; }
+  } else {
+    if(sesion && sesion.id) suscribirLive(sesion.id);
+  }
+});
+
+// ── PARAR POLLING AL CERRAR LA PESTAÑA ───────────────────────
+window.addEventListener('beforeunload', ()=>{
+  if(liveUnsub){ liveUnsub(); liveUnsub=null; }
+  if(timerIv){ clearInterval(timerIv); timerIv=null; }
+  if(window._autoCloseTimeout){ clearTimeout(window._autoCloseTimeout); }
+});
 
 // ── INIT ─────────────────────────────────────────────────────
 async function initProfe(){
